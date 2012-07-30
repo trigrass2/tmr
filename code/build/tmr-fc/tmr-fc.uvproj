@@ -348,7 +348,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\inc;..\..\platform\src\inc;..\..\utilities\freertos\Source\include;..\..\utilities\freertos\Source\portable\stm32f4\inc;..\..\utilities\fatfs\inc</IncludePath>
+              <IncludePath>..\..\platform\csp\st\STM32F4xx_StdPeriph_Driver\inc;..\..\platform\src\inc;..\..\utilities\freertos\Source\include;..\..\utilities\freertos\Source\portable\stm32f4\inc;..\..\utilities\fatfs\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -391,7 +391,7 @@
             <File>
               <FileName>startup_stm32f4xx.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\platform\csp\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\startup_stm32f4xx.s</FilePath>
+              <FilePath>..\..\platform\csp\arm\Device\STM32F4\Source\arm\startup_stm32f4xx.s</FilePath>
             </File>
           </Files>
         </Group>
