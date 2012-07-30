@@ -2,6 +2,7 @@
 ### Preparing for ADS-LD.
 ### Creating ADS-LD Command Line
 ### List of Objects: adding '".\obj\startup_stm32f4xx.o"'
+### List of Objects: adding '".\obj\system_stm32f4xx.o"'
 ### List of Objects: adding '".\obj\timers.o"'
 ### List of Objects: adding '".\obj\croutine.o"'
 ### List of Objects: adding '".\obj\list.o"'
@@ -12,11 +13,10 @@
 ### List of Objects: adding '".\obj\ff.o"'
 ### List of Objects: adding '".\obj\fattime.o"'
 ### List of Objects: adding '".\obj\diskio.o"'
-### List of Objects: adding '".\obj\stm32f4xx_it.o"'
 ### List of Objects: adding '".\obj\main.o"'
-### List of Objects: adding '".\obj\system_stm32f4xx.o"'
+### List of Objects: adding '".\obj\stm32f4xx_it.o"'
 ### ADS-LD Command completed:
---cpu Cortex-M4.fp ".\obj\startup_stm32f4xx.o" ".\obj\timers.o" ".\obj\croutine.o" ".\obj\list.o" ".\obj\queue.o" ".\obj\tasks.o" ".\obj\heap_2.o" ".\obj\port.o" ".\obj\ff.o" ".\obj\fattime.o" ".\obj\diskio.o" ".\obj\stm32f4xx_it.o" ".\obj\main.o" ".\obj\system_stm32f4xx.o" --library_type=microlib --feedback ".\obj\tmr-fc.fed" 
+--cpu Cortex-M4.fp ".\obj\startup_stm32f4xx.o" ".\obj\system_stm32f4xx.o" ".\obj\timers.o" ".\obj\croutine.o" ".\obj\list.o" ".\obj\queue.o" ".\obj\tasks.o" ".\obj\heap_2.o" ".\obj\port.o" ".\obj\ff.o" ".\obj\fattime.o" ".\obj\diskio.o" ".\obj\main.o" ".\obj\stm32f4xx_it.o" --library_type=microlib --feedback ".\obj\tmr-fc.fed" 
 --strict --scatter ".\obj\tmr-fc.sct" 
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols 
 --info sizes --info totals --info unused --info veneers 
@@ -24,7 +24,7 @@
 ### ADS-LD Output File: '.\obj\tmr-fc.axf'
 ### ADS-LD Command File: '.\obj\tmr-fc.lnp'
 ### Checking for dirty Components...
-### Creating CmdFile '.\obj\tmr-fc.lnp', Handle=0x0000064C
+### Creating CmdFile '.\obj\tmr-fc.lnp', Handle=0x00000154
 ### Writing '.lnp' file
 ### ADS-LD Command file '.\obj\tmr-fc.lnp' is ready.
 ### ADS-LD: About to start ADS-LD Thread.
