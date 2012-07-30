@@ -348,7 +348,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\platform\csp\st\STM32F4xx_StdPeriph_Driver\inc;..\..\platform\src\inc;..\..\utilities\freertos\Source\include;..\..\utilities\freertos\Source\portable\stm32f4\inc;..\..\utilities\fatfs\inc</IncludePath>
+              <IncludePath>..\..\platform\csp\st\STM32F4xx_StdPeriph_Driver\inc;..\..\platform\sys\inc;..\..\utilities\freertos\Source\include;..\..\utilities\freertos\Source\portable\stm32f4\inc;..\..\utilities\fatfs\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -391,7 +391,12 @@
             <File>
               <FileName>startup_stm32f4xx.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\platform\csp\arm\Device\STM32F4\Source\arm\startup_stm32f4xx.s</FilePath>
+              <FilePath>..\..\platform\csp\arm\Device\STM32F4\Source\startup_stm32f4xx.s</FilePath>
+            </File>
+            <File>
+              <FileName>system_stm32f4xx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\platform\csp\arm\Device\STM32F4\Source\system_stm32f4xx.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -673,19 +678,19 @@
           <GroupName>apps</GroupName>
           <Files>
             <File>
-              <FileName>stm32f4xx_it.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\platform\src\apps\stm32f4xx_it.c</FilePath>
-            </File>
-            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\platform\src\apps\main.c</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>sys</GroupName>
+          <Files>
             <File>
-              <FileName>system_stm32f4xx.c</FileName>
+              <FileName>stm32f4xx_it.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\src\apps\system_stm32f4xx.c</FilePath>
+              <FilePath>..\..\platform\sys\stm32f4xx_it.c</FilePath>
             </File>
           </Files>
         </Group>
