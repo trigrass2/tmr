@@ -348,7 +348,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\platform\csp\st\STM32F4xx_StdPeriph_Driver\inc;..\..\platform\sys\inc;..\..\utilities\freertos\Source\include;..\..\utilities\freertos\Source\portable\stm32f4\inc;..\..\utilities\fatfs\inc</IncludePath>
+              <IncludePath>..\..\..\platform\csp\st\STM32F4xx_StdPeriph_Driver\inc;..\..\..\platform\sys\inc;..\..\..\utilities\freertos\Source\include;..\..\..\utilities\freertos\Source\portable\stm32f4\inc;..\..\..\utilities\fatfs\inc;..\..\..\utilities\freertos\Source\portable\stm32f4\MDK-ARM</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -391,12 +391,12 @@
             <File>
               <FileName>startup_stm32f4xx.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\platform\csp\arm\Device\STM32F4\Source\startup_stm32f4xx.s</FilePath>
+              <FilePath>..\..\..\platform\csp\arm\Device\STM32F4\Source\MDK-ARM\startup_stm32f4xx.s</FilePath>
             </File>
             <File>
               <FileName>system_stm32f4xx.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\arm\Device\STM32F4\Source\system_stm32f4xx.c</FilePath>
+              <FilePath>..\..\..\platform\csp\arm\Device\STM32F4\Source\system_stm32f4xx.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -470,147 +470,147 @@
             <File>
               <FileName>stm32f4xx_can.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_can.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_can.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_crc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_crc.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_crc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_cryp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_cryp_aes.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_aes.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_aes.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_cryp_des.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_des.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_des.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_cryp_tdes.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_tdes.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_tdes.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_dac.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dac.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dac.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_dbgmcu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dbgmcu.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dbgmcu.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_dcmi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dcmi.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dcmi.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_dma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dma.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dma.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_exti.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_exti.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_exti.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_flash.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_flash.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_fsmc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_fsmc.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_fsmc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_hash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_hash_md5.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash_md5.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash_md5.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_hash_sha1.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash_sha1.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash_sha1.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_i2c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_i2c.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_i2c.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_iwdg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_iwdg.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_iwdg.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_pwr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_pwr.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_pwr.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_rcc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_rng.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rng.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rng.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_rtc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rtc.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rtc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_sdio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_sdio.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_sdio.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_spi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_spi.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_spi.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_syscfg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_syscfg.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_syscfg.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_tim.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_usart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_wwdg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_wwdg.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_wwdg.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -620,37 +620,37 @@
             <File>
               <FileName>timers.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\utilities\freertos\Source\timers.c</FilePath>
+              <FilePath>..\..\..\utilities\freertos\Source\timers.c</FilePath>
             </File>
             <File>
               <FileName>croutine.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\utilities\freertos\Source\croutine.c</FilePath>
+              <FilePath>..\..\..\utilities\freertos\Source\croutine.c</FilePath>
             </File>
             <File>
               <FileName>list.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\utilities\freertos\Source\list.c</FilePath>
+              <FilePath>..\..\..\utilities\freertos\Source\list.c</FilePath>
             </File>
             <File>
               <FileName>queue.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\utilities\freertos\Source\queue.c</FilePath>
+              <FilePath>..\..\..\utilities\freertos\Source\queue.c</FilePath>
             </File>
             <File>
               <FileName>tasks.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\utilities\freertos\Source\tasks.c</FilePath>
+              <FilePath>..\..\..\utilities\freertos\Source\tasks.c</FilePath>
             </File>
             <File>
               <FileName>heap_2.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\utilities\freertos\Source\portable\MemMang\heap_2.c</FilePath>
+              <FilePath>..\..\..\utilities\freertos\Source\portable\MemMang\heap_2.c</FilePath>
             </File>
             <File>
               <FileName>port.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\utilities\freertos\Source\portable\stm32f4\port.c</FilePath>
+              <FilePath>..\..\..\utilities\freertos\Source\portable\stm32f4\MDK-ARM\port.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -660,17 +660,17 @@
             <File>
               <FileName>ff.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\utilities\fatfs\src\ff.c</FilePath>
+              <FilePath>..\..\..\utilities\fatfs\src\ff.c</FilePath>
             </File>
             <File>
               <FileName>fattime.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\utilities\fatfs\port\fattime.c</FilePath>
+              <FilePath>..\..\..\utilities\fatfs\port\fattime.c</FilePath>
             </File>
             <File>
               <FileName>diskio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\utilities\fatfs\port\diskio.c</FilePath>
+              <FilePath>..\..\..\utilities\fatfs\port\diskio.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -680,7 +680,7 @@
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\src\apps\main.c</FilePath>
+              <FilePath>..\..\..\platform\src\apps\main.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -690,7 +690,7 @@
             <File>
               <FileName>stm32f4xx_it.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\platform\sys\stm32f4xx_it.c</FilePath>
+              <FilePath>..\..\..\platform\sys\stm32f4xx_it.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -236,7 +236,7 @@
     <cbSel>0</cbSel>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>0</FileNumber>
+      <FileNumber>1</FileNumber>
       <FileType>2</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -245,12 +245,12 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\arm\Device\STM32F4\Source\startup_stm32f4xx.s</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\arm\Device\STM32F4\Source\MDK-ARM\startup_stm32f4xx.s</PathWithFileName>
       <FilenameWithoutPath>startup_stm32f4xx.s</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>0</FileNumber>
+      <FileNumber>2</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -259,7 +259,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\arm\Device\STM32F4\Source\system_stm32f4xx.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\arm\Device\STM32F4\Source\system_stm32f4xx.c</PathWithFileName>
       <FilenameWithoutPath>system_stm32f4xx.c</FilenameWithoutPath>
     </File>
   </Group>
@@ -271,7 +271,7 @@
     <cbSel>0</cbSel>
     <File>
       <GroupNumber>2</GroupNumber>
-      <FileNumber>2</FileNumber>
+      <FileNumber>3</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -285,7 +285,7 @@
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
-      <FileNumber>3</FileNumber>
+      <FileNumber>4</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -299,20 +299,6 @@
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
-      <FileNumber>4</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_can.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_can.c</FilenameWithoutPath>
-    </File>
-    <File>
-      <GroupNumber>2</GroupNumber>
       <FileNumber>5</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -322,8 +308,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_crc.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_crc.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_can.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_can.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -336,8 +322,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_cryp.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_crc.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_crc.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -350,8 +336,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_aes.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_cryp_aes.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_cryp.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -364,8 +350,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_des.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_cryp_des.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_aes.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_cryp_aes.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -378,8 +364,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_tdes.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_cryp_tdes.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_des.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_cryp_des.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -392,8 +378,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dac.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_dac.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_tdes.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_cryp_tdes.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -406,8 +392,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dbgmcu.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_dbgmcu.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dac.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_dac.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -420,8 +406,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dcmi.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_dcmi.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dbgmcu.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_dbgmcu.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -434,8 +420,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dma.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_dma.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dcmi.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_dcmi.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -448,8 +434,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_exti.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_exti.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dma.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_dma.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -462,8 +448,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_flash.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_flash.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_exti.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_exti.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -476,8 +462,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_fsmc.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_fsmc.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_flash.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_flash.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -490,8 +476,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_gpio.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_fsmc.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_fsmc.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -504,8 +490,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_hash.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_gpio.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -518,8 +504,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash_md5.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_hash_md5.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_hash.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -532,8 +518,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash_sha1.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_hash_sha1.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash_md5.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_hash_md5.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -546,8 +532,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_i2c.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_i2c.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash_sha1.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_hash_sha1.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -560,8 +546,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_iwdg.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_iwdg.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_i2c.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_i2c.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -574,8 +560,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_pwr.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_pwr.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_iwdg.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_iwdg.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -588,8 +574,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_rcc.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_pwr.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_pwr.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -602,8 +588,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rng.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_rng.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_rcc.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -616,8 +602,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rtc.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_rtc.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rng.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_rng.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -630,8 +616,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_sdio.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_sdio.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rtc.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_rtc.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -644,8 +630,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_spi.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_spi.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_sdio.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_sdio.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -658,8 +644,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_syscfg.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_syscfg.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_spi.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_spi.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -672,8 +658,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_tim.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_syscfg.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_syscfg.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -686,8 +672,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_usart.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_tim.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -700,7 +686,21 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_wwdg.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_usart.c</FilenameWithoutPath>
+    </File>
+    <File>
+      <GroupNumber>2</GroupNumber>
+      <FileNumber>33</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_wwdg.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_wwdg.c</FilenameWithoutPath>
     </File>
   </Group>
@@ -712,20 +712,6 @@
     <cbSel>0</cbSel>
     <File>
       <GroupNumber>3</GroupNumber>
-      <FileNumber>33</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\utilities\freertos\Source\timers.c</PathWithFileName>
-      <FilenameWithoutPath>timers.c</FilenameWithoutPath>
-    </File>
-    <File>
-      <GroupNumber>3</GroupNumber>
       <FileNumber>34</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -735,8 +721,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\utilities\freertos\Source\croutine.c</PathWithFileName>
-      <FilenameWithoutPath>croutine.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\utilities\freertos\Source\timers.c</PathWithFileName>
+      <FilenameWithoutPath>timers.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>3</GroupNumber>
@@ -749,8 +735,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\utilities\freertos\Source\list.c</PathWithFileName>
-      <FilenameWithoutPath>list.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\utilities\freertos\Source\croutine.c</PathWithFileName>
+      <FilenameWithoutPath>croutine.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>3</GroupNumber>
@@ -763,8 +749,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\utilities\freertos\Source\queue.c</PathWithFileName>
-      <FilenameWithoutPath>queue.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\utilities\freertos\Source\list.c</PathWithFileName>
+      <FilenameWithoutPath>list.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>3</GroupNumber>
@@ -774,11 +760,11 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1441</TopLine>
-      <CurrentLine>1443</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\utilities\freertos\Source\tasks.c</PathWithFileName>
-      <FilenameWithoutPath>tasks.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\utilities\freertos\Source\queue.c</PathWithFileName>
+      <FilenameWithoutPath>queue.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>3</GroupNumber>
@@ -791,8 +777,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\utilities\freertos\Source\portable\MemMang\heap_2.c</PathWithFileName>
-      <FilenameWithoutPath>heap_2.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\utilities\freertos\Source\tasks.c</PathWithFileName>
+      <FilenameWithoutPath>tasks.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>3</GroupNumber>
@@ -800,23 +786,16 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>23</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>164</TopLine>
-      <CurrentLine>165</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\utilities\freertos\Source\portable\stm32f4\port.c</PathWithFileName>
-      <FilenameWithoutPath>port.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\utilities\freertos\Source\portable\MemMang\heap_2.c</PathWithFileName>
+      <FilenameWithoutPath>heap_2.c</FilenameWithoutPath>
     </File>
-  </Group>
-
-  <Group>
-    <GroupName>FatFs</GroupName>
-    <tvExp>1</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
     <File>
-      <GroupNumber>4</GroupNumber>
+      <GroupNumber>3</GroupNumber>
       <FileNumber>40</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -826,9 +805,16 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\utilities\fatfs\src\ff.c</PathWithFileName>
-      <FilenameWithoutPath>ff.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\utilities\freertos\Source\portable\stm32f4\MDK-ARM\port.c</PathWithFileName>
+      <FilenameWithoutPath>port.c</FilenameWithoutPath>
     </File>
+  </Group>
+
+  <Group>
+    <GroupName>FatFs</GroupName>
+    <tvExp>0</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
     <File>
       <GroupNumber>4</GroupNumber>
       <FileNumber>41</FileNumber>
@@ -840,8 +826,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\utilities\fatfs\port\fattime.c</PathWithFileName>
-      <FilenameWithoutPath>fattime.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\utilities\fatfs\src\ff.c</PathWithFileName>
+      <FilenameWithoutPath>ff.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>4</GroupNumber>
@@ -854,14 +840,28 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\utilities\fatfs\port\diskio.c</PathWithFileName>
+      <PathWithFileName>..\..\..\utilities\fatfs\port\fattime.c</PathWithFileName>
+      <FilenameWithoutPath>fattime.c</FilenameWithoutPath>
+    </File>
+    <File>
+      <GroupNumber>4</GroupNumber>
+      <FileNumber>43</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\utilities\fatfs\port\diskio.c</PathWithFileName>
       <FilenameWithoutPath>diskio.c</FilenameWithoutPath>
     </File>
   </Group>
 
   <Group>
     <GroupName>apps</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <File>
@@ -872,10 +872,10 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>1</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\src\apps\main.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\src\apps\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
     </File>
   </Group>
@@ -886,17 +886,17 @@
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <File>
-      <GroupNumber>0</GroupNumber>
-      <FileNumber>0</FileNumber>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>45</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>25</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>13</TopLine>
-      <CurrentLine>31</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\platform\sys\stm32f4xx_it.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\sys\stm32f4xx_it.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_it.c</FilenameWithoutPath>
     </File>
   </Group>
