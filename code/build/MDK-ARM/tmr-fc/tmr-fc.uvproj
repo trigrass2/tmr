@@ -346,9 +346,9 @@
             <uThumb>0</uThumb>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER, UMPL_ELIMINATE_ADVFUSION, CONFIG_MPU_SENSORS_MPU6050A2</Define>
+              <Define>USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\platform\csp\st\STM32F4xx_StdPeriph_Driver\inc;..\..\..\platform\sys\inc;..\..\..\utilities\freertos\Source\include;..\..\..\utilities\freertos\Source\portable\stm32f4\inc;..\..\..\utilities\fatfs\inc;..\..\..\utilities\freertos\Source\portable\stm32f4\MDK-ARM;..\..\..\utilities\umpl\platform\include</IncludePath>
+              <IncludePath>..\..\..\platform\csp\st\STM32F4xx_StdPeriph_Driver\inc;..\..\..\platform\sys\inc;..\..\..\utilities\freertos\Source\include;..\..\..\utilities\fatfs\inc;..\..\..\platform\src\drivers\inc;..\..\..\utilities\freertos\Source\portable\STM32F4\MDK-ARM;..\..\..\platform\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -695,12 +695,67 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>umpl</GroupName>
+          <GroupName>drivers</GroupName>
           <Files>
             <File>
-              <FileName>ml.c</FileName>
+              <FileName>drv_usart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\utilities\umpl\lite\ml.c</FilePath>
+              <FilePath>..\..\..\platform\src\drivers\drv_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_acs758.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\src\drivers\drv_acs758.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\src\drivers\drv_adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_apc250.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\src\drivers\drv_apc250.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_hcsr04.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\src\drivers\drv_hcsr04.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_hmc5883l.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\src\drivers\drv_hmc5883l.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\src\drivers\drv_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_mpu6050.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\src\drivers\drv_mpu6050.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_ms5611.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\src\drivers\drv_ms5611.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_pca95xx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\src\drivers\drv_pca95xx.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\src\drivers\drv_pwm.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\src\drivers\drv_spi.c</FilePath>
             </File>
           </Files>
         </Group>
