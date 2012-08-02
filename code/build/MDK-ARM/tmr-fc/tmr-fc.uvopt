@@ -245,7 +245,7 @@
       <TopLine>212</TopLine>
       <CurrentLine>227</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\arm\Device\STM32F4\Source\MDK-ARM\startup_stm32f4xx.s</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\arm\Device\ST\Source\MDK-ARM\startup_stm32f4xx.s</PathWithFileName>
       <FilenameWithoutPath>startup_stm32f4xx.s</FilenameWithoutPath>
     </File>
     <File>
@@ -259,7 +259,7 @@
       <TopLine>519</TopLine>
       <CurrentLine>361</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\arm\Device\STM32F4\Source\system_stm32f4xx.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\arm\Device\ST\Source\system_stm32f4xx.c</PathWithFileName>
       <FilenameWithoutPath>system_stm32f4xx.c</FilenameWithoutPath>
     </File>
   </Group>
@@ -802,8 +802,8 @@
       <Focus>0</Focus>
       <ColumnNumber>8</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>320</TopLine>
-      <CurrentLine>331</CurrentLine>
+      <TopLine>336</TopLine>
+      <CurrentLine>342</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\utilities\freertos\Source\portable\stm32f4\MDK-ARM\port.c</PathWithFileName>
       <FilenameWithoutPath>port.c</FilenameWithoutPath>
@@ -873,7 +873,7 @@
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>1</TopLine>
-      <CurrentLine>32</CurrentLine>
+      <CurrentLine>1</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\platform\src\apps\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -893,7 +893,7 @@
       <Focus>0</Focus>
       <ColumnNumber>20</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>129</TopLine>
+      <TopLine>133</TopLine>
       <CurrentLine>142</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\platform\sys\stm32f4xx_it.c</PathWithFileName>
