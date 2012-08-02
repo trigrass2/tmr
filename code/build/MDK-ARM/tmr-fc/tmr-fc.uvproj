@@ -346,9 +346,9 @@
             <uThumb>0</uThumb>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER</Define>
+              <Define>USE_STDPERIPH_DRIVER, UMPL_ELIMINATE_ADVFUSION, CONFIG_MPU_SENSORS_MPU6050A2</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\platform\csp\st\STM32F4xx_StdPeriph_Driver\inc;..\..\..\platform\sys\inc;..\..\..\utilities\freertos\Source\include;..\..\..\utilities\freertos\Source\portable\stm32f4\inc;..\..\..\utilities\fatfs\inc;..\..\..\utilities\freertos\Source\portable\stm32f4\MDK-ARM</IncludePath>
+              <IncludePath>..\..\..\platform\csp\st\STM32F4xx_StdPeriph_Driver\inc;..\..\..\platform\sys\inc;..\..\..\utilities\freertos\Source\include;..\..\..\utilities\freertos\Source\portable\stm32f4\inc;..\..\..\utilities\fatfs\inc;..\..\..\utilities\freertos\Source\portable\stm32f4\MDK-ARM;..\..\..\utilities\umpl\platform\include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -691,6 +691,16 @@
               <FileName>stm32f4xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\platform\sys\stm32f4xx_it.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>umpl</GroupName>
+          <Files>
+            <File>
+              <FileName>ml.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\ml.c</FilePath>
             </File>
           </Files>
         </Group>
