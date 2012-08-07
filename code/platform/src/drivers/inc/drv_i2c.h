@@ -2,6 +2,16 @@
 #define __DRV_I2C_H__
 #include "device.h"
 
+struct i2c_gpio_platform_data {
+	unsigned int	sda_pin;
+	unsigned int	scl_pin;
+	int		udelay;
+	int		timeout;
+	unsigned int	sda_is_open_drain:1;
+	unsigned int	scl_is_open_drain:1;
+	unsigned int	scl_is_output_only:1;
+};
+
 DWORD drv_i2c_init(LPCSTR dwContext);
 DWORD drv_i2c_open(DWORD dwData, DWORD dwAccess);
 BOOL drv_i2c_close(DWORD dwData);
