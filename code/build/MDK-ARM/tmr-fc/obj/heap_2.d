@@ -1,0 +1,12 @@
+.\obj\heap_2.o: ..\..\..\utilities\freertos\Source\portable\MemMang\heap_2.c
+.\obj\heap_2.o: C:\Keil\ARM\RV31\Inc\stdlib.h
+.\obj\heap_2.o: ..\..\..\utilities\freertos\Source\include\FreeRTOS.h
+.\obj\heap_2.o: C:\Keil\ARM\RV31\Inc\stddef.h
+.\obj\heap_2.o: ..\..\..\utilities\freertos\Source\include\projdefs.h
+.\obj\heap_2.o: ..\..\..\utilities\freertos\Source\portable\STM32F4\MDK-ARM\FreeRTOSConfig.h
+.\obj\heap_2.o: C:\Keil\ARM\RV31\Inc\stdint.h
+.\obj\heap_2.o: ..\..\..\utilities\freertos\Source\include\portable.h
+.\obj\heap_2.o: ..\..\..\utilities\freertos\Source\portable\STM32F4\MDK-ARM\portmacro.h
+.\obj\heap_2.o: ..\..\..\utilities\freertos\Source\include\mpu_wrappers.h
+.\obj\heap_2.o: ..\..\..\utilities\freertos\Source\include\task.h
+.\obj\heap_2.o: ..\..\..\utilities\freertos\Source\include\list.h

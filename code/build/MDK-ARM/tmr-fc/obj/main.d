@@ -1,0 +1,14 @@
+.\obj\main.o: ..\..\..\platform\src\apps\main.c
+.\obj\main.o: C:\Keil\ARM\RV31\Inc\stdio.h
+.\obj\main.o: ..\..\..\utilities\freertos\Source\include\FreeRTOS.h
+.\obj\main.o: C:\Keil\ARM\RV31\Inc\stddef.h
+.\obj\main.o: ..\..\..\utilities\freertos\Source\include\projdefs.h
+.\obj\main.o: ..\..\..\utilities\freertos\Source\portable\STM32F4\MDK-ARM\FreeRTOSConfig.h
+.\obj\main.o: C:\Keil\ARM\RV31\Inc\stdint.h
+.\obj\main.o: ..\..\..\utilities\freertos\Source\include\portable.h
+.\obj\main.o: ..\..\..\utilities\freertos\Source\portable\STM32F4\MDK-ARM\portmacro.h
+.\obj\main.o: ..\..\..\utilities\freertos\Source\include\mpu_wrappers.h
+.\obj\main.o: ..\..\..\utilities\freertos\Source\include\task.h
+.\obj\main.o: ..\..\..\utilities\freertos\Source\include\list.h
+.\obj\main.o: ..\..\..\utilities\freertos\Source\include\queue.h
+.\obj\main.o: ..\..\..\utilities\freertos\Source\include\semphr.h

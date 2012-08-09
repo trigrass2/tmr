@@ -1,0 +1,11 @@
+.\obj\list.o: ..\..\..\utilities\freertos\Source\list.c
+.\obj\list.o: C:\Keil\ARM\RV31\Inc\stdlib.h
+.\obj\list.o: ..\..\..\utilities\freertos\Source\include\FreeRTOS.h
+.\obj\list.o: C:\Keil\ARM\RV31\Inc\stddef.h
+.\obj\list.o: ..\..\..\utilities\freertos\Source\include\projdefs.h
+.\obj\list.o: ..\..\..\utilities\freertos\Source\portable\STM32F4\MDK-ARM\FreeRTOSConfig.h
+.\obj\list.o: C:\Keil\ARM\RV31\Inc\stdint.h
+.\obj\list.o: ..\..\..\utilities\freertos\Source\include\portable.h
+.\obj\list.o: ..\..\..\utilities\freertos\Source\portable\STM32F4\MDK-ARM\portmacro.h
+.\obj\list.o: ..\..\..\utilities\freertos\Source\include\mpu_wrappers.h
+.\obj\list.o: ..\..\..\utilities\freertos\Source\include\list.h

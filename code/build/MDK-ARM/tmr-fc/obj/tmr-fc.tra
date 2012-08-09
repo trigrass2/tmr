@@ -1,0 +1,34 @@
+*** Creating Trace Output File '.\obj\tmr-fc.tra' Ok.
+### Preparing for ADS-LD.
+### Creating ADS-LD Command Line
+### List of Objects: adding '".\obj\startup_stm32f4xx.o"'
+### List of Objects: adding '".\obj\system_stm32f4xx.o"'
+### List of Objects: adding '".\obj\timers.o"'
+### List of Objects: adding '".\obj\croutine.o"'
+### List of Objects: adding '".\obj\list.o"'
+### List of Objects: adding '".\obj\queue.o"'
+### List of Objects: adding '".\obj\tasks.o"'
+### List of Objects: adding '".\obj\heap_2.o"'
+### List of Objects: adding '".\obj\port.o"'
+### List of Objects: adding '".\obj\ff.o"'
+### List of Objects: adding '".\obj\fattime.o"'
+### List of Objects: adding '".\obj\diskio.o"'
+### List of Objects: adding '".\obj\main.o"'
+### List of Objects: adding '".\obj\stm32f4xx_it.o"'
+### List of Objects: adding '".\obj\drv_i2c.o"'
+### ADS-LD Command completed:
+--cpu Cortex-M4.fp ".\obj\startup_stm32f4xx.o" ".\obj\system_stm32f4xx.o" ".\obj\timers.o" ".\obj\croutine.o" ".\obj\list.o" ".\obj\queue.o" ".\obj\tasks.o" ".\obj\heap_2.o" ".\obj\port.o" ".\obj\ff.o" ".\obj\fattime.o" ".\obj\diskio.o" ".\obj\main.o" ".\obj\stm32f4xx_it.o" ".\obj\drv_i2c.o" --library_type=microlib --feedback ".\obj\tmr-fc.fed" 
+--strict --scatter ".\obj\tmr-fc.sct" 
+--summary_stderr --info summarysizes --map --xref --callgraph --symbols 
+--info sizes --info totals --info unused --info veneers 
+ --list ".\tmr-fc.map" -o ".\obj\tmr-fc.axf"### Preparing Environment (PrepEnvAds)
+### ADS-LD Output File: '.\obj\tmr-fc.axf'
+### ADS-LD Command File: '.\obj\tmr-fc.lnp'
+### Checking for dirty Components...
+### Creating CmdFile '.\obj\tmr-fc.lnp', Handle=0x00000294
+### Writing '.lnp' file
+### ADS-LD Command file '.\obj\tmr-fc.lnp' is ready.
+### ADS-LD: About to start ADS-LD Thread.
+### ADS-LD: executed with 0 errors
+### Updating obj list
+### LDADS_file() completed.
