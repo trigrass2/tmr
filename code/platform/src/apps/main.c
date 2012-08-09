@@ -14,9 +14,10 @@ void vLoopTask( void *pvParameters );
 int main(void)
 {	
 	unsigned int exit = 0;
+	unsigned int p1=2,p2=10;
 	
-	xTaskCreate( vLoopTask, ( signed portCHAR * ) "LOOP-1", configMINIMAL_STACK_SIZE*2, NULL, 1, NULL );
-	xTaskCreate( vLoopTask, ( signed portCHAR * ) "LOOP-2", configMINIMAL_STACK_SIZE*2, NULL, 2, NULL );
+	xTaskCreate( vLoopTask, ( signed portCHAR * ) "LOOP-1", configMINIMAL_STACK_SIZE*2, (void*)&p1, 1, NULL );
+	xTaskCreate( vLoopTask, ( signed portCHAR * ) "LOOP-2", configMINIMAL_STACK_SIZE*2, (void*)&p2, 2, NULL );
 	/* Start the scheduler. */
 	vTaskStartScheduler();
 	
@@ -27,9 +28,17 @@ int main(void)
 
 void vLoopTask( void *pvParameters )
 {
+    unsigned int delay = 0;
+
+    if( pvParameters != NULL )
+        delay = *((unsigned int*)pvParameters);
+    else
+        delay = 2;
+
 	while(1)
 	{
 		count++;
-		vTaskDelay(2);
+		vTaskDelay(delay);
 	}
 }
+
