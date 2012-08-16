@@ -348,7 +348,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\utilities\freertos\Source\portable\STM32F4\MDK-ARM;..\..\..\platform\csp\st\STM32F4xx_StdPeriph_Driver\inc;..\..\..\utilities\freertos\Source\include;..\..\..\platform\sys\inc;..\..\..\utilities\fatfs\inc;..\..\..\platform\inc</IncludePath>
+              <IncludePath>..\..\..\utilities\freertos\Source\portable\RVDS\ARM_CM4F;..\..\..\platform\csp\st\STM32F4xx_StdPeriph_Driver\inc;..\..\..\utilities\freertos\Source\include;..\..\..\platform\sys\inc;..\..\..\platform\src\inc;..\..\..\utilities\fatfs\inc;..\..\..\platform\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -650,7 +650,7 @@
             <File>
               <FileName>port.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\utilities\freertos\Source\portable\stm32f4\MDK-ARM\port.c</FilePath>
+              <FilePath>..\..\..\utilities\freertos\Source\portable\RVDS\ARM_CM4F\port.c</FilePath>
             </File>
           </Files>
         </Group>

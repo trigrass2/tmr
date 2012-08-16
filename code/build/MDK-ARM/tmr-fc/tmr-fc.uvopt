@@ -805,7 +805,7 @@
       <TopLine>331</TopLine>
       <CurrentLine>335</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\utilities\freertos\Source\portable\stm32f4\MDK-ARM\port.c</PathWithFileName>
+      <PathWithFileName>..\..\..\utilities\freertos\Source\portable\RVDS\ARM_CM4F\port.c</PathWithFileName>
       <FilenameWithoutPath>port.c</FilenameWithoutPath>
     </File>
   </Group>
