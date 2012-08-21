@@ -333,7 +333,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>4</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
@@ -346,9 +346,9 @@
             <uThumb>0</uThumb>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER</Define>
+              <Define>USE_STDPERIPH_DRIVER, CONFIG_MPU_SENSORS_MPU6050B1, UMPL</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\utilities\freertos\Source\portable\RVDS\ARM_CM4F;..\..\..\platform\csp\st\STM32F4xx_StdPeriph_Driver\inc;..\..\..\utilities\freertos\Source\include;..\..\..\platform\sys\inc;..\..\..\platform\src\inc;..\..\..\utilities\fatfs\inc;..\..\..\platform\inc</IncludePath>
+              <IncludePath>..\..\..\utilities\freertos\Source\portable\RVDS\ARM_CM4F;..\..\..\platform\csp\st\STM32F4xx_StdPeriph_Driver\inc;..\..\..\utilities\freertos\Source\include;..\..\..\platform\sys\inc;..\..\..\platform\src\inc;..\..\..\utilities\fatfs\inc;..\..\..\platform\inc;..\..\..\utilities\umpl\platform\include;..\..\..\utilities\umpl\lite;..\..\..\utilities\umpl\platform\include\linux</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -701,6 +701,161 @@
               <FileName>drv_i2c.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\platform\src\drivers\i2c\drv_i2c.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>umpl</GroupName>
+          <Files>
+            <File>
+              <FileName>umpl-states.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\umpl-states.c</FilePath>
+            </File>
+            <File>
+              <FileName>umpl-setup.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\umpl-setup.c</FilePath>
+            </File>
+            <File>
+              <FileName>mlBiasNoMotion.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\mlBiasNoMotion.c</FilePath>
+            </File>
+            <File>
+              <FileName>ml.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\ml.c</FilePath>
+            </File>
+            <File>
+              <FileName>mlstates.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\mlstates.c</FilePath>
+            </File>
+            <File>
+              <FileName>mlos_at32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\platform\at32\mlos_at32.c</FilePath>
+            </File>
+            <File>
+              <FileName>temp_comp_u.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\temp_comp_u.c</FilePath>
+            </File>
+            <File>
+              <FileName>ustore_manager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\ustore_manager.c</FilePath>
+            </File>
+            <File>
+              <FileName>ustore_nvram_uc3_io.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\ustore_nvram_uc3_io.c</FilePath>
+            </File>
+            <File>
+              <FileName>mlarray_lite.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\mlarray_lite.c</FilePath>
+            </File>
+            <File>
+              <FileName>mldl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\mldl.c</FilePath>
+            </File>
+            <File>
+              <FileName>mlsl_at32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\platform\at32\mlsl_at32.c</FilePath>
+            </File>
+            <File>
+              <FileName>mldl_cfg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\mldl_cfg.c</FilePath>
+            </File>
+            <File>
+              <FileName>mldl_cfg_init_umpl_6050a2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\mldl_cfg_init_umpl_6050a2.c</FilePath>
+            </File>
+            <File>
+              <FileName>dmpDefault.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\dmpDefault.c</FilePath>
+            </File>
+            <File>
+              <FileName>mpu6050.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\accel\mpu6050.c</FilePath>
+            </File>
+            <File>
+              <FileName>compass.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\compass.c</FilePath>
+            </File>
+            <File>
+              <FileName>mlFIFO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\mlFIFO.c</FilePath>
+            </File>
+            <File>
+              <FileName>mlFIFOHW.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\mlFIFOHW.c</FilePath>
+            </File>
+            <File>
+              <FileName>mlMathFunc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\mlMathFunc.c</FilePath>
+            </File>
+            <File>
+              <FileName>mlsupervisor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\mlsupervisor.c</FilePath>
+            </File>
+            <File>
+              <FileName>pressure.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\pressure.c</FilePath>
+            </File>
+            <File>
+              <FileName>accel.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\accel.c</FilePath>
+            </File>
+            <File>
+              <FileName>mlcontrol.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\mlcontrol.c</FilePath>
+            </File>
+            <File>
+              <FileName>mlSetGyroBias.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\mlSetGyroBias.c</FilePath>
+            </File>
+            <File>
+              <FileName>ml_invobj.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\ml_invobj.c</FilePath>
+            </File>
+            <File>
+              <FileName>ustore_lite_fusion_delegate.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\ustore_lite_fusion_delegate.c</FilePath>
+            </File>
+            <File>
+              <FileName>mldmp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\mldmp.c</FilePath>
+            </File>
+            <File>
+              <FileName>key0_96.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\key0_96.c</FilePath>
+            </File>
+            <File>
+              <FileName>ml_init.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\ml_init.c</FilePath>
             </File>
           </Files>
         </Group>
