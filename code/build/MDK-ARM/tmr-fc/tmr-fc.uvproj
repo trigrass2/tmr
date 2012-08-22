@@ -346,7 +346,7 @@
             <uThumb>0</uThumb>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER, CONFIG_MPU_SENSORS_MPU6050B1, UMPL</Define>
+              <Define>USE_STDPERIPH_DRIVER, CONFIG_MPU_SENSORS_MPU6050B1, UMPL, UMPL_ELIMINATE_ADVFUSION</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\utilities\freertos\Source\portable\RVDS\ARM_CM4F;..\..\..\platform\csp\st\STM32F4xx_StdPeriph_Driver\inc;..\..\..\utilities\freertos\Source\include;..\..\..\platform\sys\inc;..\..\..\platform\src\inc;..\..\..\utilities\fatfs\inc;..\..\..\platform\inc;..\..\..\utilities\umpl\platform\include;..\..\..\utilities\umpl\lite;..\..\..\utilities\umpl\platform\include\linux</IncludePath>
             </VariousControls>

@@ -24,12 +24,6 @@
 #endif // defined UTC
 
 /* INV_FEATURE_ADVFUSION can be eliminated by UMPL_ELIMINATE_ADVFUSION */
-
-#if 1 // cctsao1008
-#define UMPL_ELIMINATE_ADVFUSION 1
-#define CONFIG_MPU_SENSORS_MPU6050B1 1
-#endif
-
 #ifndef UMPL_ELIMINATE_ADVFUSION
 #define INV_FEATURE_ADVFUSION
 #else
