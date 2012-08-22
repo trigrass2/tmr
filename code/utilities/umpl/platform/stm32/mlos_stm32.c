@@ -5,13 +5,13 @@
  */
 /*******************************************************************************
  *
- * $Id: mlos_win32.c 4598 2011-01-25 19:33:13Z prao $
+ * $ mlos_win32.c 2012-08-22 tsao, chia-cheng $
  *
  *******************************************************************************/
 
 /**
  *  @defgroup MLOS
- *  @brief OS Interface for Atmel AVR32
+ *  @brief OS Interface for STMicroelectronics STM32
  *
  *  @{
  *      @file mlos.c
@@ -24,11 +24,10 @@
 
 #include "mlos.h"
 #include "stdint_invensense.h"
-#include <asf.h>
 
 #include "log.h"
 #undef MPL_LOG_TAG
-#define MPL_LOG_TAG "mlos_at32"
+#define MPL_LOG_TAG "mlos_stm32"
 
 /* -------------- */
 /* - Functions. - */
@@ -92,7 +91,7 @@ void inv_fclose(FILE *fp)
 **/
 void inv_sleep(int mSecs)
 {
-    delay_ms(mSecs);
+    // To do
 }
 
 
@@ -103,10 +102,13 @@ void inv_sleep(int mSecs)
 **/
 unsigned long inv_get_tick_count(void)
 {
-	const long cpu_hz = 12000000;
-	long count, ms;
-	count = Get_system_register(AVR32_COUNT);
-	ms = cpu_cy_2_ms(count,cpu_hz);
+	//const long cpu_hz = 12000000;
+	long count, ms=0;
+	
+	count = count;
+	
+	// To do
+	
 	return ms;
 }
 

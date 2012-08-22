@@ -5,7 +5,9 @@
  */
 
 /******************************************************************************
- * $Id: mlsl_linux.c 4639 2011-01-28 04:39:15Z yserlin $
+ *
+ * $ mlsl_stm32.c 2012-08-22 tsao, chia-cheng $
+ *
  *****************************************************************************/
 
 /** 
@@ -14,7 +16,7 @@
  *          interface to the system functions.
  *
  *  @{
- *      @file   mlsl_at32.c
+ *      @file   mlsl_stm32.c
  *      @brief  The Motion Library System Layer.
  *
  */
@@ -46,8 +48,8 @@
 #include "mlinclude.h"
 #include "stdint_invensense.h"
 
-#include "twim.h"
-#include "umplCalClient.h"
+//#include "twim.h"
+//#include "umplCalClient.h"
 
 #ifdef DEBUG
 #define _SerialError(...) MPL_LOGE(__VA_ARGS__)
@@ -100,6 +102,7 @@ inv_error_t inv_serial_write( void *sl_handle,
                           unsigned short length,
                           unsigned char const *data )
 {
+    #if 0
     inv_error_t result;
 	
     // twim_write does follow the slaveAddr / slaveRegister convention
@@ -112,6 +115,8 @@ inv_error_t inv_serial_write( void *sl_handle,
     if(result != STATUS_OK ){
 		_SerialError("inv_serial_write: Error. Could not twim_write.\n");
         return INV_ERROR_SERIAL_WRITE; }
+
+		#endif
 
     return INV_SUCCESS;
 }
@@ -133,6 +138,7 @@ inv_error_t inv_serial_single_write(void *sl_handle,
                                     unsigned char registerAddr, 
                                     unsigned char data)
 {
+    #if 0
     inv_error_t result;
     // Copy the argument to this call stack.
     // In the past there have been compiler issues which prohibit
@@ -150,7 +156,9 @@ inv_error_t inv_serial_single_write(void *sl_handle,
 		_SerialError("inv_serial_single_write: Error. Could not twim_write.\n");
         return INV_ERROR_SERIAL_WRITE;
     }
-    
+
+		#endif
+
     return INV_SUCCESS;
 }
 
@@ -173,6 +181,10 @@ inv_error_t inv_serial_write_mem( void *sl_handle,
                              unsigned char const *data )
 {
     inv_error_t result;
+	  result=0;
+
+    #if 0
+
 	unsigned char tmpAddr;
 	unsigned char memAddress[1];
 	unsigned char i2cWrite[SERIAL_MAX_TRANSFER_SIZE];
@@ -223,7 +235,7 @@ inv_error_t inv_serial_write_mem( void *sl_handle,
 
         bytesWritten += thisLen;
     }
-
+    #endif
     return result;
 }
 
@@ -246,6 +258,7 @@ inv_error_t inv_serial_write_fifo( void *sl_handle,
                               unsigned short length, 
                               unsigned char const *data )
 {
+    #if 0
     inv_error_t result;
 	if (length>FIFO_HW_SIZE) {
         _SerialDebug("inv_serial_write_fifo: "
@@ -258,7 +271,7 @@ inv_error_t inv_serial_write_fifo( void *sl_handle,
 		_SerialError("inv_serial_write_fifo: Could not twim_write.\n");
         return INV_ERROR_SERIAL_WRITE; 
     }
-    
+    #endif
     return INV_SUCCESS;
 }
 
@@ -282,6 +295,7 @@ inv_error_t inv_serial_read( void *sl_handle,
                          unsigned short length,
                          unsigned char  *data )
 {
+	  #if 0
     inv_error_t result;
     if (slaveAddr == 0x68 && 
         (registerAddr==MPUREG_FIFO_R_W ||
@@ -295,6 +309,7 @@ inv_error_t inv_serial_read( void *sl_handle,
 		_SerialError("\rinv_serial_read: Error. Could not twim_read.\n");
         return INV_ERROR_SERIAL_READ;
     }
+		#endif
     return INV_SUCCESS;
 }
 
@@ -316,7 +331,10 @@ inv_error_t inv_serial_read_mem( void *sl_handle,
                             unsigned short length, 
                             unsigned char *data )
 {
-    inv_error_t result;
+	  inv_error_t result;
+	  result=0;
+
+	  #if 0
 	unsigned char tmpAddr;
 	unsigned char memAddress[1];
     uint_fast16_t bytesRead = 0;
@@ -364,6 +382,7 @@ inv_error_t inv_serial_read_mem( void *sl_handle,
 
         bytesRead += thisLen;
     }
+	#endif
 	return result;
 }
 
@@ -384,6 +403,7 @@ inv_error_t inv_serial_read_fifo( void *sl_handle,
                              unsigned short length, 
                              unsigned char *data )
 {
+	   #if 0
     uint16_t bytesRead = 0;
     inv_error_t result;
 	if (length>FIFO_HW_SIZE) {
@@ -403,7 +423,7 @@ inv_error_t inv_serial_read_fifo( void *sl_handle,
         
         bytesRead += thisLen;
     }
-
+    #endif
     return INV_SUCCESS;
 }
 

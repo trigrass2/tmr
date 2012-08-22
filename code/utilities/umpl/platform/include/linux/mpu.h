@@ -7,6 +7,10 @@
 #ifndef __MPU_H_
 #define __MPU_H_
 
+#if 1 // cctsao1008
+#define inline    __inline
+#endif
+
 #ifdef __KERNEL__
 #include <linux/types.h>
 #include <linux/ioctl.h>
@@ -219,11 +223,8 @@ struct fix_pnt_range {
 	__s32 fraction;
 };
 
-#if 0 // cctsao1008
-//static inline long range_fixedpoint_to_long_mg(struct fix_pnt_range rng)
-#else
-static long range_fixedpoint_to_long_mg(struct fix_pnt_range rng)
-#endif
+
+static inline long range_fixedpoint_to_long_mg(struct fix_pnt_range rng)
 {
 	return (long)(rng.mantissa * 1000 + rng.fraction / 10);
 }

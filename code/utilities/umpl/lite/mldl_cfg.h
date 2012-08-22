@@ -67,10 +67,6 @@
 
 #define MPL_PROD_KEY(ver, rev) (ver * 100 + rev)
 
-#if 1 // cctsao1008
-#define inline 
-#endif
-
 /* -------------------------------------------------------------------------- */
 struct mpu_ram {
 	__u16 length;

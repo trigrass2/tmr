@@ -1222,6 +1222,8 @@ inv_error_t inv_set_bias_update(unsigned short function)
     inv_error_t result = INV_SUCCESS;
     struct mldl_cfg *mldl_cfg = inv_get_dl_config();
 
+    tmp[0] = tmp[0]; tmp[1] = tmp[1]; tmp[2] = tmp[2];
+
     if (inv_get_state() != INV_STATE_DMP_OPENED)
         return INV_ERROR_SM_IMPROPER_STATE;
 

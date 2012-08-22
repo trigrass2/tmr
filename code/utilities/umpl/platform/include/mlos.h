@@ -34,7 +34,7 @@ typedef unsigned int HANDLE;
 #define MLOS_OPEN_EXISTING        ((unsigned int)0x00000003)
 	
 #if 1 // cctsao1008
-#define inline 	
+#define inline    __inline
 #endif
 
 	/* ---------- */

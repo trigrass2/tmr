@@ -346,7 +346,7 @@
             <uThumb>0</uThumb>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER, CONFIG_MPU_SENSORS_MPU6050B1, UMPL, UMPL_ELIMINATE_ADVFUSION</Define>
+              <Define>USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\utilities\freertos\Source\portable\RVDS\ARM_CM4F;..\..\..\platform\csp\st\STM32F4xx_StdPeriph_Driver\inc;..\..\..\utilities\freertos\Source\include;..\..\..\platform\sys\inc;..\..\..\platform\src\inc;..\..\..\utilities\fatfs\inc;..\..\..\platform\inc;..\..\..\utilities\umpl\platform\include;..\..\..\utilities\umpl\lite;..\..\..\utilities\umpl\platform\include\linux</IncludePath>
             </VariousControls>
@@ -706,6 +706,60 @@
         </Group>
         <Group>
           <GroupName>umpl</GroupName>
+          <GroupOption>
+            <CommonProperty>
+              <UseCPPCompiler>0</UseCPPCompiler>
+              <RVCTCodeConst>0</RVCTCodeConst>
+              <RVCTZI>0</RVCTZI>
+              <RVCTOtherData>0</RVCTOtherData>
+              <ModuleSelection>0</ModuleSelection>
+              <IncludeInBuild>2</IncludeInBuild>
+              <AlwaysBuild>2</AlwaysBuild>
+              <GenerateAssemblyFile>2</GenerateAssemblyFile>
+              <AssembleAssemblyFile>2</AssembleAssemblyFile>
+              <PublicsOnly>2</PublicsOnly>
+              <StopOnExitCode>11</StopOnExitCode>
+              <CustomArgument></CustomArgument>
+              <IncludeLibraryModules></IncludeLibraryModules>
+            </CommonProperty>
+            <GroupArmAds>
+              <Cads>
+                <interw>2</interw>
+                <Optim>0</Optim>
+                <oTime>2</oTime>
+                <SplitLS>2</SplitLS>
+                <OneElfS>2</OneElfS>
+                <Strict>2</Strict>
+                <EnumInt>2</EnumInt>
+                <PlainCh>2</PlainCh>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <wLevel>0</wLevel>
+                <uThumb>2</uThumb>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define>CONFIG_MPU_SENSORS_MPU6050B1, UMPL, UMPL_ELIMINATE_ADVFUSION, INV_FEATURE_GYROTC_UTC , DMPDEFAULT_UNSORTEDKEYLOOKUP, UMPL_DISABLE_STORE_CAL, UMPL_DISABLE_LOAD_CAL</Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Cads>
+              <Aads>
+                <interw>2</interw>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <thumb>2</thumb>
+                <SplitLS>2</SplitLS>
+                <SwStkChk>2</SwStkChk>
+                <NoWarn>2</NoWarn>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Aads>
+            </GroupArmAds>
+          </GroupOption>
           <Files>
             <File>
               <FileName>umpl-states.c</FileName>
@@ -733,11 +787,6 @@
               <FilePath>..\..\..\utilities\umpl\lite\mlstates.c</FilePath>
             </File>
             <File>
-              <FileName>mlos_at32.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\utilities\umpl\platform\at32\mlos_at32.c</FilePath>
-            </File>
-            <File>
               <FileName>temp_comp_u.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\utilities\umpl\lite\temp_comp_u.c</FilePath>
@@ -746,11 +795,6 @@
               <FileName>ustore_manager.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\utilities\umpl\lite\ustore_manager.c</FilePath>
-            </File>
-            <File>
-              <FileName>ustore_nvram_uc3_io.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\utilities\umpl\lite\ustore_nvram_uc3_io.c</FilePath>
             </File>
             <File>
               <FileName>mlarray_lite.c</FileName>
@@ -763,24 +807,9 @@
               <FilePath>..\..\..\utilities\umpl\lite\mldl.c</FilePath>
             </File>
             <File>
-              <FileName>mlsl_at32.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\utilities\umpl\platform\at32\mlsl_at32.c</FilePath>
-            </File>
-            <File>
               <FileName>mldl_cfg.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\utilities\umpl\lite\mldl_cfg.c</FilePath>
-            </File>
-            <File>
-              <FileName>mldl_cfg_init_umpl_6050a2.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\utilities\umpl\lite\mldl_cfg_init_umpl_6050a2.c</FilePath>
-            </File>
-            <File>
-              <FileName>dmpDefault.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\utilities\umpl\lite\dmpDefault.c</FilePath>
             </File>
             <File>
               <FileName>mpu6050.c</FileName>
@@ -856,6 +885,31 @@
               <FileName>ml_init.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\utilities\umpl\lite\ml_init.c</FilePath>
+            </File>
+            <File>
+              <FileName>dmpDefaultMantis.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\dmpDefaultMantis.c</FilePath>
+            </File>
+            <File>
+              <FileName>ustore_nvram_stm32_io.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\ustore_nvram_stm32_io.c</FilePath>
+            </File>
+            <File>
+              <FileName>mlsl_stm32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\platform\stm32\mlsl_stm32.c</FilePath>
+            </File>
+            <File>
+              <FileName>mlos_stm32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\platform\stm32\mlos_stm32.c</FilePath>
+            </File>
+            <File>
+              <FileName>mldl_cfg_init_umpl_6050a2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utilities\umpl\lite\mldl_cfg_init_umpl_6050a2.c</FilePath>
             </File>
           </Files>
         </Group>
