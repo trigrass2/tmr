@@ -738,7 +738,7 @@
                 <uThumb>2</uThumb>
                 <VariousControls>
                   <MiscControls></MiscControls>
-                  <Define>CONFIG_MPU_SENSORS_MPU6050B1, UMPL, UMPL_ELIMINATE_ADVFUSION, INV_FEATURE_GYROTC_UTC , DMPDEFAULT_UNSORTEDKEYLOOKUP, UMPL_DISABLE_STORE_CAL, UMPL_DISABLE_LOAD_CAL</Define>
+                  <Define>CONFIG_MPU_SENSORS_MPU6050B1, UMPL, UMPL_ELIMINATE_ADVFUSION, INV_FEATURE_GYROTC_UTC , DMPDEFAULT_UNSORTEDKEYLOOKUP, UMPL_ENABLE_TEMPCOMP, UMPL_DISABLE_STORE_CAL, UMPL_DISABLE_LOAD_CAL, INV_CACHE_DMP=0</Define>
                   <Undefine></Undefine>
                   <IncludePath></IncludePath>
                 </VariousControls>
