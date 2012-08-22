@@ -15,7 +15,7 @@ static void inv_init_accel_obj( struct inv_accel_param *iobj_accel );
 static void inv_init_mag_obj( struct inv_mag_data *iobj_mag );
 static void inv_init_pressure_obj( struct inv_pressure_data *iobj_pressure );
 //static void inv_init_gyro_tc_obj( struct inv_tempcomp_data *iobj_gyro_tc );
-//static void inv_init_lite_fusion_obj( struct inv_litefusion_data *iobj_lite_fusion );
+static void inv_init_lite_fusion_obj( struct inv_litefusion_data *iobj_lite_fusion );
 //static void inv_init_adv_fusion_obj( struct inv_advfusion_data *iobj_adv_fusion );
 static void inv_init_calmat_obj( struct inv_cal_params *iobj_calmat );
 static void inv_init_sys_obj( struct inv_system_data *iobj_sys );

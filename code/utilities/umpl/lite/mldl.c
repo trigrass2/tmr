@@ -680,15 +680,13 @@ inv_error_t inv_set_offset(const short *offset)
     int ii;
     long sf;
 
-
     MPL_LOGI("%s(%04x, %04x, %04x); from %04x, %04x %04x\n",
              __func__,
              offset[0], offset[1], offset[2],
              g_mldl_cfg->mpu_offsets->gyro[0],
              g_mldl_cfg->mpu_offsets->gyro[1],
              g_mldl_cfg->mpu_offsets->gyro[2]);
-
-    
+             
     sf = (2000L * 131) / g_mldl_cfg->mpu_chip_info->gyro_sens_trim;
     for (ii = 0; ii < ARRAY_SIZE(g_mldl_cfg->mpu_offsets->gyro); ii++) {
         // Record the bias in the units the register uses

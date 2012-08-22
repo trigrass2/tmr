@@ -248,7 +248,7 @@ inv_error_t umplStartAccelOnly(float freq)
     }
     if (umplState == UMPL_RUN || umplState == UMPL_LPACCEL_ONLY)
     {
-        if( freq <= 18.0f )
+        if( freq <= 18.0F )
             inv_set_fifo_rate(10); //fifo rate = 18 hz
         else if( freq <= 50.0F && freq > 18.0F )
             inv_set_fifo_rate(3); //fifo rate = 50 hz

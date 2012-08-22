@@ -72,12 +72,10 @@ inv_error_t umplPlatformSetup(void)
 
 void umplMotionCallback(unsigned short motionstate)
 {
-
     if (motionstate == INV_MOTION)
         MPL_LOGI("umplMotionCallback: INV_MOTION\n");
     else if (motionstate == INV_NO_MOTION)
         MPL_LOGI("umplMotionCallback: INV_NO_MOTION\n");
-
 }
 /**
  *  @brief  umplDmpSetup is called by Called by umplStartMPU(). This function 

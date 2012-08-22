@@ -596,7 +596,8 @@ static int inv_get_silicon_rev_mpu6050(
 	unsigned char bank =
 	    (BIT_PRFTCH_EN | BIT_CFG_USER_BANK | MPU_MEM_OTP_BANK_0);
 	unsigned short memAddr = ((bank << 8) | 0x06);
-	short key, index;
+	unsigned short key;
+	short index;
 	struct mpu_chip_info *mpu_chip_info = mldl_cfg->mpu_chip_info;
 
 #if defined CONFIG_MPU_SENSORS_MPU6050B1

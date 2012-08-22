@@ -825,12 +825,11 @@ inv_error_t inv_set_accel_calibration(float range, signed char *orientation)
 
     if (mldl_cfg->slave[EXT_SLAVE_TYPE_ACCEL]->id) {
 
+        tmp[0] = tmp[0]; tmp[1] = tmp[1]; tmp[2] = tmp[2];
+
         tmp[0] = DINA4C;
-			  tmp[0] = tmp[0];
         tmp[1] = DINACD;
-			  tmp[1] = tmp[1];
         tmp[2] = DINA6C;
-			  tmp[2] = tmp[2];
 
         for (kk = 0; kk < 9; ++kk) {
             cal[kk] = scale * orientation[kk];

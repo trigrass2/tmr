@@ -175,7 +175,7 @@ inv_error_t inv_get_accel_data(long *data)
                     (long)tmp[2] * mtx[3 * ii + 2]);
     }
 
-    MPL_LOGI("ACCEL: %8ld, %8ld, %8ld\n", data[0], data[1], data[2]);
+    //MPL_LOGI("ACCEL: %8ld, %8ld, %8ld\n", data[0], data[1], data[2]);
     return result;
 }
 

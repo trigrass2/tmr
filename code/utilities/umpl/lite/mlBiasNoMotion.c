@@ -186,7 +186,7 @@ inv_error_t MLAccelMotionDetection(struct inv_obj_t *inv_obj)
 
         gain = inv_obj->lite_fusion->accel_lpf_gain * rate;
         timeChange = inv_get_fifo_rate();
-				timeChange = timeChange;
+        timeChange = timeChange;
 
         accelMag = 0;
         for (kk = 0; kk < ACCEL_NUM_AXES; ++kk) {

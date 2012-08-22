@@ -151,13 +151,12 @@ uint_fast16_t inv_get_fifo(uint_fast16_t length, unsigned char *buffer)
         if (buffer[kk] != gFifoFooter[kk]) {
             MPL_LOGV("Resetting Fifo : Invalid footer : 0x%02x 0x%02x\n",
                      buffer[0], buffer[1]);
-            //_fifoDebug(char out[200];
-                       //MPL_LOGW("fifoCount : %d\n", fifo_objHW.fifoCount);
-                       //sprintf(out, "0x");
+            _fifoDebug(char out[200];
+                       MPL_LOGW("fifoCount : %d\n", fifo_objHW.fifoCount);
+                       sprintf(out, "0x");
                        for (kk = 0; kk < (int)toRead; kk++) {
-                       //sprintf(out, "%s%02X", out, buffer[kk]);
-											 }
-                       //MPL_LOGW("%s\n", out);)
+                       sprintf(out, "%s%02X", out, buffer[kk]);}
+                       MPL_LOGW("%s\n", out);)
                 inv_reset_fifo();
             fifo_objHW.fifoError = INV_ERROR_FIFO_FOOTER;
             return 0;

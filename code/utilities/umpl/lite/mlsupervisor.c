@@ -59,8 +59,8 @@ void inv_init_sensor_fusion_supervisor(void)
     lastCompassTime = 0;
     polltime = 0;
 
-	  lastCompassTime = lastCompassTime;
-	  polltime = polltime;
+      lastCompassTime = lastCompassTime;
+      polltime = polltime;
 
     inv_obj.lite_fusion->acc_state = SF_STARTUP_SETTLE;
     compassCalStableCount = 0;
@@ -177,11 +177,11 @@ inv_error_t inv_simple_compass_cal(struct compass_obj_t *compass_obj)
     };
     int gyroMag;
     int i;
-    
-		prevCompassBias[0] = prevCompassBias[0];
-		prevCompassBias[1] = prevCompassBias[1];
-		prevCompassBias[2] = prevCompassBias[2];
-		
+
+        prevCompassBias[0] = prevCompassBias[0];
+        prevCompassBias[1] = prevCompassBias[1];
+        prevCompassBias[2] = prevCompassBias[2];
+
     if (inv_params_obj.bias_mode & INV_MAG_BIAS_FROM_MOTION) {
         //Most basic compass calibration, used only with lite MPL
         gyroMag = inv_get_gyro_sum_of_sqr() >> GYRO_MAG_SQR_SHIFT;

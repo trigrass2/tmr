@@ -172,12 +172,12 @@ inv_error_t inv_get_euler_angles_x(long *data)
     }
     data[0] =
         (long)((float)
-               (atan2f(rotMatrix[7], rotMatrix[8]) * 57.29577951308f) *
+               (atan2f(rotMatrix[7], rotMatrix[8]) * 57.29577951308F) *
                65536L);
     data[1] = (long)((float)((double)asin(tmp) * 57.29577951308) * 65536L);
     data[2] =
         (long)((float)
-               (atan2f(rotMatrix[3], rotMatrix[0]) * 57.29577951308f) *
+               (atan2f(rotMatrix[3], rotMatrix[0]) * 57.29577951308F) *
                65536L);
     return result;
 }
