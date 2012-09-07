@@ -12,7 +12,7 @@
 
 unsigned int count = 0;
 unsigned int p1=2,p2=10,p3=10000;
-unsigned int data = 0;
+unsigned int data[6] = {0};
 
 void vLoopTask( void *pvParameters );
 void vDiagTask( void *pvParameters );
@@ -57,9 +57,10 @@ void vLoopTask( void *pvParameters )
 
 #define PCA9536DP_ADDRESS 0x41
 #define PCA9533DP_ADDRESS 0x62
-#define MPU6050_ADDRESS   0x69 
-
-
+#define MPU6050_ADDRESS   0x69
+#define HMC5883L_ADDRESS  0x1E
+#define MS5611_ADDRESS    0x76
+#define I2C_SPEED 400000
 
 void vDiagTask( void *pvParameters )
 {
@@ -121,7 +122,7 @@ void vDiagTask( void *pvParameters )
     I2C_CH2.I2C_OwnAddress1 = 0;
     I2C_CH2.I2C_Ack = I2C_Ack_Enable;
     I2C_CH2.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
-    I2C_CH2.I2C_ClockSpeed = 400000;
+    I2C_CH2.I2C_ClockSpeed = I2C_SPEED;
   
     /* I2C Peripheral Enable */
     I2C_Cmd(I2C2, ENABLE);
@@ -130,25 +131,40 @@ void vDiagTask( void *pvParameters )
 
     I2C_ByteWrite(PCA9536DP_ADDRESS, 0x03, 0xF7); // IO3 us output pin
 
-    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x03, 0x97);
-    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x04, 0x80);
-    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0xFF);
+    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x01, 0xFF); // PSC0 : P = 1.68
+    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x02, 0x80); // PWM0
+    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x03, 0x97); // PSC1 : P = 1.00
+    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x04, 0x80); // PWM1
+    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0xBB); // LS0
     
-	while(1)
-	{
-		//GPIO_SetBits(GPIOB, GPIO_Pin_12);
-		delay = 20 / portTICK_RATE_MS;
-		vTaskDelay(delay);
-		GPIO_ResetBits(GPIOB, GPIO_Pin_12);
-		I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xF7); // IO3 (ON)
-		delay = 2000 / portTICK_RATE_MS;
-		vTaskDelay(delay);
-		I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xFF); // IO3 (OFF)
-		vTaskDelay(delay);
-		
-		data=I2C_ByteRead(PCA9536DP_ADDRESS, 0x00);
-		data=I2C_ByteRead(MPU6050_ADDRESS, 0x75);
-	}
+
+    I2C_ByteWrite(MPU6050_ADDRESS, 0x37, 0x02);
+    
+    data[0]=I2C_ByteRead(MPU6050_ADDRESS, 0x75); // to check MPU6050
+    //data[1]=I2C_ByteRead(MPU6050_ADDRESS, 0x24); // to check MPU6050
+    data[1]=I2C_ByteRead(MPU6050_ADDRESS, 0x6A); // to check MPU6050
+    data[2]=I2C_ByteRead(MPU6050_ADDRESS, 0x37); // to check MPU6050
+    //data[3]=I2C_ByteRead(HMC5883L_ADDRESS, 0x0A); // to check HMC5883L
+    //data[4]=I2C_ByteRead(MS5611_ADDRESS, 0x0); // to check MS5611
+    while(1)
+    {
+       #if 1
+        GPIO_SetBits(GPIOB, GPIO_Pin_12);
+        delay = 20 / portTICK_RATE_MS;
+        vTaskDelay(delay);
+        GPIO_ResetBits(GPIOB, GPIO_Pin_12);
+       #endif
+
+        delay = 1000 / portTICK_RATE_MS;
+
+        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xF7); // IO3 (ON)
+        vTaskDelay(delay);
+        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xFF); // IO3 (OFF)
+        vTaskDelay(delay);
+
+        //data=I2C_ByteRead(PCA9536DP_ADDRESS, 0x00);
+        //data=I2C_ByteRead(MPU6050_ADDRESS, 0x75);
+    }
 }
 
 /*******************************************************************************
@@ -164,7 +180,7 @@ uint8_t I2C_ByteRead(u16 I2C_SLAVE_ADDRESS, u8 RegAddr)
 {
     u16 tempADD; 
     uint8_t rData;
-    I2C2_Configuration();
+    //I2C2_Configuration();
     while(I2C_GetFlagStatus(I2C2, I2C_FLAG_BUSY));            //檢測總線是否忙 就是看 SCL 或SDA是否為 低
 
     tempADD=I2C_SLAVE_ADDRESS<<1;
@@ -211,13 +227,12 @@ void I2C2_Configuration(void)
   I2C_InitStructure.I2C_OwnAddress1 = 0;     //這個地方不太明白什麼作用，自身地址？是不是只有從模式才有效？
   I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;                  //使能 應答 功能
   I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;   //應答7位地址
-  I2C_InitStructure.I2C_ClockSpeed = 400000;                               //設置i2c的速率，不能高於 400KHz
+  I2C_InitStructure.I2C_ClockSpeed = I2C_SPEED;                               //設置i2c的速率，不能高於 400KHz
   
 
   I2C_Cmd(I2C2, ENABLE);                                       //使能i2c1外設
   I2C_Init(I2C2, &I2C_InitStructure);                          //配置i2c1
 
-	
   I2C_AcknowledgeConfig(I2C2, ENABLE);                        //允許1字節1應答模式
     
 //  printf("\n\r I2C1_初始化完成\n\r");
@@ -237,7 +252,7 @@ void I2C2_Configuration(void)
 void I2C_ByteWrite(u16 I2C_SLAVE_ADDRESS, u8 RegAddr,u8 CData)
 {
    u16 tempADD;
-   I2C2_Configuration();
+   //I2C2_Configuration();
 //*((u8 *)0x4001080c) |=0x80; 
     while(I2C_GetFlagStatus(I2C2, I2C_FLAG_BUSY)); // 檢測i2c總線狀態
     tempADD=I2C_SLAVE_ADDRESS<<1;    
