@@ -118,7 +118,7 @@ void vDiagTask( void *pvParameters )
 
     GPIO_Init(GPIOB, &GPIO_PB);
     //------------------------------------------------
-    
+
     //------------------------------------------------
     // I2C & GPIO Configuration
     //------------------------------------------------
@@ -164,7 +164,7 @@ void vDiagTask( void *pvParameters )
     /* Apply I2C configuration after enabling it */
     I2C_Init(I2C2, &I2C_CH2);
     //------------------------------------------------
-    
+
     //------------------------------------------------
     // Test PCA9536
     //------------------------------------------------
@@ -208,7 +208,7 @@ void vDiagTask( void *pvParameters )
     }
 
     // CONVERSION SEQUENCE
-    
+
     // D1
     I2C_ByteWrite(MS5611_ADDRESS, (CMD_ADC_CONV|CMD_ADC_D1|CMD_ADC_4096), NULL, TRUE); // ADC command for MS5611
 
@@ -289,7 +289,7 @@ uint8_t I2C_ByteRead(u16 Add, u8 Reg)
     while (!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));    // Test on EV6 and clear it 仿真過不去，直接運行沒問題
 
     //  I2C_Cmd(I2C1, ENABLE);    /* Clear EV6 by setting again the PE bit */--------驗證是否需要
- 
+
     I2C_SendData(I2C2, Reg);    /*發送P寄存器地址*/
     while (!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_TRANSMITTED));    /*數據已發送*/ /* Test on EV8 and clear it */
 
@@ -328,7 +328,6 @@ void I2C2_Configuration(void)
 
     //  printf("\n\r I2C1_初始化完成\n\r");
 }
-
 
 /*******************************************************************************
 * Function Name  : SKATER_I2C_ByteWrite
@@ -380,7 +379,6 @@ void I2C_ByteWrite(u16 Add, u8 Reg,u8 Data,u8 Cmd)
     I2C_GenerateSTOP(I2C2, ENABLE);    //發送停止信號
 }
 
-
 /*******************************************************************************
 * Function Name  : SKATER_I2C_MultRead
 * Description    : 多字節寫讀取指定地址的數據（7位地址）
@@ -429,7 +427,7 @@ void I2C_MutiRead(u8* pBuffer, u8 Add, u8 Reg,u8 Count)
         }
 
         /* Test on EV7 and clear it */
-    
+
         /* 為了在收到最後一個字節後產生一個NACK脈衝，在讀倒數第二個數據字節之後(在倒數第二個RxNE事件之後)必須清除ACK位。
         為了產生一個停止/重起始條件，軟件必須在讀倒數第二個數據字節之後(在倒數第二個RxNE事件之後)設置STOP/START位。
         只接收一個字節時，剛好在EV6之後(EV6_1時，清除ADDR之後)要關閉應答和停止條件的產生位。*/
