@@ -69,25 +69,25 @@ void vLoopTask( void *pvParameters )
     }
 }
 
-#define PCA9536DP_ADDRESS 0x41
-#define PCA9533DP_ADDRESS 0x62
-#define MPU6050_ADDRESS   0x69
-#define HMC5883L_ADDRESS  0x1E
-#define MS5611_ADDRESS    0x77
-#define I2C_SPEED 400000
+#define PCA9536DP_ADDRESS    0x41
+#define PCA9533DP_ADDRESS    0x62
+#define MPU6050_ADDRESS      0x69
+#define HMC5883L_ADDRESS     0x1E
+#define MS5611_ADDRESS       0x77
+#define I2C_SPEED            400000
 
 // MS5611
-#define CMD_RESET    0x1E // ADC reset command 
-#define CMD_ADC_READ 0x00 // ADC read command 
-#define CMD_ADC_CONV 0x40 // ADC conversion command 
-#define CMD_ADC_D1   0x00 // ADC D1 conversion 
-#define CMD_ADC_D2   0x10 // ADC D2 conversion 
-#define CMD_ADC_256  0x00 // ADC OSR=256 
-#define CMD_ADC_512  0x02 // ADC OSR=512 
-#define CMD_ADC_1024 0x04 // ADC OSR=1024 
-#define CMD_ADC_2048 0x06 // ADC OSR=2056 
-#define CMD_ADC_4096 0x08 // ADC OSR=4096 
-#define CMD_PROM_RD  0xA0 // Prom read command
+#define CMD_RESET            0x1E // ADC reset command
+#define CMD_ADC_READ         0x00 // ADC read command
+#define CMD_ADC_CONV         0x40 // ADC conversion command
+#define CMD_ADC_D1           0x00 // ADC D1 conversion
+#define CMD_ADC_D2           0x10 // ADC D2 conversion
+#define CMD_ADC_256          0x00 // ADC OSR=256
+#define CMD_ADC_512          0x02 // ADC OSR=512
+#define CMD_ADC_1024         0x04 // ADC OSR=1024
+#define CMD_ADC_2048         0x06 // ADC OSR=2056
+#define CMD_ADC_4096         0x08 // ADC OSR=4096
+#define CMD_PROM_RD          0xA0 // Prom read command
 
 
 #define TRUE   (1)                      /* Boolean true value.   */
@@ -124,7 +124,7 @@ void vDiagTask( void *pvParameters )
     //------------------------------------------------
     /*!< I2C Periph clock enable */
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C2, ENABLE);
-  
+
     /*!< I2C_SCL_GPIO_CLK and I2C_SDA_GPIO_CLK Periph clock enable */
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
 
@@ -200,7 +200,7 @@ void vDiagTask( void *pvParameters )
     delay = 20 / portTICK_RATE_MS; // delay 20 ms
     vTaskDelay(delay);
 
-    // PROM READ SEQUENCE 
+    // PROM READ SEQUENCE
     for(i=0 ; i<8 ; i++)
     {
         I2C_MutiRead((u8*)&(C[i]), MS5611_ADDRESS, (CMD_PROM_RD + (i<<1)), 2);
@@ -264,9 +264,9 @@ void vDiagTask( void *pvParameters )
 
 /*******************************************************************************
 * Function Name  : SKATER_I2C_ByteRead
-* Description    : 單字節讀取指定地址的數據（7位地址）.
-* Input          : - I2C_SLAVE_ADDRESS : 設備地址。
-*                  - RegAddr:寄存器地址.
+* Description    : 單字節讀取指定地址的數據（7位地址）
+* Input          : - I2C_SLAVE_ADDRESS : 設備地址
+*                  - RegAddr:寄存器地址
 *                  - Data：讀取的單字節數據
 * Output         : None
 * Return         : rData：讀取的數據
@@ -331,9 +331,9 @@ void I2C2_Configuration(void)
 
 /*******************************************************************************
 * Function Name  : SKATER_I2C_ByteWrite
-* Description    : 單字節寫入指定地址的數據指定數據（7位地址）--一般為控制字或配置.
-* Input          : - I2C_SLAVE_ADDRESS : 設備地址。
-*                  - RegAddr:寄存器地址.
+* Description    : 單字節寫入指定地址的數據指定數據（7位地址）--一般為控制字或配置
+* Input          : - I2C_SLAVE_ADDRESS : 設備地址
+*                  - RegAddr:寄存器地址
 *                  - CData：數據
 * Output         : None
 * Return         : None
@@ -374,7 +374,7 @@ void I2C_ByteWrite(u16 Add, u8 Reg,u8 Data,u8 Cmd)
         /* Test on EV8 and clear it */
         while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_TRANSMITTED));
     }
-  
+
     /* Send STOP condition */
     I2C_GenerateSTOP(I2C2, ENABLE);    //發送停止信號
 }
