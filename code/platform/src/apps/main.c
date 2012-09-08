@@ -38,7 +38,7 @@ void I2C2_Configuration(void);
 unsigned char crc4(unsigned int n_prom[]) ;
 
 int main(void)
-{    
+{
     unsigned int exit = 0;
 
     xTaskCreate( vLoopTask, ( signed portCHAR * ) "LOOP-1", configMINIMAL_STACK_SIZE*2, (void*)&p1, 3, NULL );
