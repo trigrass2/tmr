@@ -37,9 +37,6 @@ void I2C_MutiRead(u8* pBuffer, u8 Add, u8 Reg,u8 Count);
 void I2C2_Configuration(void);
 unsigned char crc4(unsigned int n_prom[]) ;
 
-
-
-
 int main(void)
 {    
     unsigned int exit = 0;
@@ -47,10 +44,10 @@ int main(void)
     xTaskCreate( vLoopTask, ( signed portCHAR * ) "LOOP-1", configMINIMAL_STACK_SIZE*2, (void*)&p1, 3, NULL );
     xTaskCreate( vLoopTask, ( signed portCHAR * ) "LOOP-2", configMINIMAL_STACK_SIZE*2, (void*)&p2, 2, NULL );
     xTaskCreate( vDiagTask, ( signed portCHAR * ) "DIAG-3", configMINIMAL_STACK_SIZE*2, (void*)&p3, 1, NULL );
-    
+
     /* Start the scheduler. */
     vTaskStartScheduler();
-    
+
     while(exit == 1);
 
     return 0;
@@ -102,15 +99,15 @@ void vDiagTask( void *pvParameters )
     GPIO_InitTypeDef  GPIO_PB;
     I2C_InitTypeDef   I2C_CH2;
     unsigned int delay=0, i=0;
-    
-    //const portTickType xDelay = 5000 / portTICK_RATE_MS;
 
     if( pvParameters != NULL )
         delay = *((unsigned int*)pvParameters);
     else
         delay = 2;
 
-    // BEEP
+    //------------------------------------------------
+    // BEEP & GPIO Configuration
+    //------------------------------------------------
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
 
     GPIO_PB.GPIO_Pin = GPIO_Pin_12;
@@ -118,10 +115,13 @@ void vDiagTask( void *pvParameters )
     GPIO_PB.GPIO_OType = GPIO_OType_PP;
     GPIO_PB.GPIO_Speed = GPIO_Speed_100MHz;
     GPIO_PB.GPIO_PuPd = GPIO_PuPd_NOPULL;
-    
-    GPIO_Init(GPIOB, &GPIO_PB);
 
-    // I2C
+    GPIO_Init(GPIOB, &GPIO_PB);
+    //------------------------------------------------
+    
+    //------------------------------------------------
+    // I2C & GPIO Configuration
+    //------------------------------------------------
     /*!< I2C Periph clock enable */
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C2, ENABLE);
   
@@ -129,25 +129,25 @@ void vDiagTask( void *pvParameters )
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
 
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
-  
+
     /* Reset I2C IP */
     RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C2, ENABLE);
-  
+
     /* Release reset signal of I2C IP */
     RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C2, DISABLE);
-    
+
     /*!< GPIO configuration */
     /* Connect PXx to I2C_SCL*/
     GPIO_PinAFConfig(GPIOB, GPIO_PinSource10, GPIO_AF_I2C2);
     /* Connect PXx to I2C_SDA*/
     GPIO_PinAFConfig(GPIOB, GPIO_PinSource11, GPIO_AF_I2C2);
-    
+
     GPIO_PB.GPIO_Pin = GPIO_Pin_10|GPIO_Pin_11;
     GPIO_PB.GPIO_Mode = GPIO_Mode_AF;
     GPIO_PB.GPIO_OType = GPIO_OType_OD;
     GPIO_PB.GPIO_Speed = GPIO_Speed_100MHz;
     GPIO_PB.GPIO_PuPd = GPIO_PuPd_NOPULL;
-    
+
     GPIO_Init(GPIOB, &GPIO_PB);
 
     /*!< I2C configuration */
@@ -158,12 +158,13 @@ void vDiagTask( void *pvParameters )
     I2C_CH2.I2C_Ack = I2C_Ack_Enable;
     I2C_CH2.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
     I2C_CH2.I2C_ClockSpeed = I2C_SPEED;
-  
+
     /* I2C Peripheral Enable */
     I2C_Cmd(I2C2, ENABLE);
     /* Apply I2C configuration after enabling it */
     I2C_Init(I2C2, &I2C_CH2);
-
+    //------------------------------------------------
+    
     //------------------------------------------------
     // Test PCA9536
     //------------------------------------------------
@@ -199,7 +200,7 @@ void vDiagTask( void *pvParameters )
     delay = 20 / portTICK_RATE_MS; // delay 20 ms
     vTaskDelay(delay);
 
-    //PROM READ SEQUENCE 
+    // PROM READ SEQUENCE 
     for(i=0 ; i<8 ; i++)
     {
         I2C_MutiRead((u8*)&(C[i]), MS5611_ADDRESS, (CMD_PROM_RD + (i<<1)), 2);
@@ -226,7 +227,6 @@ void vDiagTask( void *pvParameters )
 
     // CYCLIC REDUNDANCY CHECK (CRC) 
     ms_crc4=crc4(C);
-    //ms_crc4=crc4(nprom);
 
     //------------------------------------------------
 
@@ -239,7 +239,10 @@ void vDiagTask( void *pvParameters )
         data_m[i]=I2C_ByteRead(HMC5883L_ADDRESS, i); // to check HMC5883L
     }
     //------------------------------------------------
-    
+
+    //------------------------------------------------
+    // LOOP
+    //------------------------------------------------
     while(1)
     {
         #if 0
@@ -256,6 +259,7 @@ void vDiagTask( void *pvParameters )
         I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xFF, NULL); // IO3 (OFF)
         vTaskDelay(delay);
     }
+    //------------------------------------------------
 }
 
 /*******************************************************************************
