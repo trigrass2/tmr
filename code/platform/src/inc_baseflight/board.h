@@ -11,8 +11,8 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "stm32f4xx_conf.h"
-#include "core_cm4.h"
+#include "stm32f10x_conf.h"
+#include "core_cm3.h"
 #include "printf.h"
 
 #ifndef M_PI
