@@ -1168,7 +1168,12 @@
             <File>
               <FileName>drv_i2c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\src\drivers\i2c\drv_i2c.c</FilePath>
+              <FilePath>..\..\..\platform\src\drivers\drv_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_system.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\src\drivers\drv_system.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -19,11 +19,13 @@ static void cycleCounterInit(void)
     usTicks = clocks.SYSCLK_Frequency / 1000000;
 }
 
+#if 0
 // SysTick
 void SysTick_Handler(void)
 {
     sysTickUptime++;
 }
+#endif
 
 // Return system uptime in microseconds (rollover in 70minutes)
 uint32_t micros(void)
@@ -44,6 +46,7 @@ uint32_t millis(void)
 
 void systemInit(void)
 {
+#if 0
     GPIO_InitTypeDef GPIO_InitStructure;
     uint32_t i;
 
@@ -83,21 +86,25 @@ void systemInit(void)
     LED0_OFF;
     LED1_OFF;
     BEEP_OFF;
+#endif
 
     // Init cycle counter
     cycleCounterInit();
 
+#if 0
     // SysTick
     SysTick_Config(SystemCoreClock / 1000);
 
     // Configure the rest of the stuff
     adcInit();
+#endif
+
 #ifndef FY90Q
     i2cInit(I2C2);
 #endif
-
     // sleep for 100ms
     delay(100);
+
 }
 
 #if 1
@@ -142,6 +149,7 @@ void delay(uint32_t ms)
 
 void failureMode(uint8_t mode)
 {
+#if 0
     LED1_ON;
     LED0_OFF;
     while (1) {
@@ -152,6 +160,7 @@ void failureMode(uint8_t mode)
         delay(25);
         BEEP_OFF;
     }
+#endif
 }
 
 #define AIRCR_VECTKEY_MASK    ((uint32_t)0x05FA0000)

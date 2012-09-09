@@ -267,9 +267,17 @@ void i2cInit(I2C_TypeDef *I2C)
     I2C_InitTypeDef I2C_InitStructure;
 
     // Init pins
+    #if 0
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;
+    #else
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10|GPIO_Pin_11;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+    #endif
     GPIO_Init(GPIOB, &GPIO_InitStructure);
 
     I2Cx = I2C;
@@ -282,10 +290,19 @@ void i2cInit(I2C_TypeDef *I2C)
     I2C_StructInit(&I2C_InitStructure);
 
     I2C_ITConfig(I2Cx, I2C_IT_EVT | I2C_IT_ERR, DISABLE);       //Enable EVT and ERR interrupts - they are enabled by the first request
+    #if 0
     I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;
     I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
     I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
     I2C_InitStructure.I2C_ClockSpeed = 400000;
+    #else
+    I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;
+    I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
+    I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
+    I2C_InitStructure.I2C_ClockSpeed = 400000;
+    //I2C_InitStructure.I2C_OwnAddress1 = 0;
+    //I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
+    #endif
     I2C_Cmd(I2Cx, ENABLE);
     I2C_Init(I2Cx, &I2C_InitStructure);
 
@@ -315,9 +332,17 @@ static void i2cUnstick(void)
     GPIO_InitTypeDef GPIO_InitStructure;
     uint8_t i;
 
+    #if 0
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
+    #else
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10|GPIO_Pin_11;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+    #endif
     GPIO_Init(GPIOB, &GPIO_InitStructure);
 
     GPIO_SetBits(GPIOB, GPIO_Pin_10 | GPIO_Pin_11);
@@ -347,9 +372,17 @@ static void i2cUnstick(void)
     GPIO_SetBits(GPIOB, GPIO_Pin_11); // Set bus sda high
 
     // Init pins
+    #if 0
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;
+    #else
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10|GPIO_Pin_11;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+    #endif
     GPIO_Init(GPIOB, &GPIO_InitStructure);
 }
 
