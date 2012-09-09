@@ -10,30 +10,39 @@
 /* ST StdPeriph Driver includes. */
 #include "stm32f4xx_conf.h"
 
+#include "drv_mpu6050.h"
+#include "drv_hmc5883l.h"
+
 unsigned int count = 0;
 unsigned int p1=2,p2=10,p3=10000;
 unsigned int data[6] = {0};
-unsigned int data_m[13] = {0};
+u8 data_mpu[118] = {0};
+u8 data_hmc[13] = {0};
+unsigned int data_g[6] = {0};
 
 // MS5611
-unsigned long D1;    // ADC value of the pressure conversion 
-unsigned long D2;    // ADC value of the temperature conversion  
-unsigned int C[8];   // calibration coefficients 
-double P;   // compensated pressure value 
-double T;   // compensated temperature value 
-double dT;   // difference between actual and measured temperature 
-double OFF;   // offset at actual temperature 
-double SENS;   // sensitivity at actual temperature 
+unsigned long D1;    // ADC value of the pressure conversion
+unsigned long D2;    // ADC value of the temperature conversion
+unsigned int C[8];   // calibration coefficients
+double P;   // compensated pressure value
+double T;   // compensated temperature value
+double dT;   // difference between actual and measured temperature
+double OFF;   // offset at actual temperature
+double SENS;   // sensitivity at actual temperature
 
 unsigned char ms_crc4 = 0;
 unsigned int nprom[] = {0x3132,0x3334,0x3536,0x3738,0x3940,0x4142,0x4344,0x450B}; // CRC =0x0B so..  0x4500 + 0x0B
 
+// MPU6050
+s16 temp_data = 0;
+double temp_deg = 0.0;
+
 
 void vLoopTask( void *pvParameters );
 void vDiagTask( void *pvParameters );
-uint8_t I2C_ByteRead(u16 Add, u8 Reg);
-void I2C_ByteWrite(u16 Add, u8 Reg,u8 Data,u8 Cmd);
-void I2C_MutiRead(u8* pBuffer, u8 Add, u8 Reg,u8 Count);
+uint8_t I2C_ByteRead(u16 Addr, u8 Reg);
+void I2C_ByteWrite(u16 Addr, u8 Reg,u8 Data,u8 Cmd);
+void I2C_MutiRead(u8* pBuffer, u8 Addr, u8 Reg,u8 Count);
 void I2C2_Configuration(void);
 unsigned char crc4(unsigned int n_prom[]) ;
 
@@ -174,30 +183,49 @@ void vDiagTask( void *pvParameters )
     //------------------------------------------------
     // Test PCA9533
     //------------------------------------------------
-    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x01, 0xFF, NULL); // PSC0 : P = 1.68
-    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x02, 0x40, NULL); // PWM0 50%(0x80)
-    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x03, 0x97, NULL); // PSC1 : P = 1.00
-    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x04, 0x40, NULL); // PWM1 25%(0x40)
-    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0xBB, NULL); // LS0
+    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x01, 0xFF, FALSE); // PSC0 : P = 1.68
+    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x02, 0x40, FALSE); // PWM0 50%(0x80)
+    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x03, 0x97, FALSE); // PSC1 : P = 1.00
+    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x04, 0x40, FALSE); // PWM1 25%(0x40)
+    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0xBB, FALSE); // LS0
     //------------------------------------------------
 
     //------------------------------------------------
     // Test MPU6050
     //------------------------------------------------
-    I2C_ByteWrite(MPU6050_ADDRESS, 0x37, 0x02, NULL);
-    
-    data[0]=I2C_ByteRead(MPU6050_ADDRESS, 0x75); // to check MPU6050
-    data[1]=I2C_ByteRead(MPU6050_ADDRESS, 0x24); // to check MPU6050
-    data[2]=I2C_ByteRead(MPU6050_ADDRESS, 0x6A); // to check MPU6050
-    data[3]=I2C_ByteRead(MPU6050_ADDRESS, 0x37); // to check MPU6050
+    I2C_ByteWrite(MPU6050_ADDRESS, MPU6050_RA_PWR_MGMT_1, 1 << MPU6050_PWR1_DEVICE_RESET_BIT, FALSE); // Reset
+
+    delay = 100 / portTICK_RATE_MS; // delay 100 ms
+    vTaskDelay(delay);
+
+    I2C_ByteWrite(MPU6050_ADDRESS, MPU6050_RA_PWR_MGMT_1, 0x0, FALSE); // Leave sleep mpde
+
+    delay = 100 / portTICK_RATE_MS; // delay 100 ms
+    vTaskDelay(delay);
+
+    I2C_ByteWrite(MPU6050_ADDRESS, MPU6050_RA_INT_PIN_CFG, 1 << MPU6050_INTCFG_I2C_BYPASS_EN_BIT, FALSE); // Disable MST I2C
+
+    delay = 100 / portTICK_RATE_MS; // delay 100 ms
+    vTaskDelay(delay);
+
+    #if 1
+    for(i=0 ; i<118 ; i++)
+    {
+        data_mpu[i]=I2C_ByteRead(MPU6050_ADDRESS, i);
+    }
+    #else
+    I2C_MutiRead((u8*)data_mpu, MPU6050_ADDRESS, 0x0, 118);
+    #endif
+    temp_data = (data_mpu[MPU6050_RA_TEMP_OUT_H]<<8) | data_mpu[MPU6050_RA_TEMP_OUT_L];
+    temp_deg = (double)(temp_data/340.0) + 36.53;
     //------------------------------------------------
 
     //------------------------------------------------
     // Test MS5611
     //------------------------------------------------
-    I2C_ByteWrite(MS5611_ADDRESS, CMD_RESET, NULL, TRUE); // Reset command for MS5611
-    
-    delay = 20 / portTICK_RATE_MS; // delay 20 ms
+    I2C_ByteWrite(MS5611_ADDRESS, CMD_RESET, NULL, TRUE); // Reset command
+
+    delay = 100 / portTICK_RATE_MS; // delay 100 ms
     vTaskDelay(delay);
 
     // PROM READ SEQUENCE
@@ -225,7 +253,7 @@ void vDiagTask( void *pvParameters )
 
     I2C_MutiRead((u8*)&(D2), MS5611_ADDRESS, CMD_ADC_READ, 3);
 
-    // CYCLIC REDUNDANCY CHECK (CRC) 
+    // CYCLIC REDUNDANCY CHECK (CRC)
     ms_crc4=crc4(C);
 
     //------------------------------------------------
@@ -233,10 +261,9 @@ void vDiagTask( void *pvParameters )
     //------------------------------------------------
     // Test HMC5883L
     //------------------------------------------------
-    //Read out all register data from HMC5883L
     for(i=0 ; i<13 ; i++)
     {
-        data_m[i]=I2C_ByteRead(HMC5883L_ADDRESS, i); // to check HMC5883L
+        data_hmc[i]=I2C_ByteRead(HMC5883L_ADDRESS, i); // to check HMC5883L
     }
     //------------------------------------------------
 
@@ -254,171 +281,197 @@ void vDiagTask( void *pvParameters )
 
         delay = 1000 / portTICK_RATE_MS;
 
-        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xF7, NULL); // IO3 (ON)
+        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xF7, FALSE); // IO3 (ON)
         vTaskDelay(delay);
-        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xFF, NULL); // IO3 (OFF)
+        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xFF, FALSE); // IO3 (OFF)
         vTaskDelay(delay);
     }
     //------------------------------------------------
 }
 
 /*******************************************************************************
-* Function Name  : SKATER_I2C_ByteRead
-* Description    : 單字節讀取指定地址的數據（7位地址）
-* Input          : - I2C_SLAVE_ADDRESS : 設備地址
-*                  - RegAddr:寄存器地址
-*                  - Data：讀取的單字節數據
-* Output         : None
-* Return         : rData：讀取的數據
+* Function Name  : GPIO_I2C2_Configuration
+* Description    :
+* Input          :
+* Output         :
+* Return         :
 *******************************************************************************/
-uint8_t I2C_ByteRead(u16 Add, u8 Reg)
+void GPIO_I2C2_Configuration(void)
 {
-    u16 tempADD; 
+    GPIO_InitTypeDef  GPIO_I2C1_InitStructure;
+
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C2,ENABLE);
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB,ENABLE);
+    /* Configure I2C1 pins: SCL and SDA PB10 & PB11*/
+    GPIO_PinAFConfig(GPIOB, GPIO_PinSource10, GPIO_AF_I2C2);
+    GPIO_PinAFConfig(GPIOB, GPIO_PinSource11, GPIO_AF_I2C2);
+
+    GPIO_I2C1_InitStructure.GPIO_Pin =  GPIO_Pin_10 | GPIO_Pin_11;
+    GPIO_I2C1_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_I2C1_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+    GPIO_I2C1_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+    GPIO_I2C1_InitStructure.GPIO_OType = GPIO_OType_OD;
+    GPIO_Init(GPIOB, &GPIO_I2C1_InitStructure);
+}
+
+/*******************************************************************************
+* Function Name  : I2C2_Configuration
+* Description    :
+* Input          :
+* Output         :
+* Return         :
+*******************************************************************************/
+void I2C2_Configuration(void)
+{
+    I2C_InitTypeDef  I2C_InitStructure;
+    I2C_DeInit(I2C2);
+    I2C_Cmd(I2C2, DISABLE);
+
+    /* I2C configuration */
+    I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;
+    I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
+    I2C_InitStructure.I2C_OwnAddress1 = 0;
+    I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
+    I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
+    I2C_InitStructure.I2C_ClockSpeed = I2C_SPEED;
+
+    I2C_Cmd(I2C2, ENABLE);
+    I2C_Init(I2C2, &I2C_InitStructure);
+
+    I2C_AcknowledgeConfig(I2C2, ENABLE);
+}
+
+/*******************************************************************************
+* Function Name  : I2C_ByteRead
+* Description    :
+* Input          :
+* Output         :
+* Return         :
+*******************************************************************************/
+uint8_t I2C_ByteRead(u16 Addr, u8 Reg)
+{
+    u16 tempADD;
     uint8_t rData;
+
     //I2C2_Configuration();
-    while(I2C_GetFlagStatus(I2C2, I2C_FLAG_BUSY));    //檢測總線是否忙 就是看 SCL 或SDA是否為 低
 
-    tempADD=Add<<1;
-    I2C_AcknowledgeConfig(I2C2, ENABLE);    //允許1字節1應答模式
+    while(I2C_GetFlagStatus(I2C2, I2C_FLAG_BUSY));
 
-    I2C_GenerateSTART(I2C2, ENABLE);    // 發送起始位 
-    while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_MODE_SELECT));    //EV5,主模式 SR1.SB應當=1
-    //while((((u32)(I2C1->SR2) << 16) | (u32)(I2C1->SR1) & 0x00FFFFBF) != I2C_EVENT_MASTER_MODE_SELECT); 
+    tempADD=Addr<<1;
+    I2C_AcknowledgeConfig(I2C2, ENABLE);
+    I2C_GenerateSTART(I2C2, ENABLE);
 
-    I2C_Send7bitAddress(I2C2, tempADD, I2C_Direction_Transmitter);    //發送移位後的器件地址(寫)
-    while (!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));    // Test on EV6 and clear it 仿真過不去，直接運行沒問題
+    /* Test on EV5 and clear it */
+    while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_MODE_SELECT));
 
-    //  I2C_Cmd(I2C1, ENABLE);    /* Clear EV6 by setting again the PE bit */--------驗證是否需要
+    I2C_Send7bitAddress(I2C2, tempADD, I2C_Direction_Transmitter);
+    /* Test on EV6 and clear it */
+    while (!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
 
-    I2C_SendData(I2C2, Reg);    /*發送P寄存器地址*/
-    while (!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_TRANSMITTED));    /*數據已發送*/ /* Test on EV8 and clear it */
+    I2C_SendData(I2C2, Reg);
 
-    I2C_GenerateSTART(I2C2, ENABLE);    //起始位
-    while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_MODE_SELECT));    /* Test on EV5 and clear it */
+    /* Test on EV8 and clear it */
+    while (!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_TRANSMITTED));
 
-    I2C_Send7bitAddress(I2C2, tempADD, I2C_Direction_Receiver);    /*發送器件地址(讀)*/
-    while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));    /* Test on EV6 and clear it */
+    I2C_GenerateSTART(I2C2, ENABLE);
+    while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_MODE_SELECT));
 
-    while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_RECEIVED));    /* EV7 */
-    rData= I2C_ReceiveData(I2C2);    /* 讀 Register*/
-    I2C_AcknowledgeConfig(I2C2, DISABLE);    //最後一位後要關閉應答的
-    I2C_GenerateSTOP(I2C2, ENABLE);    //發送停止位 
+    I2C_Send7bitAddress(I2C2, tempADD, I2C_Direction_Receiver);
+    while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));
+
+    while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_RECEIVED));
+
+    rData= I2C_ReceiveData(I2C2);
+    I2C_AcknowledgeConfig(I2C2, DISABLE);
+    I2C_GenerateSTOP(I2C2, ENABLE);
 
     return rData;
 }
 
-void I2C2_Configuration(void)
-{
-    I2C_InitTypeDef  I2C_InitStructure; 
-    I2C_DeInit(I2C2); 
-    I2C_Cmd(I2C2, DISABLE); 
-
-    /* I2C configuration */
-    I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;    //設置為i2c模式
-    I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;    //I2C 快速模式 Tlow / Thigh = 2 
-    I2C_InitStructure.I2C_OwnAddress1 = 0;    //這個地方不太明白什麼作用，自身地址？是不是只有從模式才有效？
-    I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;    //使能 應答 功能
-    I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;    //應答7位地址
-    I2C_InitStructure.I2C_ClockSpeed = I2C_SPEED;    //設置i2c的速率，不能高於 400KHz
-
-    I2C_Cmd(I2C2, ENABLE);    //使能i2c1外設
-    I2C_Init(I2C2, &I2C_InitStructure);    //配置i2c1
-
-    I2C_AcknowledgeConfig(I2C2, ENABLE);    //允許1字節1應答模式
-
-    //  printf("\n\r I2C1_初始化完成\n\r");
-}
-
 /*******************************************************************************
-* Function Name  : SKATER_I2C_ByteWrite
-* Description    : 單字節寫入指定地址的數據指定數據（7位地址）--一般為控制字或配置
-* Input          : - I2C_SLAVE_ADDRESS : 設備地址
-*                  - RegAddr:寄存器地址
-*                  - CData：數據
-* Output         : None
-* Return         : None
+* Function Name  : I2C_ByteWrite
+* Description    :
+* Input          :
+* Output         :
+* Return         :
 *******************************************************************************/
-void I2C_ByteWrite(u16 Add, u8 Reg,u8 Data,u8 Cmd)
+void I2C_ByteWrite(u16 Addr, u8 Reg,u8 Data,u8 Cmd)
 {
     u16 tempADD;
+
     //I2C2_Configuration();
-    //*((u8 *)0x4001080c) |=0x80; 
-    while(I2C_GetFlagStatus(I2C2, I2C_FLAG_BUSY));    // 檢測i2c總線狀態
-    tempADD=Add<<1;    
 
-    I2C_AcknowledgeConfig(I2C2, ENABLE);    //允許1字節1應答模式
+    while(I2C_GetFlagStatus(I2C2, I2C_FLAG_BUSY));
 
-    I2C_GenerateSTART(I2C2, ENABLE);    //發送start信號
+    tempADD=Addr<<1;
+    I2C_AcknowledgeConfig(I2C2, ENABLE);
+    I2C_GenerateSTART(I2C2, ENABLE);
 
     /* Test on EV5 and clear it */
-    while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_MODE_SELECT));    //EV5：SB=1，讀SR1然後將地址寫入DR寄存器將清除該事件 
-    I2C_Send7bitAddress(I2C2, tempADD, I2C_Direction_Transmitter);    //發送設備地址，主發送
+    while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_MODE_SELECT));
+    I2C_Send7bitAddress(I2C2, tempADD, I2C_Direction_Transmitter);
 
     /* Test on EV6 and clear it */
-    while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));    //EV6：ADDR=1，讀SR1然後讀SR2將清除該事件
+    while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
+    //I2C_Cmd(I2C2, ENABLE); /* Clear EV6 by setting again the PE bit */ // to verify it
 
-    /* Clear EV6 by setting again the PE bit */
-    I2C_Cmd(I2C2, ENABLE);    //驗證是否需要此步？************
-
-    /* Send the EEPROM's internal address to write to */
-    I2C_SendData(I2C2, Reg);    //發送寄存器地址
+    /* Send the internal address to write to */
+    I2C_SendData(I2C2, Reg);
 
     /* Test on EV8 and clear it */
-    while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_TRANSMITTED));    //EV8：TxE=1，寫入DR寄存器將清除該事件
+    while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_TRANSMITTED));
 
-    if(Cmd == NULL)
+    if(Cmd != TRUE)
     {
         /* Send the byte to be written */
-        I2C_SendData(I2C2, Data);    //發送配置字
+        I2C_SendData(I2C2, Data);
 
         /* Test on EV8 and clear it */
         while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_TRANSMITTED));
     }
 
     /* Send STOP condition */
-    I2C_GenerateSTOP(I2C2, ENABLE);    //發送停止信號
+    I2C_GenerateSTOP(I2C2, ENABLE);
+    I2C_AcknowledgeConfig(I2C2, ENABLE); // test
 }
 
 /*******************************************************************************
-* Function Name  : SKATER_I2C_MultRead
-* Description    : 多字節寫讀取指定地址的數據（7位地址）
-* Input          : - pBuffer：數據存儲區
-*                  - I2C_SLAVE_ADDRESS : 設備地址
-*                  - RegAddr:起始寄存器地址
-*                  - NumByteToRead：連續讀取的字節數目
-* Output         : None
-* Return         : None
+* Function Name  : I2C_MutiRead
+* Description    :
+* Input          :
+* Output         :
+* Return         :
 *******************************************************************************/
-void I2C_MutiRead(u8* pBuffer, u8 Add, u8 Reg,u8 Count)
+void I2C_MutiRead(u8* pBuffer, u8 Addr, u8 Reg,u8 Count)
 {
     u8 tempADD;
+
     //I2C1_Configuration();
-    //*((u8 *)0x4001080c) |=0x80; 
-    while(I2C_GetFlagStatus(I2C2, I2C_FLAG_BUSY));    // Added by Najoua 27/08/2008
-    I2C_AcknowledgeConfig(I2C2, ENABLE);    //允許1字節1應答模式    
+
+    while(I2C_GetFlagStatus(I2C2, I2C_FLAG_BUSY));
+    I2C_AcknowledgeConfig(I2C2, ENABLE);
 
     /* Send START condition */
     I2C_GenerateSTART(I2C2, ENABLE);
-    //*((u8 *)0x4001080c) &=~0x80;
-    tempADD=Add<<1;
+    tempADD=Addr<<1;
 
     while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_MODE_SELECT));    /* Test on EV5 and clear it */
-    I2C_Send7bitAddress(I2C2, tempADD, I2C_Direction_Transmitter);    /* 發送移位後的設備地址，設置主發送模式 */
+    I2C_Send7bitAddress(I2C2, tempADD, I2C_Direction_Transmitter);
 
     while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));    /* Test on EV6 and clear it */
     //  I2C_Cmd(I2C1, ENABLE); /* Clear EV6 by setting again the PE bit */
 
-    I2C_SendData(I2C2, Reg);    /* 發送要讀取的寄存器地址 */
+    I2C_SendData(I2C2, Reg);
     while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_TRANSMITTED));    /* Test on EV8 and clear it */
 
-    I2C_GenerateSTART(I2C2, ENABLE);    /* 發送 開始 信號 */  
+    I2C_GenerateSTART(I2C2, ENABLE);
     while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_MODE_SELECT));    /* Test on EV5 and clear it */
 
-    I2C_Send7bitAddress(I2C2, tempADD, I2C_Direction_Receiver);    /* 發送移位後的設備地址 */
+    I2C_Send7bitAddress(I2C2, tempADD, I2C_Direction_Receiver);
     while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));    /* Test on EV6 and clear it */
 
     /* While there is data to be read */
-    while(Count)  
+    while(Count)
     {
         if(Count == 1)
         {
@@ -427,19 +480,14 @@ void I2C_MutiRead(u8* pBuffer, u8 Add, u8 Reg,u8 Count)
         }
 
         /* Test on EV7 and clear it */
-
-        /* 為了在收到最後一個字節後產生一個NACK脈衝，在讀倒數第二個數據字節之後(在倒數第二個RxNE事件之後)必須清除ACK位。
-        為了產生一個停止/重起始條件，軟件必須在讀倒數第二個數據字節之後(在倒數第二個RxNE事件之後)設置STOP/START位。
-        只接收一個字節時，剛好在EV6之後(EV6_1時，清除ADDR之後)要關閉應答和停止條件的產生位。*/
-
-        if(I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_RECEIVED))  
-        // while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_RECEIVED)); 
-        {      
+        if(I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_RECEIVED))
+        // while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_RECEIVED));
+        {
             /* Read a byte from the EEPROM */
-            *pBuffer = I2C_ReceiveData(I2C2);      
+            *pBuffer = I2C_ReceiveData(I2C2);
             pBuffer++;    /* Point to the next location where the byte read will be saved */
             Count--;    /* Decrement the read bytes counter */
-        }   
+        }
     }
 
     /* Enable Acknowledgement to be ready for another reception */
@@ -448,7 +496,7 @@ void I2C_MutiRead(u8* pBuffer, u8 Add, u8 Reg,u8 Count)
 
 //********************************************************
 //! @brief calculate the CRC code for details look into CRC CODE NOTES
-//! 
+//!
 //! @return crc code
 //********************************************************
 unsigned char crc4(unsigned int n_prom[])
@@ -482,6 +530,6 @@ unsigned char crc4(unsigned int n_prom[])
 
     n_rem=  (0x000F & (n_rem >> 12));    // final 4-bit reminder is CRC code
     n_prom[7]=crc_read;    // restore the crc_read to its original place
-    
+
     return (n_rem ^ 0x00);
 }
