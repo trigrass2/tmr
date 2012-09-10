@@ -20,6 +20,8 @@ u8 data_mpu[118] = {0};
 u8 data_hmc[13] = {0};
 unsigned int data_g[6] = {0};
 
+//#define BEEP_ENABLE
+
 // MS5611
 unsigned long D1;    // ADC value of the pressure conversion
 unsigned long D2;    // ADC value of the temperature conversion
@@ -36,6 +38,14 @@ unsigned int nprom[] = {0x3132,0x3334,0x3536,0x3738,0x3940,0x4142,0x4344,0x450B}
 // MPU6050
 s16 temp_data = 0;
 double temp_deg = 0.0;
+
+#ifdef __GNUC__
+  /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
+     set to 'Yes') calls __io_putchar() */
+  #define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+  #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif /* __GNUC__ */
 
 
 void vLoopTask( void *pvParameters );
@@ -112,6 +122,38 @@ void vLoopTask( void *pvParameters )
 #define CMD_ADC_4096         0x08 // ADC OSR=4096
 #define CMD_PROM_RD          0xA0 // Prom read command
 
+// PCA9536DP : 4-bit I2C-bus and SMBus I/O port
+#define REG_I           0x00
+#define REG_O           0x01
+#define REG_N           0x02
+#define REG_C           0x03
+
+#define I0_BIT          0x00
+#define I1_BIT          0x01
+#define I2_BIT          0x02
+#define I3_BIT          0x03
+
+#define O0_BIT          0x00
+#define O1_BIT          0x01
+#define O2_BIT          0x02
+#define O3_BIT          0x03
+
+#define N0_BIT          0x00
+#define N1_BIT          0x01
+#define N2_BIT          0x02
+#define N3_BIT          0x03
+
+#define C0_BIT          0x00
+#define C1_BIT          0x01
+#define C2_BIT          0x02
+#define C3_BIT          0x03
+
+
+
+u8 pca9536dp[4]={0};
+
+
+
 
 #define TRUE   (1)                      /* Boolean true value.   */
 #define FALSE  (0)                      /* Boolean false value.  */
@@ -119,16 +161,17 @@ void vLoopTask( void *pvParameters )
 
 void vDiagTask( void *pvParameters )
 {
-    unsigned int delay=0, i=0;
+    u16 delay=0, i=0;
+    u32 count=0;
 
     if( pvParameters != NULL )
         delay = *((unsigned int*)pvParameters);
     else
         delay = 2;
 
-    //------------------------------------------------
-    // Test PCA9533
-    //------------------------------------------------
+    /*------------------------------------------------
+         Test PCA9533
+         ------------------------------------------------*/
     I2C_ByteWrite(PCA9533DP_ADDRESS, 0x01, 0xFF, FALSE); // PSC0 : P = 1.68
     I2C_ByteWrite(PCA9533DP_ADDRESS, 0x02, 0x40, FALSE); // PWM0 50%(0x80)
     I2C_ByteWrite(PCA9533DP_ADDRESS, 0x03, 0x97, FALSE); // PSC1 : P = 1.00
@@ -136,23 +179,38 @@ void vDiagTask( void *pvParameters )
 
     I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0x03, FALSE); // LS0
 
+    #ifdef BEEP_ENABLE
     GPIO_SetBits(GPIOB, GPIO_Pin_12);
     vTaskDelay(20);
     GPIO_ResetBits(GPIOB, GPIO_Pin_12);
-    vTaskDelay(1200);
+    vTaskDelay(500);
+    #endif
     //------------------------------------------------
 
-    //------------------------------------------------
-    // Test PCA9536
-    //------------------------------------------------
+    /*------------------------------------------------
+        Test PCA9536
+        ------------------------------------------------*/
     I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0x0F, FALSE); // LS0
 
+    #ifdef BEEP_ENABLE
     GPIO_SetBits(GPIOB, GPIO_Pin_12);
     vTaskDelay(20);
     GPIO_ResetBits(GPIOB, GPIO_Pin_12);
-    vTaskDelay(1200);
+    vTaskDelay(500);
+    #endif
 
-    I2C_ByteWrite(PCA9536DP_ADDRESS, 0x03, 0xF7, NULL); // IO3 us output pin
+    for(i=0 ; i<4 ; i++)
+    {
+        pca9536dp[i]=I2C_ByteRead(PCA9536DP_ADDRESS, i);
+    }
+    // Config pins with Output
+    // IO0 : APC_EN  -> O
+    // IO1 : APC_SET - > O
+    // IO2 : APC_AUX -> I
+    // IO3 : PWR_LED -> O
+    //pca9536dp[REG_C] = 0xF4
+    I2C_ByteWrite(PCA9536DP_ADDRESS, REG_C, 0xF4, NULL); // IO2 us input  pin
+    I2C_ByteWrite(PCA9536DP_ADDRESS, REG_O, 0xF6, NULL); // 11110110
     //------------------------------------------------
 
     //------------------------------------------------
@@ -160,10 +218,12 @@ void vDiagTask( void *pvParameters )
     //------------------------------------------------
     I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0x3F, FALSE); // LS0
 
+    #ifdef BEEP_ENABLE
     GPIO_SetBits(GPIOB, GPIO_Pin_12);
     vTaskDelay(20);
     GPIO_ResetBits(GPIOB, GPIO_Pin_12);
-    vTaskDelay(1200);
+    vTaskDelay(500);
+    #endif
 
     I2C_ByteWrite(MPU6050_ADDRESS, MPU6050_RA_PWR_MGMT_1, 1 << MPU6050_PWR1_DEVICE_RESET_BIT, FALSE); // Reset
 
@@ -197,10 +257,12 @@ void vDiagTask( void *pvParameters )
     //------------------------------------------------
     I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0xFF, FALSE); // LS0
 
+    #ifdef BEEP_ENABLE
     GPIO_SetBits(GPIOB, GPIO_Pin_12);
     vTaskDelay(20);
     GPIO_ResetBits(GPIOB, GPIO_Pin_12);
-    vTaskDelay(1200);
+    vTaskDelay(500);
+    #endif
 
     I2C_ByteWrite(MS5611_ADDRESS, CMD_RESET, NULL, TRUE); // Reset command
 
@@ -242,10 +304,12 @@ void vDiagTask( void *pvParameters )
     //------------------------------------------------
     I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0x55, FALSE); // LS0
 
+    #ifdef BEEP_ENABLE
     GPIO_SetBits(GPIOB, GPIO_Pin_12);
     vTaskDelay(20);
     GPIO_ResetBits(GPIOB, GPIO_Pin_12);
-    vTaskDelay(1200);
+    vTaskDelay(500);
+    #endif
 
     for(i=0 ; i<13 ; i++)
     {
@@ -254,9 +318,16 @@ void vDiagTask( void *pvParameters )
     //------------------------------------------------
 
     //------------------------------------------------
+    // Test APC250
+    //------------------------------------------------
+    
+
+    //------------------------------------------------
     // LOOP
     //------------------------------------------------
     I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0xBB, FALSE); // LS0
+
+    delay = 500 / portTICK_RATE_MS;
 
     while(1)
     {
@@ -267,11 +338,12 @@ void vDiagTask( void *pvParameters )
         GPIO_ResetBits(GPIOB, GPIO_Pin_12);
         #endif
 
-        delay = 1000 / portTICK_RATE_MS;
+        printf("\n\rUSART Printf Example: retarget the C library printf function to the USART (%d)\n\r",count++);
 
-        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xF7, FALSE); // IO3 (ON)
+        //I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xFF, FALSE); // PWR_LED (ON), APC250 (OFF)
+        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xFE, FALSE); // PWR_LED (ON)
         vTaskDelay(delay);
-        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xFF, FALSE); // IO3 (OFF)
+        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xF6, FALSE); // IO3 (OFF)
         vTaskDelay(delay);
     }
     //------------------------------------------------
@@ -525,11 +597,12 @@ unsigned char crc4(unsigned int n_prom[])
 void System_Init(void)
 {
     GPIO_InitTypeDef  GPIO_InitStruct;
+    USART_InitTypeDef USART_InitStruct;
     I2C_InitTypeDef   I2C_InitStruct;
 
-    //------------------------------------------------
-    // BEEP & GPIO Configuration
-    //------------------------------------------------
+    /*------------------------------------------------
+          BEEP & GPIO Configuration
+         ------------------------------------------------*/
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
 
     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_12;
@@ -541,9 +614,9 @@ void System_Init(void)
     GPIO_Init(GPIOB, &GPIO_InitStruct);
     //------------------------------------------------
 
-    //------------------------------------------------
-    // I2C & GPIO Configuration
-    //------------------------------------------------
+    /*------------------------------------------------
+         I2C & GPIO Configuration
+         ------------------------------------------------*/
     /*!< I2C Periph clock enable */
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C2, ENABLE);
 
@@ -586,4 +659,87 @@ void System_Init(void)
     /* Apply I2C configuration after enabling it */
     I2C_Init(I2C2, &I2C_InitStruct);
     //------------------------------------------------
+
+    /*------------------------------------------------
+         UART & GPIO Configuration
+         ------------------------------------------------*/
+    USART_InitStruct.USART_BaudRate = 9600;
+    USART_InitStruct.USART_WordLength = USART_WordLength_8b;
+    USART_InitStruct.USART_StopBits = USART_StopBits_1;
+    USART_InitStruct.USART_Parity = USART_Parity_No;
+    USART_InitStruct.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+    USART_InitStruct.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+    
+    /* Enable GPIO clock */
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC | RCC_AHB1Periph_GPIOC, ENABLE);
+
+    /* Enable UART clock */
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART6, ENABLE);
+
+    /* Connect PXx to USARTx_Tx*/
+    GPIO_PinAFConfig(GPIOC, GPIO_PinSource6, GPIO_AF_USART6);
+
+    /* Connect PXx to USARTx_Rx*/
+    GPIO_PinAFConfig(GPIOC, GPIO_PinSource7, GPIO_AF_USART6);
+
+    /* Configure USART Tx as alternate function  */
+    GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+    GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
+    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
+
+    GPIO_InitStruct.GPIO_Pin = GPIO_Pin_6;
+    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+    /* Configure USART Rx as alternate function  */
+    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
+    GPIO_InitStruct.GPIO_Pin = GPIO_Pin_7;
+    GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+    /* USART configuration */
+    USART_Init(USART6, &USART_InitStruct);
+    
+    /* Enable USART */
+    USART_Cmd(USART6, ENABLE);
+         
 }
+
+/**
+  * @brief  Retargets the C library printf function to the USART.
+  * @param  None
+  * @retval None
+  */
+PUTCHAR_PROTOTYPE
+{
+  /* Place your implementation of fputc here */
+  /* e.g. write a character to the USART */
+  USART_SendData(USART6, (uint8_t) ch);
+
+  /* Loop until the end of transmission */
+  while (USART_GetFlagStatus(USART6, USART_FLAG_TC) == RESET)
+  {}
+
+  return ch;
+}
+
+#ifdef  USE_FULL_ASSERT
+
+/**
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
+void assert_failed(uint8_t* file, uint32_t line)
+{ 
+  /* User can add his own implementation to report the file name and line number,
+     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+
+  /* Infinite loop */
+  while (1)
+  {
+  }
+}
+#endif
+

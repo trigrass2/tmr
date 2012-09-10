@@ -348,7 +348,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\utilities\freertos\Source\portable\RVDS\ARM_CM4F;..\..\..\platform\csp\st\STM32F4xx_StdPeriph_Driver\inc;..\..\..\utilities\freertos\Source\include;..\..\..\platform\sys\inc;..\..\..\platform\src\inc;..\..\..\utilities\fatfs\inc;..\..\..\platform\inc;..\..\..\utilities\umpl\platform\include;..\..\..\utilities\umpl\lite;..\..\..\utilities\umpl\platform\include\linux</IncludePath>
+              <IncludePath>..\..\..\platform\csp\st\STM32F4xx_StdPeriph_Driver\inc;..\..\..\platform\csp\arm\Device\ST\Include;..\..\..\platform\sys\inc;..\..\..\platform\src\inc;..\..\..\platform\inc;..\..\..\utilities\freertos\Source\portable\RVDS\ARM_CM4F;..\..\..\utilities\umpl\platform\include\linux;..\..\..\utilities\freertos\Source\include;..\..\..\utilities\umpl\platform\include;..\..\..\utilities\umpl\lite;..\..\..\utilities\fatfs\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
