@@ -14,7 +14,7 @@
 #include "drv_hmc5883l.h"
 
 unsigned int count = 0;
-unsigned int p1=2,p2=10,p3=10000;
+unsigned int p1=5000,p2=1000,p3=10000;
 unsigned int data[6] = {0};
 u8 data_mpu[118] = {0};
 u8 data_hmc[13] = {0};
@@ -44,11 +44,15 @@ uint8_t I2C_ByteRead(u16 Addr, u8 Reg);
 void I2C_ByteWrite(u16 Addr, u8 Reg,u8 Data,u8 Cmd);
 void I2C_MutiRead(u8* pBuffer, u8 Addr, u8 Reg,u8 Count);
 void I2C2_Configuration(void);
-unsigned char crc4(unsigned int n_prom[]) ;
+unsigned char crc4(unsigned int n_prom[]);
+void System_Init(void);
+
 
 int main(void)
 {
     unsigned int exit = 0;
+
+    System_Init();
 
     xTaskCreate( vLoopTask, ( signed portCHAR * ) "LOOP-1", configMINIMAL_STACK_SIZE*2, (void*)&p1, 3, NULL );
     xTaskCreate( vLoopTask, ( signed portCHAR * ) "LOOP-2", configMINIMAL_STACK_SIZE*2, (void*)&p2, 2, NULL );
@@ -71,11 +75,21 @@ void vLoopTask( void *pvParameters )
     else
         delay = 2;
 
+    //------------------------------------------------
+    // LOOP
+    //------------------------------------------------
     while(1)
     {
         count++;
-        vTaskDelay(delay);
+
+        #if 0
+        GPIO_SetBits(GPIOB, GPIO_Pin_12);
+        vTaskDelay(20);
+        GPIO_ResetBits(GPIOB, GPIO_Pin_12);
+        #endif
+        vTaskDelay((delay / portTICK_RATE_MS));
     }
+    //------------------------------------------------
 }
 
 #define PCA9536DP_ADDRESS    0x41
@@ -105,8 +119,6 @@ void vLoopTask( void *pvParameters )
 
 void vDiagTask( void *pvParameters )
 {
-    GPIO_InitTypeDef  GPIO_PB;
-    I2C_InitTypeDef   I2C_CH2;
     unsigned int delay=0, i=0;
 
     if( pvParameters != NULL )
@@ -115,84 +127,44 @@ void vDiagTask( void *pvParameters )
         delay = 2;
 
     //------------------------------------------------
-    // BEEP & GPIO Configuration
-    //------------------------------------------------
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
-
-    GPIO_PB.GPIO_Pin = GPIO_Pin_12;
-    GPIO_PB.GPIO_Mode = GPIO_Mode_OUT;
-    GPIO_PB.GPIO_OType = GPIO_OType_PP;
-    GPIO_PB.GPIO_Speed = GPIO_Speed_100MHz;
-    GPIO_PB.GPIO_PuPd = GPIO_PuPd_NOPULL;
-
-    GPIO_Init(GPIOB, &GPIO_PB);
-    //------------------------------------------------
-
-    //------------------------------------------------
-    // I2C & GPIO Configuration
-    //------------------------------------------------
-    /*!< I2C Periph clock enable */
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C2, ENABLE);
-
-    /*!< I2C_SCL_GPIO_CLK and I2C_SDA_GPIO_CLK Periph clock enable */
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
-
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
-
-    /* Reset I2C IP */
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C2, ENABLE);
-
-    /* Release reset signal of I2C IP */
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C2, DISABLE);
-
-    /*!< GPIO configuration */
-    /* Connect PXx to I2C_SCL*/
-    GPIO_PinAFConfig(GPIOB, GPIO_PinSource10, GPIO_AF_I2C2);
-    /* Connect PXx to I2C_SDA*/
-    GPIO_PinAFConfig(GPIOB, GPIO_PinSource11, GPIO_AF_I2C2);
-
-    GPIO_PB.GPIO_Pin = GPIO_Pin_10|GPIO_Pin_11;
-    GPIO_PB.GPIO_Mode = GPIO_Mode_AF;
-    GPIO_PB.GPIO_OType = GPIO_OType_OD;
-    GPIO_PB.GPIO_Speed = GPIO_Speed_100MHz;
-    GPIO_PB.GPIO_PuPd = GPIO_PuPd_NOPULL;
-
-    GPIO_Init(GPIOB, &GPIO_PB);
-
-    /*!< I2C configuration */
-    /* I2C configuration */
-    I2C_CH2.I2C_Mode = I2C_Mode_I2C;
-    I2C_CH2.I2C_DutyCycle = I2C_DutyCycle_2;
-    I2C_CH2.I2C_OwnAddress1 = 0;
-    I2C_CH2.I2C_Ack = I2C_Ack_Enable;
-    I2C_CH2.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
-    I2C_CH2.I2C_ClockSpeed = I2C_SPEED;
-
-    /* I2C Peripheral Enable */
-    I2C_Cmd(I2C2, ENABLE);
-    /* Apply I2C configuration after enabling it */
-    I2C_Init(I2C2, &I2C_CH2);
-    //------------------------------------------------
-
-    //------------------------------------------------
-    // Test PCA9536
-    //------------------------------------------------
-    I2C_ByteWrite(PCA9536DP_ADDRESS, 0x03, 0xF7, NULL); // IO3 us output pin
-    //------------------------------------------------
-
-    //------------------------------------------------
     // Test PCA9533
     //------------------------------------------------
     I2C_ByteWrite(PCA9533DP_ADDRESS, 0x01, 0xFF, FALSE); // PSC0 : P = 1.68
     I2C_ByteWrite(PCA9533DP_ADDRESS, 0x02, 0x40, FALSE); // PWM0 50%(0x80)
     I2C_ByteWrite(PCA9533DP_ADDRESS, 0x03, 0x97, FALSE); // PSC1 : P = 1.00
     I2C_ByteWrite(PCA9533DP_ADDRESS, 0x04, 0x40, FALSE); // PWM1 25%(0x40)
-    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0xBB, FALSE); // LS0
+
+    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0x03, FALSE); // LS0
+
+    GPIO_SetBits(GPIOB, GPIO_Pin_12);
+    vTaskDelay(20);
+    GPIO_ResetBits(GPIOB, GPIO_Pin_12);
+    vTaskDelay(1200);
+    //------------------------------------------------
+
+    //------------------------------------------------
+    // Test PCA9536
+    //------------------------------------------------
+    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0x0F, FALSE); // LS0
+
+    GPIO_SetBits(GPIOB, GPIO_Pin_12);
+    vTaskDelay(20);
+    GPIO_ResetBits(GPIOB, GPIO_Pin_12);
+    vTaskDelay(1200);
+
+    I2C_ByteWrite(PCA9536DP_ADDRESS, 0x03, 0xF7, NULL); // IO3 us output pin
     //------------------------------------------------
 
     //------------------------------------------------
     // Test MPU6050
     //------------------------------------------------
+    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0x3F, FALSE); // LS0
+
+    GPIO_SetBits(GPIOB, GPIO_Pin_12);
+    vTaskDelay(20);
+    GPIO_ResetBits(GPIOB, GPIO_Pin_12);
+    vTaskDelay(1200);
+
     I2C_ByteWrite(MPU6050_ADDRESS, MPU6050_RA_PWR_MGMT_1, 1 << MPU6050_PWR1_DEVICE_RESET_BIT, FALSE); // Reset
 
     delay = 100 / portTICK_RATE_MS; // delay 100 ms
@@ -223,6 +195,13 @@ void vDiagTask( void *pvParameters )
     //------------------------------------------------
     // Test MS5611
     //------------------------------------------------
+    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0xFF, FALSE); // LS0
+
+    GPIO_SetBits(GPIOB, GPIO_Pin_12);
+    vTaskDelay(20);
+    GPIO_ResetBits(GPIOB, GPIO_Pin_12);
+    vTaskDelay(1200);
+
     I2C_ByteWrite(MS5611_ADDRESS, CMD_RESET, NULL, TRUE); // Reset command
 
     delay = 100 / portTICK_RATE_MS; // delay 100 ms
@@ -261,6 +240,13 @@ void vDiagTask( void *pvParameters )
     //------------------------------------------------
     // Test HMC5883L
     //------------------------------------------------
+    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0x55, FALSE); // LS0
+
+    GPIO_SetBits(GPIOB, GPIO_Pin_12);
+    vTaskDelay(20);
+    GPIO_ResetBits(GPIOB, GPIO_Pin_12);
+    vTaskDelay(1200);
+
     for(i=0 ; i<13 ; i++)
     {
         data_hmc[i]=I2C_ByteRead(HMC5883L_ADDRESS, i); // to check HMC5883L
@@ -270,6 +256,8 @@ void vDiagTask( void *pvParameters )
     //------------------------------------------------
     // LOOP
     //------------------------------------------------
+    I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0xBB, FALSE); // LS0
+
     while(1)
     {
         #if 0
@@ -532,4 +520,70 @@ unsigned char crc4(unsigned int n_prom[])
     n_prom[7]=crc_read;    // restore the crc_read to its original place
 
     return (n_rem ^ 0x00);
+}
+
+void System_Init(void)
+{
+    GPIO_InitTypeDef  GPIO_InitStruct;
+    I2C_InitTypeDef   I2C_InitStruct;
+
+    //------------------------------------------------
+    // BEEP & GPIO Configuration
+    //------------------------------------------------
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+
+    GPIO_InitStruct.GPIO_Pin = GPIO_Pin_12;
+    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
+    GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
+    GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
+
+    GPIO_Init(GPIOB, &GPIO_InitStruct);
+    //------------------------------------------------
+
+    //------------------------------------------------
+    // I2C & GPIO Configuration
+    //------------------------------------------------
+    /*!< I2C Periph clock enable */
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C2, ENABLE);
+
+    /*!< I2C_SCL_GPIO_CLK and I2C_SDA_GPIO_CLK Periph clock enable */
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+
+    /* Reset I2C IP */
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C2, ENABLE);
+
+    /* Release reset signal of I2C IP */
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C2, DISABLE);
+
+    /*!< GPIO configuration */
+    /* Connect PXx to I2C_SCL*/
+    GPIO_PinAFConfig(GPIOB, GPIO_PinSource10, GPIO_AF_I2C2);
+    /* Connect PXx to I2C_SDA*/
+    GPIO_PinAFConfig(GPIOB, GPIO_PinSource11, GPIO_AF_I2C2);
+
+    GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10|GPIO_Pin_11;
+    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
+    GPIO_InitStruct.GPIO_OType = GPIO_OType_OD;
+    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
+    GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
+
+    GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+    /*!< I2C configuration */
+    /* I2C configuration */
+    I2C_InitStruct.I2C_Mode = I2C_Mode_I2C;
+    I2C_InitStruct.I2C_DutyCycle = I2C_DutyCycle_2;
+    I2C_InitStruct.I2C_OwnAddress1 = 0;
+    I2C_InitStruct.I2C_Ack = I2C_Ack_Enable;
+    I2C_InitStruct.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
+    I2C_InitStruct.I2C_ClockSpeed = I2C_SPEED;
+
+    /* I2C Peripheral Enable */
+    I2C_Cmd(I2C2, ENABLE);
+    /* Apply I2C configuration after enabling it */
+    I2C_Init(I2C2, &I2C_InitStruct);
+    //------------------------------------------------
 }
