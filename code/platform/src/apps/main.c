@@ -47,6 +47,20 @@ double temp_deg = 0.0;
   #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
 #endif /* __GNUC__ */
 
+// BATT
+__IO uint16_t ADCConvertedValue = 0;
+__IO uint32_t VBATVoltage = 0;
+#define ADC1_DR_ADDRESS    ((uint32_t)0x4001204C)
+
+// RTC
+RTC_InitTypeDef RTC_InitStruct;
+RTC_TimeTypeDef RTC_TimeStruct;
+RTC_DateTypeDef RTC_DateStruct;
+RTC_TimeTypeDef  RTC_TimeStampStruct;
+RTC_DateTypeDef  RTC_TimeStampDateStruct;
+__IO uint32_t AsynchPrediv = 0, SynchPrediv = 0;
+
+
 
 void vLoopTask( void *pvParameters );
 void vDiagTask( void *pvParameters );
@@ -55,6 +69,17 @@ void I2C_ByteWrite(u16 Addr, u8 Reg,u8 Data,u8 Cmd);
 void I2C_MutiRead(u8* pBuffer, u8 Addr, u8 Reg,u8 Count);
 void I2C2_Configuration(void);
 unsigned char crc4(unsigned int n_prom[]);
+uint8_t USART_Scanf(uint32_t MinValue, uint32_t MaxValue);
+void RTC_TimeShow(void);
+void RTC_DateShow(void);
+void RTC_TimeStampShow(void);
+void RTC_TimeRegulate(void);
+void RTC_Config(void);
+
+
+
+
+
 void System_Init(void);
 
 
@@ -164,6 +189,7 @@ void vDiagTask( void *pvParameters )
     u16 delay=0, i=0;
     u32 count=0;
     u32 tick_s=0, tick_e=0;
+    double vbatV=0;
 
     if( pvParameters != NULL )
         delay = *((unsigned int*)pvParameters);
@@ -323,7 +349,7 @@ void vDiagTask( void *pvParameters )
     //------------------------------------------------
     I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0xBB, FALSE); // LS0
 
-    delay = 500 / portTICK_RATE_MS;
+    delay = 2000 / portTICK_RATE_MS;
 
     while(1)
     {
@@ -335,18 +361,36 @@ void vDiagTask( void *pvParameters )
         #endif
 
         printf("\n\r---------------------------------------------------------------------------------\n\r");
+        vTaskDelay(100);
         printf("\n\rUSART Printf Example: retarget the C library printf function to the USART (%d)\n\r",count++);
+        vTaskDelay(100);
 
-        //I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xFF, FALSE); // PWR_LED (ON), APC250 (OFF)
-        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xFE, FALSE); // PWR_LED (ON)
+        /*The VBAT pin is internally connected to a bridge divider by 2 */
+        VBATVoltage = (ADCConvertedValue*2)*3300/0xFFF;
+        vbatV=VBATVoltage/1000.0;
+        printf("\n\rvbatV = %f\n\r",vbatV);
+        vTaskDelay(100);
+
+        /* Display the RTC Time/Date and TimeStamp Time/Date */
+        RTC_TimeShow();
+        RTC_DateShow();
+        RTC_TimeStampShow();
+
         tick_s=xTaskGetTickCount();
         printf("\n\rEnter Sleep, xTickCount = %d\n\r",tick_s);
+
+        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xFF, FALSE); // PWR_LED (ON), APC250 (OFF)
         vTaskDelay(delay);
+        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xFE, FALSE); // PWR_LED (ON), APC250 (ON)
+
         tick_e=xTaskGetTickCount();
-        printf("\n\rExit Sleep, xTickCount = %d\n\r",tick_e);
+        printf("\n\rLeave Sleep, xTickCount = %d\n\r",tick_e);
         printf("\n\rTime Spent = %f ms\n\r",(float)(tick_e-tick_s)/portTICK_RATE_MS);
-        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xF6, FALSE); // IO3 (OFF)
+
+        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xF7, FALSE); // PWR_LED (ON), APC250 (OFF)
         vTaskDelay(delay);
+        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xF6, FALSE); // PWR_LED (ON), APC250 (ON)
+
     }
     //------------------------------------------------
 }
@@ -601,10 +645,13 @@ void System_Init(void)
     GPIO_InitTypeDef  GPIO_InitStruct;
     USART_InitTypeDef USART_InitStruct;
     I2C_InitTypeDef   I2C_InitStruct;
+    ADC_InitTypeDef       ADC_InitStruct;
+    ADC_CommonInitTypeDef ADC_CommonInitStruct;
+    DMA_InitTypeDef       DMA_InitStruct;
 
     /*------------------------------------------------
           BEEP & GPIO Configuration
-         ------------------------------------------------*/
+     ------------------------------------------------*/
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
 
     GPIO_InitStruct.GPIO_Pin = GPIO_Pin_12;
@@ -618,7 +665,7 @@ void System_Init(void)
 
     /*------------------------------------------------
          I2C & GPIO Configuration
-         ------------------------------------------------*/
+     ------------------------------------------------*/
     /*!< I2C Periph clock enable */
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C2, ENABLE);
 
@@ -664,14 +711,14 @@ void System_Init(void)
 
     /*------------------------------------------------
          UART & GPIO Configuration
-         ------------------------------------------------*/
-    USART_InitStruct.USART_BaudRate = 9600;
+     ------------------------------------------------*/
+    USART_InitStruct.USART_BaudRate = 115200;
     USART_InitStruct.USART_WordLength = USART_WordLength_8b;
     USART_InitStruct.USART_StopBits = USART_StopBits_1;
     USART_InitStruct.USART_Parity = USART_Parity_No;
     USART_InitStruct.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
     USART_InitStruct.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
-    
+
     /* Enable GPIO clock */
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC | RCC_AHB1Periph_GPIOC, ENABLE);
 
@@ -700,10 +747,169 @@ void System_Init(void)
 
     /* USART configuration */
     USART_Init(USART6, &USART_InitStruct);
-    
+
     /* Enable USART */
     USART_Cmd(USART6, ENABLE);
-         
+
+    /*------------------------------------------------
+         ADC & VBAT Configuration
+     ------------------------------------------------*/
+    /* Enable peripheral clocks *************************************************/
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA2, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
+
+    /* DMA2_Stream0 channel0 configuration **************************************/
+    DMA_DeInit(DMA2_Stream0);
+    DMA_InitStruct.DMA_Channel = DMA_Channel_0;
+    DMA_InitStruct.DMA_PeripheralBaseAddr = (uint32_t)ADC1_DR_ADDRESS;
+    DMA_InitStruct.DMA_Memory0BaseAddr = (uint32_t)&ADCConvertedValue;
+    DMA_InitStruct.DMA_DIR = DMA_DIR_PeripheralToMemory;
+    DMA_InitStruct.DMA_BufferSize = 1;
+    DMA_InitStruct.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+    DMA_InitStruct.DMA_MemoryInc = DMA_MemoryInc_Disable;
+    DMA_InitStruct.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
+    DMA_InitStruct.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
+    DMA_InitStruct.DMA_Mode = DMA_Mode_Circular;
+    DMA_InitStruct.DMA_Priority = DMA_Priority_High;
+    DMA_InitStruct.DMA_FIFOMode = DMA_FIFOMode_Disable;
+    DMA_InitStruct.DMA_FIFOThreshold = DMA_FIFOThreshold_HalfFull;
+    DMA_InitStruct.DMA_MemoryBurst = DMA_MemoryBurst_Single;
+    DMA_InitStruct.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
+    DMA_Init(DMA2_Stream0, &DMA_InitStruct);
+    /* DMA2_Stream0 enable */
+    DMA_Cmd(DMA2_Stream0, ENABLE);
+
+    /* ADC Common Init **********************************************************/
+    ADC_CommonInitStruct.ADC_Mode = ADC_Mode_Independent;
+    ADC_CommonInitStruct.ADC_Prescaler = ADC_Prescaler_Div2;
+    ADC_CommonInitStruct.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
+    ADC_CommonInitStruct.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;
+    ADC_CommonInit(&ADC_CommonInitStruct);
+
+    /* ADC1 Init ****************************************************************/
+    ADC_InitStruct.ADC_Resolution = ADC_Resolution_12b;
+    ADC_InitStruct.ADC_ScanConvMode = DISABLE;
+    ADC_InitStruct.ADC_ContinuousConvMode = ENABLE;
+    ADC_InitStruct.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;
+    ADC_InitStruct.ADC_DataAlign = ADC_DataAlign_Right;
+    ADC_InitStruct.ADC_NbrOfConversion = 1;
+    ADC_Init(ADC1, &ADC_InitStruct);
+
+    /* Enable ADC1 DMA */
+    ADC_DMACmd(ADC1, ENABLE);
+
+    /* ADC1 regular channel18 (VBAT) configuration ******************************/
+    ADC_RegularChannelConfig(ADC1, ADC_Channel_Vbat, 1, ADC_SampleTime_15Cycles);
+
+    /* Enable VBAT channel */
+    ADC_VBATCmd(ENABLE);
+
+    /* Enable DMA request after last transfer (Single-ADC mode) */
+    ADC_DMARequestAfterLastTransferCmd(ADC1, ENABLE);
+
+    /* Enable ADC1 **************************************************************/
+    ADC_Cmd(ADC1, ENABLE);
+
+    /* Start ADC1 Software Conversion */
+    ADC_SoftwareStartConv(ADC1);
+
+    /*------------------------------------------------
+         RTC Configuration
+     ------------------------------------------------*/
+    I2C_ByteWrite(PCA9536DP_ADDRESS, REG_C, 0xF4, NULL); // IO2 us input  pin
+    I2C_ByteWrite(PCA9536DP_ADDRESS, REG_O, 0xF6, NULL); // 11110110 , APC250 EN = Low
+
+    /* Output a message on Hyperterminal using printf function */
+    printf("\n\r*********************** RTC Time Stamp Example ***********************\n\r");
+
+    if (RTC_ReadBackupRegister(RTC_BKP_DR0) != 0x32F2)
+    {
+        /* RTC configuration  */
+        RTC_Config();
+
+        /* Configure the RTC data register and RTC prescaler */
+        RTC_InitStruct.RTC_AsynchPrediv = AsynchPrediv;
+        RTC_InitStruct.RTC_SynchPrediv = SynchPrediv;
+        RTC_InitStruct.RTC_HourFormat = RTC_HourFormat_24;
+
+        /* Check on RTC init */
+        if (RTC_Init(&RTC_InitStruct) == ERROR)
+        {
+            printf("\n\r        /!\\***** RTC Prescaler Config failed ********/!\\ \n\r");
+        }
+
+        /* Configure the time register */
+        RTC_TimeRegulate();
+    }
+    else
+    {
+        /* Check if the Power On Reset flag is set */
+        if (RCC_GetFlagStatus(RCC_FLAG_PORRST) != RESET)
+        {
+            printf("\r\n Power On Reset occurred....\n\r");
+        }
+        /* Check if the Pin Reset flag is set */
+        else if (RCC_GetFlagStatus(RCC_FLAG_PINRST) != RESET)
+        {
+            printf("\r\n External Reset occurred....\n\r");
+        }
+
+        printf("\r\n No need to configure RTC....\n\r");
+
+        /* Enable the PWR clock */
+        RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);
+
+        /* Allow access to RTC */
+        PWR_BackupAccessCmd(ENABLE);
+
+        /* Wait for RTC APB registers synchronisation */
+        RTC_WaitForSynchro();
+
+        /* Clear the RTC Alarm Flag */
+        RTC_ClearFlag(RTC_FLAG_ALRAF);
+
+        /* Clear the EXTI Line 17 Pending bit (Connected internally to RTC Alarm) */
+        EXTI_ClearITPendingBit(EXTI_Line17);
+
+        /* Display the RTC Time/Date and TimeStamp Time/Date */
+        //RTC_TimeShow();
+        //RTC_DateShow();
+        //RTC_TimeStampShow();
+    }
+}
+
+/**
+  * @brief  Gets numeric values from the hyperterminal.
+  * @param  MinValue: minimum value to be used.
+  * @param  MaxValue: maximum value to be used.
+  * @retval None
+  */
+uint8_t USART_Scanf(uint32_t MinValue, uint32_t MaxValue)
+{
+    uint32_t index = 0;
+    uint32_t tmp[2] = {0, 0};
+
+    while (index < 2)
+    {
+        /* Loop until RXNE = 1 */
+        while (USART_GetFlagStatus(USART6, USART_FLAG_RXNE) == RESET)
+        {}
+        tmp[index++] = (USART_ReceiveData(USART6));
+        if ((tmp[index - 1] < 0x30) || (tmp[index - 1] > 0x39))
+        {
+            printf("\n\r Please enter valid number between 0 and 9\n\r");
+            index--;
+        }
+    }
+    /* Calculate the Corresponding value */
+    index = (tmp[1] - 0x30) + ((tmp[0] - 0x30) * 10);
+    /* Checks the value */
+    if ((index < MinValue) || (index > MaxValue))
+    {
+        printf("\n\r Please enter valid number between %d and %d\n\r", MinValue, MaxValue);
+        return 0xFF;
+    }
+    return index;
 }
 
 /**
@@ -713,15 +919,15 @@ void System_Init(void)
   */
 PUTCHAR_PROTOTYPE
 {
-  /* Place your implementation of fputc here */
-  /* e.g. write a character to the USART */
-  USART_SendData(USART6, (uint8_t) ch);
+    /* Place your implementation of fputc here */
+    /* e.g. write a character to the USART */
+    USART_SendData(USART6, (uint8_t) ch);
 
-  /* Loop until the end of transmission */
-  while (USART_GetFlagStatus(USART6, USART_FLAG_TC) == RESET)
-  {}
+    /* Loop until the end of transmission */
+    while (USART_GetFlagStatus(USART6, USART_FLAG_TC) == RESET)
+    {}
 
-  return ch;
+    return ch;
 }
 
 #ifdef  USE_FULL_ASSERT
@@ -734,14 +940,216 @@ PUTCHAR_PROTOTYPE
   * @retval None
   */
 void assert_failed(uint8_t* file, uint32_t line)
-{ 
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+{
+    /* User can add his own implementation to report the file name and line number,
+        ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
 
-  /* Infinite loop */
-  while (1)
-  {
-  }
+    /* Infinite loop */
+    while (1)
+    {
+    }
 }
 #endif
 
+void RTC_TimeShow(void)
+{
+    /* Get the current Time and Date */
+    RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
+    printf("\n\r============== Current Time Display ============================\n\r");
+    vTaskDelay(100);
+    printf("\n\r  The current time (Hour-Minute-Second) is :  %0.2d:%0.2d:%0.2d \n\r", RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds);
+    vTaskDelay(100);
+    (void)RTC->DR;
+}
+
+/**
+  * @brief  Display the current date on the Hyperterminal.
+  * @param  None
+  * @retval None
+  */
+void RTC_DateShow(void)
+{
+  /* Get the current Date */
+    RTC_GetDate(RTC_Format_BIN, &RTC_DateStruct);
+    printf("\n\r============== Current Date Display ============================\n\r");
+    vTaskDelay(100);
+    printf("\n\r  The current date (WeekDay-Date-Month-Year) is :  %0.2d-%0.2d-%0.2d-%0.2d \n\r", RTC_DateStruct.RTC_WeekDay, RTC_DateStruct.RTC_Date, RTC_DateStruct.RTC_Month, RTC_DateStruct.RTC_Year);
+    vTaskDelay(100);
+}
+
+
+/**
+  * @brief  Display the current TimeStamp (time and date) on the Hyperterminal.
+  * @param  None
+  * @retval None
+  */
+void RTC_TimeStampShow(void)
+{
+    /* Get the current TimeStamp */
+    RTC_GetTimeStamp(RTC_Format_BIN, &RTC_TimeStampStruct, &RTC_TimeStampDateStruct);
+    printf("\n\r==============TimeStamp Display (Time and Date)=================\n\r");
+    vTaskDelay(100);
+    printf("\n\r  The current timestamp time (Hour-Minute-Second) is :  %0.2d:%0.2d:%0.2d \n\r", RTC_TimeStampStruct.RTC_Hours, RTC_TimeStampStruct.RTC_Minutes, RTC_TimeStampStruct.RTC_Seconds);
+    vTaskDelay(100);
+    printf("\n\r  The current timestamp date (WeekDay-Date-Month) is :  %0.2d-%0.2d-%0.2d \n\r", RTC_TimeStampDateStruct.RTC_WeekDay, RTC_TimeStampDateStruct.RTC_Date, RTC_TimeStampDateStruct.RTC_Month);
+    vTaskDelay(100);
+}
+
+/**
+  * @brief  Configure the RTC peripheral by selecting the clock source.
+  * @param  None
+  * @retval None
+  */
+void RTC_Config(void)
+{
+    /* Enable the PWR clock */
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);
+
+    /* Allow access to RTC */
+    PWR_BackupAccessCmd(ENABLE);
+
+#if defined (RTC_CLOCK_SOURCE_LSI)  /* LSI used as RTC source clock*/
+/* The RTC Clock may varies due to LSI frequency dispersion. */
+    /* Enable the LSI OSC */
+    RCC_LSICmd(ENABLE);
+
+    /* Wait till LSI is ready */
+    while(RCC_GetFlagStatus(RCC_FLAG_LSIRDY) == RESET)
+    {
+    }
+
+    /* Select the RTC Clock Source */
+    RCC_RTCCLKConfig(RCC_RTCCLKSource_LSI);
+
+    SynchPrediv = 0xFF;
+    AsynchPrediv = 0x7F;
+
+#elif defined (RTC_CLOCK_SOURCE_LSE) /* LSE used as RTC source clock */
+    /* Enable the LSE OSC */
+    RCC_LSEConfig(RCC_LSE_ON);
+
+    /* Wait till LSE is ready */
+    while(RCC_GetFlagStatus(RCC_FLAG_LSERDY) == RESET)
+    {
+    }
+
+    /* Select the RTC Clock Source */
+    RCC_RTCCLKConfig(RCC_RTCCLKSource_LSE);
+
+    SynchPrediv = 0xFF;
+    AsynchPrediv = 0x7F;
+
+#else
+    #error Please select the RTC Clock source inside the main.c file
+#endif /* RTC_CLOCK_SOURCE_LSI */
+
+    /* Enable the RTC Clock */
+    RCC_RTCCLKCmd(ENABLE);
+
+    /* Wait for RTC APB registers synchronisation */
+    RTC_WaitForSynchro();
+
+    /* Enable The TimeStamp */
+    RTC_TimeStampCmd(RTC_TimeStampEdge_Falling, ENABLE);
+}
+
+/**
+  * @brief  Returns the time entered by user, using Hyperterminal.
+  * @param  None
+  * @retval None
+  */
+void RTC_TimeRegulate(void)
+{
+    uint32_t tmp_hh = 0xFF, tmp_mm = 0xFF, tmp_ss = 0xFF;
+
+    printf("\n\r==============Time Settings=====================================\n\r");
+    RTC_TimeStruct.RTC_H12     = RTC_H12_AM;
+    printf("  Please Set Hours\n\r");
+    while (tmp_hh == 0xFF)
+    {
+        tmp_hh = USART_Scanf(0, 23);
+        RTC_TimeStruct.RTC_Hours = tmp_hh;
+    }
+    printf(":  %0.2d\n\r", tmp_hh);
+
+    printf("  Please Set Minutes\n\r");
+    while (tmp_mm == 0xFF)
+    {
+        tmp_mm = USART_Scanf(0, 59);
+        RTC_TimeStruct.RTC_Minutes = tmp_mm;
+    }
+    printf(":  %0.2d\n\r", tmp_mm);
+
+    printf("  Please Set Seconds\n\r");
+    while (tmp_ss == 0xFF)
+    {
+        tmp_ss = USART_Scanf(0, 59);
+        RTC_TimeStruct.RTC_Seconds = tmp_ss;
+    }
+    printf(":  %0.2d\n\r", tmp_ss);
+
+    /* Configure the RTC time register */
+    if(RTC_SetTime(RTC_Format_BIN, &RTC_TimeStruct) == ERROR)
+    {
+        printf("\n\r>> !! RTC Set Time failed. !! <<\n\r");
+    }
+    else
+    {
+        printf("\n\r>> !! RTC Set Time success. !! <<\n\r");
+        //RTC_TimeShow();
+        /* Indicator for the RTC configuration */
+        RTC_WriteBackupRegister(RTC_BKP_DR0, 0x32F2);
+    }
+
+    tmp_hh = 0xFF;
+    tmp_mm = 0xFF;
+    tmp_ss = 0xFF;
+
+    printf("\n\r==============Date Settings=====================================\n\r");
+
+    printf("  Please Set WeekDay (01-07)\n\r");
+    while (tmp_hh == 0xFF)
+    {
+        tmp_hh = USART_Scanf(1, 7);
+        RTC_DateStruct.RTC_WeekDay = tmp_hh;
+    }
+    printf(":  %0.2d\n\r", tmp_hh);
+    tmp_hh = 0xFF;
+    printf("  Please Set Date (01-31)\n\r");
+    while (tmp_hh == 0xFF)
+    {
+        tmp_hh = USART_Scanf(1, 31);
+        RTC_DateStruct.RTC_Date = tmp_hh;
+    }
+    printf(":  %0.2d\n\r", tmp_hh);
+
+    printf("  Please Set Month (01-12)\n\r");
+    while (tmp_mm == 0xFF)
+    {
+        tmp_mm = USART_Scanf(1, 12);
+        RTC_DateStruct.RTC_Month = tmp_mm;
+    }
+    printf(":  %0.2d\n\r", tmp_mm);
+
+    printf("  Please Set Year (00-99)\n\r");
+    while (tmp_ss == 0xFF)
+    {
+        tmp_ss = USART_Scanf(0, 99);
+        RTC_DateStruct.RTC_Year = tmp_ss;
+    }
+    printf(":  %0.2d\n\r", tmp_ss);
+
+    /* Configure the RTC date register */
+    if(RTC_SetDate(RTC_Format_BIN, &RTC_DateStruct) == ERROR)
+    {
+    printf("\n\r>> !! RTC Set Date failed. !! <<\n\r");
+    }
+    else
+    {
+        printf("\n\r>> !! RTC Set Date success. !! <<\n\r");
+        //RTC_DateShow();
+        /* Indicator for the RTC configuration */
+        RTC_WriteBackupRegister(RTC_BKP_DR0, 0x32F2);
+    }
+
+}
