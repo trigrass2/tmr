@@ -163,6 +163,7 @@ void vDiagTask( void *pvParameters )
 {
     u16 delay=0, i=0;
     u32 count=0;
+    u32 tick_s=0, tick_e=0;
 
     if( pvParameters != NULL )
         delay = *((unsigned int*)pvParameters);
@@ -188,7 +189,7 @@ void vDiagTask( void *pvParameters )
     //------------------------------------------------
 
     /*------------------------------------------------
-        Test PCA9536
+        Test PCA9536 and APC250
         ------------------------------------------------*/
     I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0x0F, FALSE); // LS0
 
@@ -210,7 +211,7 @@ void vDiagTask( void *pvParameters )
     // IO3 : PWR_LED -> O
     //pca9536dp[REG_C] = 0xF4
     I2C_ByteWrite(PCA9536DP_ADDRESS, REG_C, 0xF4, NULL); // IO2 us input  pin
-    I2C_ByteWrite(PCA9536DP_ADDRESS, REG_O, 0xF6, NULL); // 11110110
+    I2C_ByteWrite(PCA9536DP_ADDRESS, REG_O, 0xF6, NULL); // 11110110 , APC250 EN = Low
     //------------------------------------------------
 
     //------------------------------------------------
@@ -318,11 +319,6 @@ void vDiagTask( void *pvParameters )
     //------------------------------------------------
 
     //------------------------------------------------
-    // Test APC250
-    //------------------------------------------------
-    
-
-    //------------------------------------------------
     // LOOP
     //------------------------------------------------
     I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0xBB, FALSE); // LS0
@@ -338,11 +334,17 @@ void vDiagTask( void *pvParameters )
         GPIO_ResetBits(GPIOB, GPIO_Pin_12);
         #endif
 
+        printf("\n\r---------------------------------------------------------------------------------\n\r");
         printf("\n\rUSART Printf Example: retarget the C library printf function to the USART (%d)\n\r",count++);
 
         //I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xFF, FALSE); // PWR_LED (ON), APC250 (OFF)
         I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xFE, FALSE); // PWR_LED (ON)
+        tick_s=xTaskGetTickCount();
+        printf("\n\rEnter Sleep, xTickCount = %d\n\r",tick_s);
         vTaskDelay(delay);
+        tick_e=xTaskGetTickCount();
+        printf("\n\rExit Sleep, xTickCount = %d\n\r",tick_e);
+        printf("\n\rTime Spent = %f ms\n\r",(float)(tick_e-tick_s)/portTICK_RATE_MS);
         I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xF6, FALSE); // IO3 (OFF)
         vTaskDelay(delay);
     }
