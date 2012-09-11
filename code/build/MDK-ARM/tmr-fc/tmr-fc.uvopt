@@ -309,7 +309,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>176</TopLine>
+      <TopLine>173</TopLine>
       <CurrentLine>182</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\platform\csp\arm\Device\ST\Source\MDK-ARM\startup_stm32f4xx.s</PathWithFileName>
@@ -610,8 +610,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1109</TopLine>
-      <CurrentLine>1110</CurrentLine>
+      <TopLine>1012</TopLine>
+      <CurrentLine>1024</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\platform\csp\st\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_i2c.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_i2c.c</FilenameWithoutPath>
@@ -839,10 +839,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>72</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>1893</TopLine>
-      <CurrentLine>1894</CurrentLine>
+      <CurrentLine>1900</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\utilities\freertos\Source\tasks.c</PathWithFileName>
       <FilenameWithoutPath>tasks.c</FilenameWithoutPath>
