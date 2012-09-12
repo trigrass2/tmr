@@ -75,13 +75,7 @@ void RTC_DateShow(void);
 void RTC_TimeStampShow(void);
 void RTC_TimeRegulate(void);
 void RTC_Config(void);
-
-
-
-
-
 void System_Init(void);
-
 
 int main(void)
 {
@@ -639,6 +633,8 @@ unsigned char crc4(unsigned int n_prom[])
 
     return (n_rem ^ 0x00);
 }
+
+#define RTC_CLOCK_SOURCE_LSE
 
 void System_Init(void)
 {
