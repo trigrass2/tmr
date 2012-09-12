@@ -10,8 +10,49 @@
 /* ST StdPeriph Driver includes. */
 #include "stm32f4xx_conf.h"
 
+#include "tmr_board.h"
 #include "drv_mpu6050.h"
 #include "drv_hmc5883l.h"
+#include "drv_sdio_sd.h"
+
+
+/** @addtogroup SDIO_uSDCard
+  * @{
+  */
+
+/* Private typedef -----------------------------------------------------------*/
+typedef enum {FAILED = 0, PASSED = !FAILED} TestStatus;
+
+/* Private define ------------------------------------------------------------*/
+#define BLOCK_SIZE            512 /* Block Size in Bytes */
+
+#define NUMBER_OF_BLOCKS      100  /* For Multi Blocks operation (Read/Write) */
+#define MULTI_BUFFER_SIZE    (BLOCK_SIZE * NUMBER_OF_BLOCKS)
+
+#define SD_OPERATION_ERASE          0
+#define SD_OPERATION_BLOCK          1
+#define SD_OPERATION_MULTI_BLOCK    2 
+#define SD_OPERATION_END            3
+
+/* Private macro -------------------------------------------------------------*/
+/* Private variables ---------------------------------------------------------*/
+uint8_t Buffer_Block_Tx[BLOCK_SIZE], Buffer_Block_Rx[BLOCK_SIZE];
+uint8_t Buffer_MultiBlock_Tx[MULTI_BUFFER_SIZE], Buffer_MultiBlock_Rx[MULTI_BUFFER_SIZE];
+volatile TestStatus EraseStatus = FAILED, TransferStatus1 = FAILED, TransferStatus2 = FAILED;
+SD_Error Status = SD_OK;
+__IO uint32_t SDCardOperation = SD_OPERATION_ERASE;
+
+/* Private function prototypes -----------------------------------------------*/
+void NVIC_Configuration(void);
+void SD_EraseTest(void);
+void SD_SingleBlockTest(void);
+void SD_MultiBlockTest(void);
+void Fill_Buffer(uint8_t *pBuffer, uint32_t BufferLength, uint32_t Offset);
+TestStatus Buffercmp(uint8_t* pBuffer1, uint8_t* pBuffer2, uint32_t BufferLength);
+TestStatus eBuffercmp(uint8_t* pBuffer, uint32_t BufferLength);
+
+/* Private functions ---------------------------------------------------------*/
+
 
 unsigned int count = 0;
 unsigned int p1=5000,p2=1000,p3=10000;
@@ -80,8 +121,6 @@ void System_Init(void);
 int main(void)
 {
     unsigned int exit = 0;
-
-    System_Init();
 
     xTaskCreate( vLoopTask, ( signed portCHAR * ) "LOOP-1", configMINIMAL_STACK_SIZE*2, (void*)&p1, 3, NULL );
     xTaskCreate( vLoopTask, ( signed portCHAR * ) "LOOP-2", configMINIMAL_STACK_SIZE*2, (void*)&p2, 2, NULL );
@@ -190,6 +229,8 @@ void vDiagTask( void *pvParameters )
     else
         delay = 2;
 
+    System_Init();
+    
     /*------------------------------------------------
          Test PCA9533
          ------------------------------------------------*/
@@ -343,7 +384,7 @@ void vDiagTask( void *pvParameters )
     //------------------------------------------------
     I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0xBB, FALSE); // LS0
 
-    delay = 2000 / portTICK_RATE_MS;
+    delay = 1500 / portTICK_RATE_MS;
 
     while(1)
     {
@@ -372,18 +413,75 @@ void vDiagTask( void *pvParameters )
 
         tick_s=xTaskGetTickCount();
         printf("\n\rEnter Sleep, xTickCount = %d\n\r",tick_s);
+        vTaskDelay(100);
 
         I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xFF, FALSE); // PWR_LED (ON), APC250 (OFF)
         vTaskDelay(delay);
         I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xFE, FALSE); // PWR_LED (ON), APC250 (ON)
+        vTaskDelay(100);
 
         tick_e=xTaskGetTickCount();
         printf("\n\rLeave Sleep, xTickCount = %d\n\r",tick_e);
+        vTaskDelay(100);
         printf("\n\rTime Spent = %f ms\n\r",(float)(tick_e-tick_s)/portTICK_RATE_MS);
+        vTaskDelay(200);
 
+        if((Status == SD_OK) && (SDCardOperation != SD_OPERATION_END) && (SD_Detect()== SD_PRESENT))
+        {
+            printf("\n\rSD Function test!!\n\r");
+            vTaskDelay(100);
+            
+            switch(SDCardOperation)
+            {
+                /*-------------------------- SD Erase Test ---------------------------- */
+                case (SD_OPERATION_ERASE):
+                {
+                    printf("\n\rSD_EraseTest()!!\n\r");
+                    vTaskDelay(100);
+                    
+                    SD_EraseTest();
+                    SDCardOperation = SD_OPERATION_BLOCK;
+                    break;
+                }
+                /*-------------------------- SD Single Block Test --------------------- */
+                case (SD_OPERATION_BLOCK):
+                {
+                    printf("\n\rSD_SingleBlockTest()!!\n\r");
+                    vTaskDelay(100);
+                    
+                    SD_SingleBlockTest();
+                    SDCardOperation = SD_OPERATION_MULTI_BLOCK;
+                    break;
+                }       
+                /*-------------------------- SD Multi Blocks Test --------------------- */
+                case (SD_OPERATION_MULTI_BLOCK):
+                {
+                    printf("\n\rSD_MultiBlockTest()!!\n\r");
+                    vTaskDelay(100);
+                    
+                    SD_MultiBlockTest();
+                    SDCardOperation = SD_OPERATION_END;
+                    break;
+                }              
+            }
+        }
+
+        
+        tick_s=xTaskGetTickCount();
+        printf("\n\rEnter Sleep, xTickCount = %d\n\r",tick_s);
+        vTaskDelay(100);
+        
         I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xF7, FALSE); // PWR_LED (ON), APC250 (OFF)
         vTaskDelay(delay);
         I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xF6, FALSE); // PWR_LED (ON), APC250 (ON)
+        vTaskDelay(100);
+
+        
+        tick_e=xTaskGetTickCount();
+        printf("\n\rLeave Sleep, xTickCount = %d\n\r",tick_e);
+        vTaskDelay(100);
+        printf("\n\rTime Spent = %f ms\n\r",(float)(tick_e-tick_s)/portTICK_RATE_MS);
+        vTaskDelay(100);
 
     }
     //------------------------------------------------
@@ -817,6 +915,7 @@ void System_Init(void)
 
     /* Output a message on Hyperterminal using printf function */
     printf("\n\r*********************** RTC Time Stamp Example ***********************\n\r");
+    vTaskDelay(100);
 
     if (RTC_ReadBackupRegister(RTC_BKP_DR0) != 0x32F2)
     {
@@ -832,6 +931,7 @@ void System_Init(void)
         if (RTC_Init(&RTC_InitStruct) == ERROR)
         {
             printf("\n\r        /!\\***** RTC Prescaler Config failed ********/!\\ \n\r");
+            vTaskDelay(100);
         }
 
         /* Configure the time register */
@@ -843,14 +943,17 @@ void System_Init(void)
         if (RCC_GetFlagStatus(RCC_FLAG_PORRST) != RESET)
         {
             printf("\r\n Power On Reset occurred....\n\r");
+            vTaskDelay(100);
         }
         /* Check if the Pin Reset flag is set */
         else if (RCC_GetFlagStatus(RCC_FLAG_PINRST) != RESET)
         {
             printf("\r\n External Reset occurred....\n\r");
+            vTaskDelay(100);
         }
 
         printf("\r\n No need to configure RTC....\n\r");
+        vTaskDelay(100);
 
         /* Enable the PWR clock */
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);
@@ -868,9 +971,28 @@ void System_Init(void)
         EXTI_ClearITPendingBit(EXTI_Line17);
 
         /* Display the RTC Time/Date and TimeStamp Time/Date */
-        //RTC_TimeShow();
-        //RTC_DateShow();
-        //RTC_TimeStampShow();
+        RTC_TimeShow();
+        RTC_DateShow();
+        RTC_TimeStampShow();
+    }
+
+    /*------------------------------------------------
+         RTC Configuration
+     ------------------------------------------------*/
+    /* Interrupt Config */
+    printf("\r\n NVIC_Configuration....\n\r");
+    vTaskDelay(100);
+
+    NVIC_Configuration();
+
+    /*------------------------------ SD Init ---------------------------------- */
+    printf("\r\n SD_Init....\n\r");
+    vTaskDelay(100);
+
+    if((Status = SD_Init()) != SD_OK)
+    {
+        printf("\n\r>> !! SD init failed. !! <<\n\r");
+        vTaskDelay(100);
     }
 }
 
@@ -1059,40 +1181,54 @@ void RTC_TimeRegulate(void)
     uint32_t tmp_hh = 0xFF, tmp_mm = 0xFF, tmp_ss = 0xFF;
 
     printf("\n\r==============Time Settings=====================================\n\r");
+    vTaskDelay(100);
+    
     RTC_TimeStruct.RTC_H12     = RTC_H12_AM;
     printf("  Please Set Hours\n\r");
+    vTaskDelay(100);
+    
     while (tmp_hh == 0xFF)
     {
         tmp_hh = USART_Scanf(0, 23);
         RTC_TimeStruct.RTC_Hours = tmp_hh;
     }
     printf(":  %0.2d\n\r", tmp_hh);
+    vTaskDelay(100);
 
     printf("  Please Set Minutes\n\r");
+    vTaskDelay(100);
+    
     while (tmp_mm == 0xFF)
     {
         tmp_mm = USART_Scanf(0, 59);
         RTC_TimeStruct.RTC_Minutes = tmp_mm;
     }
     printf(":  %0.2d\n\r", tmp_mm);
+    vTaskDelay(100);
 
     printf("  Please Set Seconds\n\r");
+    vTaskDelay(100);
+    
     while (tmp_ss == 0xFF)
     {
         tmp_ss = USART_Scanf(0, 59);
         RTC_TimeStruct.RTC_Seconds = tmp_ss;
     }
     printf(":  %0.2d\n\r", tmp_ss);
+    vTaskDelay(100);
 
     /* Configure the RTC time register */
     if(RTC_SetTime(RTC_Format_BIN, &RTC_TimeStruct) == ERROR)
     {
         printf("\n\r>> !! RTC Set Time failed. !! <<\n\r");
+        vTaskDelay(100);
     }
     else
     {
         printf("\n\r>> !! RTC Set Time success. !! <<\n\r");
-        //RTC_TimeShow();
+        vTaskDelay(100);
+        
+        RTC_TimeShow();
         /* Indicator for the RTC configuration */
         RTC_WriteBackupRegister(RTC_BKP_DR0, 0x32F2);
     }
@@ -1102,50 +1238,316 @@ void RTC_TimeRegulate(void)
     tmp_ss = 0xFF;
 
     printf("\n\r==============Date Settings=====================================\n\r");
+    vTaskDelay(100);
 
     printf("  Please Set WeekDay (01-07)\n\r");
+    vTaskDelay(100);
+    
     while (tmp_hh == 0xFF)
     {
         tmp_hh = USART_Scanf(1, 7);
         RTC_DateStruct.RTC_WeekDay = tmp_hh;
     }
+    
     printf(":  %0.2d\n\r", tmp_hh);
+    vTaskDelay(100);
+    
     tmp_hh = 0xFF;
+    
     printf("  Please Set Date (01-31)\n\r");
+    vTaskDelay(100);
+    
     while (tmp_hh == 0xFF)
     {
         tmp_hh = USART_Scanf(1, 31);
         RTC_DateStruct.RTC_Date = tmp_hh;
     }
+    
     printf(":  %0.2d\n\r", tmp_hh);
+    vTaskDelay(100);
 
     printf("  Please Set Month (01-12)\n\r");
+    vTaskDelay(100);
+    
     while (tmp_mm == 0xFF)
     {
         tmp_mm = USART_Scanf(1, 12);
         RTC_DateStruct.RTC_Month = tmp_mm;
     }
     printf(":  %0.2d\n\r", tmp_mm);
+    vTaskDelay(100);
 
     printf("  Please Set Year (00-99)\n\r");
+    vTaskDelay(100);
+    
     while (tmp_ss == 0xFF)
     {
         tmp_ss = USART_Scanf(0, 99);
         RTC_DateStruct.RTC_Year = tmp_ss;
     }
     printf(":  %0.2d\n\r", tmp_ss);
+    vTaskDelay(100);
 
     /* Configure the RTC date register */
     if(RTC_SetDate(RTC_Format_BIN, &RTC_DateStruct) == ERROR)
     {
-    printf("\n\r>> !! RTC Set Date failed. !! <<\n\r");
+        printf("\n\r>> !! RTC Set Date failed. !! <<\n\r");
+        vTaskDelay(100);
     }
     else
     {
         printf("\n\r>> !! RTC Set Date success. !! <<\n\r");
-        //RTC_DateShow();
+        vTaskDelay(100);
+        RTC_DateShow();
         /* Indicator for the RTC configuration */
         RTC_WriteBackupRegister(RTC_BKP_DR0, 0x32F2);
     }
 
 }
+
+/**
+  * @brief  Configures SDIO IRQ channel.
+  * @param  None
+  * @retval None
+  */
+void NVIC_Configuration(void)
+{
+  NVIC_InitTypeDef NVIC_InitStructure;
+
+  /* Configure the NVIC Preemption Priority Bits */
+  NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
+
+  NVIC_InitStructure.NVIC_IRQChannel = SDIO_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
+  NVIC_InitStructure.NVIC_IRQChannel = SD_SDIO_DMA_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+  NVIC_Init(&NVIC_InitStructure);  
+}
+
+/**
+  * @brief  Tests the SD card erase operation.
+  * @param  None
+  * @retval None
+  */
+void SD_EraseTest(void)
+{
+  /*------------------- Block Erase ------------------------------------------*/
+  if (Status == SD_OK)
+  {
+    //printf("SD_Erase...\n\r");
+    //vTaskDelay(100);
+    
+    /* Erase NumberOfBlocks Blocks of WRITE_BL_LEN(512 Bytes) */
+    Status = SD_Erase(0x00, (BLOCK_SIZE * NUMBER_OF_BLOCKS));
+  }
+
+  if (Status == SD_OK)
+  {
+    //printf("SD_ReadMultiBlocks...\n\r");
+    //vTaskDelay(100);
+    
+    Status = SD_ReadMultiBlocks(Buffer_MultiBlock_Rx, 0x00, BLOCK_SIZE, NUMBER_OF_BLOCKS);
+
+    //printf("SD_WaitReadOperation...\n\r");
+    //vTaskDelay(100);
+    
+    /* Check if the Transfer is finished */
+    Status = SD_WaitReadOperation();
+
+    //printf("SD_GetStatus...\n\r");
+    //vTaskDelay(100);
+    /* Wait until end of DMA transfer */
+    while(SD_GetStatus() != SD_TRANSFER_OK);
+  }
+
+  /* Check the correctness of erased blocks */
+  if (Status == SD_OK)
+  {
+    //printf("eBuffercmp...\n\r");
+    //vTaskDelay(100);
+    
+    EraseStatus = eBuffercmp(Buffer_MultiBlock_Rx, MULTI_BUFFER_SIZE);
+  }
+  
+  if(EraseStatus == PASSED)
+  {
+    //STM_EVAL_LEDOn(LED1);
+    printf("EraseStatus = PASSED...\n\r");
+    vTaskDelay(100);
+  }
+  else
+  {
+    //STM_EVAL_LEDOff(LED1);
+    //STM_EVAL_LEDOn(LED4);
+    printf("EraseStatus = FAILED...\n\r");
+    vTaskDelay(100);
+  }
+}
+
+/**
+  * @brief  Tests the SD card Single Blocks operations.
+  * @param  None
+  * @retval None
+  */
+void SD_SingleBlockTest(void)
+{
+  /*------------------- Block Read/Write --------------------------*/
+  /* Fill the buffer to send */
+  Fill_Buffer(Buffer_Block_Tx, BLOCK_SIZE, 0x320F);
+
+  if (Status == SD_OK)
+  {
+    /* Write block of 512 bytes on address 0 */
+    Status = SD_WriteBlock(Buffer_Block_Tx, 0x00, BLOCK_SIZE);
+    /* Check if the Transfer is finished */
+    Status = SD_WaitWriteOperation();
+    while(SD_GetStatus() != SD_TRANSFER_OK);
+  }
+
+  if (Status == SD_OK)
+  {
+    /* Read block of 512 bytes from address 0 */
+    Status = SD_ReadBlock(Buffer_Block_Rx, 0x00, BLOCK_SIZE);
+    /* Check if the Transfer is finished */
+    Status = SD_WaitReadOperation();
+    while(SD_GetStatus() != SD_TRANSFER_OK);
+  }
+
+  /* Check the correctness of written data */
+  if (Status == SD_OK)
+  {
+    TransferStatus1 = Buffercmp(Buffer_Block_Tx, Buffer_Block_Rx, BLOCK_SIZE);
+  }
+  
+  if(TransferStatus1 == PASSED)
+  {
+    //STM_EVAL_LEDOn(LED2);
+    printf("TransferStatus1 = PASSED...\n\r");
+    vTaskDelay(100);
+  }
+  else
+  {
+    //STM_EVAL_LEDOff(LED2);
+    //STM_EVAL_LEDOn(LED4);
+    printf("TransferStatus1 = FAILED...\n\r");
+    vTaskDelay(100);
+  }
+}
+
+/**
+  * @brief  Tests the SD card Multiple Blocks operations.
+  * @param  None
+  * @retval None
+  */
+void SD_MultiBlockTest(void)
+{
+  /*--------------- Multiple Block Read/Write ---------------------*/
+  /* Fill the buffer to send */
+  Fill_Buffer(Buffer_MultiBlock_Tx, MULTI_BUFFER_SIZE, 0x0);
+
+  if (Status == SD_OK)
+  {
+    /* Write multiple block of many bytes on address 0 */
+    Status = SD_WriteMultiBlocks(Buffer_MultiBlock_Tx, 0x00, BLOCK_SIZE, NUMBER_OF_BLOCKS);
+    /* Check if the Transfer is finished */
+    Status = SD_WaitWriteOperation();
+    while(SD_GetStatus() != SD_TRANSFER_OK);
+  }
+
+  if (Status == SD_OK)
+  {
+    /* Read block of many bytes from address 0 */
+    Status = SD_ReadMultiBlocks(Buffer_MultiBlock_Rx, 0x00, BLOCK_SIZE, NUMBER_OF_BLOCKS);
+    /* Check if the Transfer is finished */
+    Status = SD_WaitReadOperation();
+    while(SD_GetStatus() != SD_TRANSFER_OK);
+  }
+
+  /* Check the correctness of written data */
+  if (Status == SD_OK)
+  {
+    TransferStatus2 = Buffercmp(Buffer_MultiBlock_Tx, Buffer_MultiBlock_Rx, MULTI_BUFFER_SIZE);
+  }
+  
+  if(TransferStatus2 == PASSED)
+  {
+    //STM_EVAL_LEDOn(LED3);
+    printf("TransferStatus2 = PASSED...\n\r");
+    vTaskDelay(100);
+  }
+  else
+  {
+    //STM_EVAL_LEDOff(LED3);
+    //STM_EVAL_LEDOn(LED4);
+    printf("TransferStatus2 = FAILED...\n\r");
+    vTaskDelay(100);
+  }
+}
+
+/**
+  * @brief  Compares two buffers.
+  * @param  pBuffer1, pBuffer2: buffers to be compared.
+  * @param  BufferLength: buffer's length
+  * @retval PASSED: pBuffer1 identical to pBuffer2
+  *         FAILED: pBuffer1 differs from pBuffer2
+  */
+TestStatus Buffercmp(uint8_t* pBuffer1, uint8_t* pBuffer2, uint32_t BufferLength)
+{
+  while (BufferLength--)
+  {
+    if (*pBuffer1 != *pBuffer2)
+    {
+      return FAILED;
+    }
+
+    pBuffer1++;
+    pBuffer2++;
+  }
+
+  return PASSED;
+}
+
+/**
+  * @brief  Fills buffer with user predefined data.
+  * @param  pBuffer: pointer on the Buffer to fill
+  * @param  BufferLength: size of the buffer to fill
+  * @param  Offset: first value to fill on the Buffer
+  * @retval None
+  */
+void Fill_Buffer(uint8_t *pBuffer, uint32_t BufferLength, uint32_t Offset)
+{
+  uint16_t index = 0;
+
+  /* Put in global buffer same values */
+  for (index = 0; index < BufferLength; index++)
+  {
+    pBuffer[index] = index + Offset;
+  }
+}
+
+/**
+  * @brief  Checks if a buffer has all its values are equal to zero.
+  * @param  pBuffer: buffer to be compared.
+  * @param  BufferLength: buffer's length
+  * @retval PASSED: pBuffer values are zero
+  *         FAILED: At least one value from pBuffer buffer is different from zero.
+  */
+TestStatus eBuffercmp(uint8_t* pBuffer, uint32_t BufferLength)
+{
+  while (BufferLength--)
+  {
+    /* In some SD Cards the erased state is 0xFF, in others it's 0x00 */
+    if ((*pBuffer != 0xFF) && (*pBuffer != 0x00))
+    {
+      return FAILED;
+    }
+
+    pBuffer++;
+  }
+
+  return PASSED;
+}
+

@@ -1160,6 +1160,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\platform\sys\stm32f4xx_it.c</FilePath>
             </File>
+            <File>
+              <FileName>tmr_board.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\sys\tmr_board.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1174,6 +1179,11 @@
               <FileName>drv_system.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\platform\src\drivers\drv_system.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_sdio_sd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\src\drivers\drv_sdio_sd.c</FilePath>
             </File>
           </Files>
         </Group>
