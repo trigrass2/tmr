@@ -35,7 +35,7 @@
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "tmr_board.h"
+#include "tmr_fc.h"
 
 /** @addtogroup Utilities
   * @{

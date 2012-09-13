@@ -10,7 +10,7 @@
 /* ST StdPeriph Driver includes. */
 #include "stm32f4xx_conf.h"
 
-#include "tmr_board.h"
+#include "tmr_fc.h"
 #include "drv_mpu6050.h"
 #include "drv_hmc5883l.h"
 #include "drv_sdio_sd.h"
@@ -426,7 +426,7 @@ void vDiagTask( void *pvParameters )
         printf("\n\rTime Spent = %f ms\n\r",(float)(tick_e-tick_s)/portTICK_RATE_MS);
         vTaskDelay(200);
 
-        if((Status == SD_OK) && (SDCardOperation != SD_OPERATION_END) && (SD_Detect()== SD_PRESENT))
+        while((Status == SD_OK) && (SDCardOperation != SD_OPERATION_END) && (SD_Detect()== SD_PRESENT))
         {
             printf("\n\rSD Function test!!\n\r");
             vTaskDelay(100);

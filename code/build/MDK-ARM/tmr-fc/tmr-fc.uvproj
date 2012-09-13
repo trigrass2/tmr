@@ -1161,9 +1161,9 @@
               <FilePath>..\..\..\platform\sys\stm32f4xx_it.c</FilePath>
             </File>
             <File>
-              <FileName>tmr_board.c</FileName>
+              <FileName>tmr_fc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\sys\tmr_board.c</FilePath>
+              <FilePath>..\..\..\platform\sys\tmr_fc.c</FilePath>
             </File>
           </Files>
         </Group>
