@@ -39,57 +39,63 @@
   */ 
 typedef enum
 {
-  LM75_OK = 0,
-  LM75_FAIL
-}LM75_Status_TypDef;
+  I2C2_OK = 0,
+  I2C2_FAIL
+}I2C2_Status_TypDef;
 
 /* Exported constants --------------------------------------------------------*/
     
 /* CPAL Structure configuration : Select I2C device (uncomment relative define) */
 
-//#define LM75_DevStructure                I2C1_DevStructure   
-#define LM75_DevStructure                I2C2_DevStructure  
-//#define LM75_DevStructure                I2C3_DevStructure 
+//#define I2C2_DevStructure                I2C1_DevStructure   
+#define I2C2_DevStructure                I2C2_DevStructure  
+//#define I2C2_DevStructure                I2C3_DevStructure 
 
    
 /* Select clock Speed */
 /* To use the I2C at 400 KHz (in fast mode), the PCLK1 frequency (I2C peripheral
    input clock) must be a multiple of 10 MHz */
 
-#define I2C_SPEED                        300000
+#define I2C2_SPEED                        300000
 
 /* Select interrupt programming model : By default DMA programming model is selected.
  To select interrupt programming model uncomment this define */
-//#define LM75_IT
+//#define I2C2_IT
 
 /* Maximum Timeout values for waiting until device is ready for communication.*/
    
-#define LM75_TIMEOUT        ((uint32_t)0x3FFFF)
+#define I2C2_TIMEOUT        ((uint32_t)0x3FFFF)
 
 /**
   * @brief  Internal register Memory
   */
-#define LM75_REG_TEMP       0x00  /*!< Temperature Register of LM75 */
-#define LM75_REG_CONF       0x01  /*!< Configuration Register of LM75 */
-#define LM75_REG_THYS       0x02  /*!< Temperature Register of LM75 */
-#define LM75_REG_TOS        0x03  /*!< Over-temp Shutdown threshold Register of LM75 */
-#define LM75_ADDR           0x90   /*!< LM75 address */
+#define I2C2_REG_TEMP       0x00  /*!< Temperature Register of LM75 */
+#define I2C2_REG_CONF       0x01  /*!< Configuration Register of LM75 */
+#define I2C2_REG_THYS       0x02  /*!< Temperature Register of LM75 */
+#define I2C2_REG_TOS        0x03  /*!< Over-temp Shutdown threshold Register of LM75 */
+#define I2C2_ADDR           0x90   /*!< LM75 address */
    
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */ 
 
-void LM75_DeInit(void);
-void LM75_Config(void);
-ErrorStatus LM75_GetStatus(void);
-uint16_t LM75_ReadTemp(void);
-uint16_t LM75_ReadReg(uint8_t RegName);
-uint8_t LM75_WriteReg(uint8_t RegName, uint16_t RegValue);
-uint8_t LM75_ReadConfReg(void);
-uint8_t LM75_WriteConfReg(uint8_t RegValue);
-uint8_t LM75_ShutDown(FunctionalState NewState);
+void I2C2_DeInit(void);
+void I2C2_Config(void);
+ErrorStatus I2C2_GetStatus(void);
+uint16_t I2C2_ReadTemp(void);
+uint16_t I2C2_ReadReg(uint8_t RegName);
+uint8_t I2C2_WriteReg(uint8_t RegName, uint16_t RegValue);
+uint8_t I2C2_ReadConfReg(void);
+uint8_t I2C2_WriteConfReg(uint8_t RegValue);
+uint8_t I2C2_ShutDown(FunctionalState NewState);
 
+uint8_t I2Cx_read_byte(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg);
+I2C2_Status_TypDef I2Cx_read_byte_buf(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t* buf);
+I2C2_Status_TypDef I2Cx_read_mbytes_buf(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t len, uint8_t* buf);
 
+I2C2_Status_TypDef I2Cx_write_byte(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t data);
+I2C2_Status_TypDef I2Cx_write_byte_buf(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t* buf);
+I2C2_Status_TypDef I2Cx_write_mbytes_buf(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t len, uint8_t* buf);
  
 #ifdef __cplusplus
 }

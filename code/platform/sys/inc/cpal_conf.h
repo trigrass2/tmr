@@ -347,12 +347,12 @@
 
 
 /* Enable the use of 10Bit Addressing Mode */
-#define CPAL_I2C_10BIT_ADDR_MODE
+//#define CPAL_I2C_10BIT_ADDR_MODE
 
 
 /* Enable the use of 16Bit Address memory register option 
       !! This define is available only when CPAL_I2C_MASTER_MODE is enabled !!  */
-#define CPAL_16BIT_REG_OPTION
+//#define CPAL_16BIT_REG_OPTION
 
 
 /* Select which Closing communication Method is used for master receiver */
@@ -386,8 +386,12 @@
  
    WARNING: These two defines are EXCLUSIVE, only one define should be uncommented ! 
  */
-//#define USE_SINGLE_ERROR_CALLBACK   /*<! select single UserCallbacks type */  
+
+#ifdef USE_SINGLE_ERROR_CALLBACK
+#define USE_SINGLE_ERROR_CALLBACK   /*<! select single UserCallbacks type */
+#else
 #define USE_MULTIPLE_ERROR_CALLBACK /*<! select multiple UserCallbacks type */
+#endif
 
 /* Error UserCallbacks : To use an Error UserCallback comment the relative define */
 

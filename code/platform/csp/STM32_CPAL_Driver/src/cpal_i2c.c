@@ -1022,7 +1022,7 @@ uint32_t CPAL_I2C_ER_IRQHandler(CPAL_InitTypeDef* pDevInitStruct)
     }   
         
     /* USE_SINGLE_ERROR_CALLBACK is defined in cpal_conf.h file */
-#if defined(USE_SINGLE_ERROR_CALLBACK)  
+#ifdef USE_SINGLE_ERROR_CALLBACK
     /* Call Error UserCallback */  
     CPAL_I2C_ERR_UserCallback(pDevInitStruct->CPAL_Dev, pDevInitStruct->wCPAL_DevError);
 #endif /* USE_SINGLE_ERROR_CALLBACK */

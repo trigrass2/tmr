@@ -303,7 +303,7 @@ void CPAL_I2C_DUALF_UserCallback(CPAL_InitTypeDef* pDevInitStruct); /*<!This fun
                                                                      (If I2C Error interrupt is enabled) */
   #endif 
  
-#endif /* USE_SINGLE_ERROR_CALLBACK */
+#endif /* USE_MULTIPLE_ERROR_CALLBACK */
 
    
    

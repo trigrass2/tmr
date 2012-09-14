@@ -14,6 +14,7 @@
 #include "drv_mpu6050.h"
 #include "drv_hmc5883l.h"
 #include "drv_sdio_sd.h"
+#include "drv_i2c_cpal.h"
 
 
 /** @addtogroup SDIO_uSDCard
@@ -79,6 +80,7 @@ unsigned int nprom[] = {0x3132,0x3334,0x3536,0x3738,0x3940,0x4142,0x4344,0x450B}
 // MPU6050
 s16 temp_data = 0;
 double temp_deg = 0.0;
+uint16_t reg=0;
 
 #ifdef __GNUC__
   /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
@@ -490,29 +492,63 @@ void vDiagTask( void *pvParameters )
 void vDiagTask( void *pvParameters )
 {
     u16 delay=0, i=0;
-    u32 count=0;
     u32 tick_s=0, tick_e=0;
 
-    delay = 1000 / portTICK_RATE_MS;
+    delay = 3000 / portTICK_RATE_MS;
 
     System_Init();
+    I2C2_Config();
+    
+    I2Cx_write_byte(CPAL_I2C2, MPU6050_ADDRESS, MPU6050_RA_PWR_MGMT_1, 1 << MPU6050_PWR1_DEVICE_RESET_BIT);
+    vTaskDelay(100);
+    
+    I2Cx_write_byte(CPAL_I2C2, MPU6050_ADDRESS, MPU6050_RA_PWR_MGMT_1, 0x0);
+
+    I2Cx_write_byte(CPAL_I2C2, MPU6050_ADDRESS, MPU6050_RA_INT_PIN_CFG, 1 << MPU6050_INTCFG_I2C_BYPASS_EN_BIT);
     
     while(1)
     {
-        tick_s=xTaskGetTickCount();
-        printf("\n\rEnter Sleep, xTickCount = %d\n\r",tick_s);
-        vTaskDelay(10);
-        
-        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xF7, FALSE); // PWR_LED (ON), APC250 (OFF)
-        vTaskDelay(delay);
-        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xF6, FALSE); // PWR_LED (ON), APC250 (ON)
-        vTaskDelay(10);
-        
-        tick_e=xTaskGetTickCount();
-        printf("\n\rLeave Sleep, xTickCount = %d\n\r",tick_e);
+        printf("\n\r---------------------------------------------------------------------------------\n\r");
         vTaskDelay(100);
-        printf("\n\rTime Spent = %f ms\n\r",(float)(tick_e-tick_s)/portTICK_RATE_MS);
+
+        for(i=0;i<118;i++)
+        {
+            /* Get the current Time and Date */
+            RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
+            reg=I2Cx_read_byte(CPAL_I2C2, MPU6050_ADDRESS, i);
+            printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MPU6050 REG[%03d] = 0x%02X\n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, i, reg);
+
+            vTaskDelay(20);
+        }
+
+        printf("\n\r---------------------------------------------------------------------------------\n\r");
         vTaskDelay(100);
+
+        for(i=0;i<13;i++)
+        {
+            /* Get the current Time and Date */
+            RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
+            reg=I2Cx_read_byte(CPAL_I2C2, HMC5883L_ADDRESS, i);
+            printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] HMC5883L REG[%03d] = 0x%02X\n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, i, reg);
+
+            vTaskDelay(20);
+        }
+
+        #if 0
+
+        printf("\n\r---------------------------------------------------------------------------------\n\r");
+        vTaskDelay(100);
+
+        I2Cx_write_byte(CPAL_I2C2, MS5611_ADDRESS, CMD_RESET, 0x0);
+        vTaskDelay(100);
+
+        // PROM READ SEQUENCE
+        for(i=0 ; i<8 ; i++)
+        {
+            RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
+            I2C_MutiRead((u8*)&(C[i]), MS5611_ADDRESS, (CMD_PROM_RD + (i<<1)), 2);
+        }
+        #endif
     }
 }
 #endif
@@ -787,6 +823,7 @@ void System_Init(void)
     GPIO_Init(GPIOB, &GPIO_InitStruct);
     //------------------------------------------------
 
+    #if 1
     /*------------------------------------------------
          I2C & GPIO Configuration
      ------------------------------------------------*/
@@ -832,6 +869,7 @@ void System_Init(void)
     /* Apply I2C configuration after enabling it */
     I2C_Init(I2C2, &I2C_InitStruct);
     //------------------------------------------------
+    #endif
 
     /*------------------------------------------------
          UART & GPIO Configuration
