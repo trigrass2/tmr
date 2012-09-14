@@ -10,7 +10,7 @@
 /* ST StdPeriph Driver includes. */
 #include "stm32f4xx_conf.h"
 
-#include "tmr_fc.h"
+//#include "tmr_fc.h"
 #include "drv_mpu6050.h"
 #include "drv_hmc5883l.h"
 #include "drv_sdio_sd.h"
@@ -216,7 +216,7 @@ u8 pca9536dp[4]={0};
 #define TRUE   (1)                      /* Boolean true value.   */
 #define FALSE  (0)                      /* Boolean false value.  */
 
-
+#if 0
 void vDiagTask( void *pvParameters )
 {
     u16 delay=0, i=0;
@@ -486,6 +486,36 @@ void vDiagTask( void *pvParameters )
     }
     //------------------------------------------------
 }
+#else
+void vDiagTask( void *pvParameters )
+{
+    u16 delay=0, i=0;
+    u32 count=0;
+    u32 tick_s=0, tick_e=0;
+
+    delay = 1000 / portTICK_RATE_MS;
+
+    System_Init();
+    
+    while(1)
+    {
+        tick_s=xTaskGetTickCount();
+        printf("\n\rEnter Sleep, xTickCount = %d\n\r",tick_s);
+        vTaskDelay(10);
+        
+        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xF7, FALSE); // PWR_LED (ON), APC250 (OFF)
+        vTaskDelay(delay);
+        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xF6, FALSE); // PWR_LED (ON), APC250 (ON)
+        vTaskDelay(10);
+        
+        tick_e=xTaskGetTickCount();
+        printf("\n\rLeave Sleep, xTickCount = %d\n\r",tick_e);
+        vTaskDelay(100);
+        printf("\n\rTime Spent = %f ms\n\r",(float)(tick_e-tick_s)/portTICK_RATE_MS);
+        vTaskDelay(100);
+    }
+}
+#endif
 
 /*******************************************************************************
 * Function Name  : GPIO_I2C2_Configuration

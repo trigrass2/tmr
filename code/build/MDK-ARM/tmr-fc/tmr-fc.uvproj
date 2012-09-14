@@ -346,9 +346,9 @@
             <uThumb>0</uThumb>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER</Define>
+              <Define>STM32F4XX, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\platform\sys\inc;..\..\..\platform\src\inc;..\..\..\platform\inc;..\..\..\utilities\freertos\Source\portable\RVDS\ARM_CM4F;..\..\..\utilities\umpl\platform\include\linux;..\..\..\utilities\freertos\Source\include;..\..\..\utilities\umpl\platform\include;..\..\..\utilities\umpl\lite;..\..\..\utilities\fatfs\inc;..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\inc</IncludePath>
+              <IncludePath>..\..\..\platform\sys\inc;..\..\..\platform\src\inc;..\..\..\platform\inc;..\..\..\utilities\freertos\Source\portable\RVDS\ARM_CM4F;..\..\..\utilities\umpl\platform\include\linux;..\..\..\utilities\freertos\Source\include;..\..\..\utilities\umpl\platform\include;..\..\..\utilities\umpl\lite;..\..\..\utilities\fatfs\inc;..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\inc;..\..\..\platform\csp\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\platform\csp\STM32_CPAL_Driver\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -460,17 +460,17 @@
             <File>
               <FileName>stm32f4xx_wwdg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_wwdg.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_wwdg.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_adc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_adc.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_adc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_can.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_can.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_can.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -514,12 +514,12 @@
             <File>
               <FileName>stm32f4xx_crc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_crc.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_crc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_cryp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -563,7 +563,7 @@
             <File>
               <FileName>stm32f4xx_cryp_aes.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_aes.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_aes.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -607,7 +607,7 @@
             <File>
               <FileName>stm32f4xx_cryp_des.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_des.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_des.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -651,7 +651,7 @@
             <File>
               <FileName>stm32f4xx_cryp_tdes.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_tdes.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_tdes.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -695,7 +695,7 @@
             <File>
               <FileName>stm32f4xx_dac.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dac.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dac.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -739,12 +739,12 @@
             <File>
               <FileName>stm32f4xx_dbgmcu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dbgmcu.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dbgmcu.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_dcmi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dcmi.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dcmi.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -788,22 +788,22 @@
             <File>
               <FileName>stm32f4xx_dma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dma.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dma.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_exti.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_exti.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_exti.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_flash.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_flash.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_fsmc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_fsmc.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_fsmc.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -847,12 +847,12 @@
             <File>
               <FileName>stm32f4xx_gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_hash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -896,7 +896,7 @@
             <File>
               <FileName>stm32f4xx_hash_md5.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash_md5.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash_md5.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -940,7 +940,7 @@
             <File>
               <FileName>stm32f4xx_hash_sha1.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash_sha1.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash_sha1.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -984,27 +984,27 @@
             <File>
               <FileName>stm32f4xx_i2c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_i2c.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_i2c.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_iwdg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_iwdg.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_iwdg.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_pwr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_pwr.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_pwr.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_rcc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_rng.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rng.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rng.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -1048,37 +1048,37 @@
             <File>
               <FileName>stm32f4xx_rtc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rtc.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rtc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_sdio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_sdio.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_sdio.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_spi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_spi.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_spi.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_syscfg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_syscfg.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_syscfg.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_tim.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_usart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c</FilePath>
             </File>
             <File>
               <FileName>misc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\misc.c</FilePath>
+              <FilePath>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\misc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1156,25 +1156,30 @@
           <GroupName>sys</GroupName>
           <Files>
             <File>
+              <FileName>tmr_fc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\sys\tmr_fc.c</FilePath>
+            </File>
+            <File>
               <FileName>stm32f4xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\platform\sys\stm32f4xx_it.c</FilePath>
             </File>
             <File>
-              <FileName>tmr_fc.c</FileName>
+              <FileName>cpal_i2c_hal_stm32f4xx.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\platform\sys\tmr_fc.c</FilePath>
+              <FilePath>..\..\..\platform\sys\cpal_i2c_hal_stm32f4xx.c</FilePath>
+            </File>
+            <File>
+              <FileName>cpal_usercallback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\sys\cpal_usercallback.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
           <GroupName>drivers</GroupName>
           <Files>
-            <File>
-              <FileName>drv_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\platform\src\drivers\drv_i2c.c</FilePath>
-            </File>
             <File>
               <FileName>drv_system.c</FileName>
               <FileType>1</FileType>
@@ -1184,6 +1189,11 @@
               <FileName>drv_sdio_sd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\platform\src\drivers\drv_sdio_sd.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_i2c_cpal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\src\drivers\drv_i2c_cpal.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1393,6 +1403,21 @@
               <FileName>mldl_cfg_init_umpl_6050a2.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\utilities\umpl\lite\mldl_cfg_init_umpl_6050a2.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>STM32_CPAL_Driver</GroupName>
+          <Files>
+            <File>
+              <FileName>cpal_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\csp\STM32_CPAL_Driver\src\cpal_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>cpal_hal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\csp\STM32_CPAL_Driver\src\cpal_hal.c</FilePath>
             </File>
           </Files>
         </Group>

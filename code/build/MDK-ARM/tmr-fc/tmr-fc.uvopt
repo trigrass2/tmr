@@ -157,40 +157,7 @@
           <Name>-O207 -S0 -C0 -FO7 -FD20000000 -FC800 -FN1 -FF0STM32F4xx_1024 -FS08000000 -FL0100000)</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint>
-        <Bp>
-          <Number>0</Number>
-          <Type>0</Type>
-          <LineNumber>1358</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>C:\RC_CODE\google_code\code\platform\src\apps\main.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>1391</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>C:\RC_CODE\google_code\code\platform\src\drivers\drv_sdio_sd.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-      </Breakpoint>
+      <Breakpoint/>
       <WatchWindow1>
         <Ww>
           <count>0</count>
@@ -314,7 +281,7 @@
 
   <Group>
     <GroupName>CMSIS</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <File>
@@ -325,7 +292,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>391</TopLine>
+      <TopLine>395</TopLine>
       <CurrentLine>400</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\platform\sys\startup_stm32f4xx.s</PathWithFileName>
@@ -335,7 +302,7 @@
       <GroupNumber>1</GroupNumber>
       <FileNumber>2</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <Focus>0</Focus>
       <ColumnNumber>25</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -349,7 +316,7 @@
 
   <Group>
     <GroupName>STM32F4xx_StdPeriph_Driver</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <File>
@@ -363,7 +330,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_wwdg.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_wwdg.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_wwdg.c</FilenameWithoutPath>
     </File>
     <File>
@@ -377,7 +344,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_adc.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_adc.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_adc.c</FilenameWithoutPath>
     </File>
     <File>
@@ -391,7 +358,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_can.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_can.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_can.c</FilenameWithoutPath>
     </File>
     <File>
@@ -405,7 +372,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_crc.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_crc.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_crc.c</FilenameWithoutPath>
     </File>
     <File>
@@ -419,7 +386,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_cryp.c</FilenameWithoutPath>
     </File>
     <File>
@@ -433,7 +400,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_aes.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_aes.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_cryp_aes.c</FilenameWithoutPath>
     </File>
     <File>
@@ -447,7 +414,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_des.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_des.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_cryp_des.c</FilenameWithoutPath>
     </File>
     <File>
@@ -461,7 +428,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_tdes.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_tdes.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_cryp_tdes.c</FilenameWithoutPath>
     </File>
     <File>
@@ -475,7 +442,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dac.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dac.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_dac.c</FilenameWithoutPath>
     </File>
     <File>
@@ -489,7 +456,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dbgmcu.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dbgmcu.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_dbgmcu.c</FilenameWithoutPath>
     </File>
     <File>
@@ -503,7 +470,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dcmi.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dcmi.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_dcmi.c</FilenameWithoutPath>
     </File>
     <File>
@@ -517,7 +484,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dma.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dma.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_dma.c</FilenameWithoutPath>
     </File>
     <File>
@@ -531,7 +498,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_exti.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_exti.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_exti.c</FilenameWithoutPath>
     </File>
     <File>
@@ -545,7 +512,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_flash.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_flash.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_flash.c</FilenameWithoutPath>
     </File>
     <File>
@@ -559,7 +526,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_fsmc.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_fsmc.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_fsmc.c</FilenameWithoutPath>
     </File>
     <File>
@@ -573,7 +540,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_gpio.c</FilenameWithoutPath>
     </File>
     <File>
@@ -587,7 +554,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hash.c</FilenameWithoutPath>
     </File>
     <File>
@@ -601,7 +568,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash_md5.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash_md5.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hash_md5.c</FilenameWithoutPath>
     </File>
     <File>
@@ -615,7 +582,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash_sha1.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash_sha1.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hash_sha1.c</FilenameWithoutPath>
     </File>
     <File>
@@ -629,7 +596,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_i2c.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_i2c.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_i2c.c</FilenameWithoutPath>
     </File>
     <File>
@@ -643,7 +610,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_iwdg.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_iwdg.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_iwdg.c</FilenameWithoutPath>
     </File>
     <File>
@@ -657,7 +624,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_pwr.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_pwr.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_pwr.c</FilenameWithoutPath>
     </File>
     <File>
@@ -671,7 +638,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_rcc.c</FilenameWithoutPath>
     </File>
     <File>
@@ -685,7 +652,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rng.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rng.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_rng.c</FilenameWithoutPath>
     </File>
     <File>
@@ -699,7 +666,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rtc.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rtc.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_rtc.c</FilenameWithoutPath>
     </File>
     <File>
@@ -713,7 +680,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_sdio.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_sdio.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_sdio.c</FilenameWithoutPath>
     </File>
     <File>
@@ -727,7 +694,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_spi.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_spi.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_spi.c</FilenameWithoutPath>
     </File>
     <File>
@@ -741,7 +708,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_syscfg.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_syscfg.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_syscfg.c</FilenameWithoutPath>
     </File>
     <File>
@@ -755,7 +722,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_tim.c</FilenameWithoutPath>
     </File>
     <File>
@@ -769,7 +736,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_usart.c</FilenameWithoutPath>
     </File>
     <File>
@@ -783,14 +750,14 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_DSP_StdPeriph_Lib_V1.0.1\Libraries\STM32F4xx_StdPeriph_Driver\src\misc.c</PathWithFileName>
+      <PathWithFileName>..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\src\misc.c</PathWithFileName>
       <FilenameWithoutPath>misc.c</FilenameWithoutPath>
     </File>
   </Group>
 
   <Group>
     <GroupName>FreeRTOS</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <File>
@@ -944,7 +911,7 @@
 
   <Group>
     <GroupName>apps</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <File>
@@ -970,13 +937,27 @@
     <cbSel>0</cbSel>
     <File>
       <GroupNumber>6</GroupNumber>
+      <FileNumber>0</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\platform\sys\tmr_fc.c</PathWithFileName>
+      <FilenameWithoutPath>tmr_fc.c</FilenameWithoutPath>
+    </File>
+    <File>
+      <GroupNumber>6</GroupNumber>
       <FileNumber>45</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>7</TopLine>
+      <TopLine>1</TopLine>
       <CurrentLine>1</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\platform\sys\stm32f4xx_it.c</PathWithFileName>
@@ -984,17 +965,31 @@
     </File>
     <File>
       <GroupNumber>6</GroupNumber>
-      <FileNumber>46</FileNumber>
+      <FileNumber>0</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>14</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>13</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\sys\tmr_fc.c</PathWithFileName>
-      <FilenameWithoutPath>tmr_fc.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\platform\sys\cpal_i2c_hal_stm32f4xx.c</PathWithFileName>
+      <FilenameWithoutPath>cpal_i2c_hal_stm32f4xx.c</FilenameWithoutPath>
+    </File>
+    <File>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>0</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\platform\sys\cpal_usercallback.c</PathWithFileName>
+      <FilenameWithoutPath>cpal_usercallback.c</FilenameWithoutPath>
     </File>
   </Group>
 
@@ -1005,28 +1000,14 @@
     <cbSel>0</cbSel>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>47</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\platform\src\drivers\drv_i2c.c</PathWithFileName>
-      <FilenameWithoutPath>drv_i2c.c</FilenameWithoutPath>
-    </File>
-    <File>
-      <GroupNumber>7</GroupNumber>
       <FileNumber>48</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>6</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>92</TopLine>
+      <CurrentLine>106</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\platform\src\drivers\drv_system.c</PathWithFileName>
       <FilenameWithoutPath>drv_system.c</FilenameWithoutPath>
@@ -1039,11 +1020,25 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>1385</TopLine>
+      <CurrentLine>1391</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\platform\src\drivers\drv_sdio_sd.c</PathWithFileName>
       <FilenameWithoutPath>drv_sdio_sd.c</FilenameWithoutPath>
+    </File>
+    <File>
+      <GroupNumber>7</GroupNumber>
+      <FileNumber>0</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>1</TopLine>
+      <CurrentLine>1</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\platform\src\drivers\drv_i2c_cpal.c</PathWithFileName>
+      <FilenameWithoutPath>drv_i2c_cpal.c</FilenameWithoutPath>
     </File>
   </Group>
 
@@ -1471,6 +1466,41 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\utilities\umpl\lite\mldl_cfg_init_umpl_6050a2.c</PathWithFileName>
       <FilenameWithoutPath>mldl_cfg_init_umpl_6050a2.c</FilenameWithoutPath>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>STM32_CPAL_Driver</GroupName>
+    <tvExp>1</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <File>
+      <GroupNumber>0</GroupNumber>
+      <FileNumber>0</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>8</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>1007</TopLine>
+      <CurrentLine>1022</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\platform\csp\STM32_CPAL_Driver\src\cpal_i2c.c</PathWithFileName>
+      <FilenameWithoutPath>cpal_i2c.c</FilenameWithoutPath>
+    </File>
+    <File>
+      <GroupNumber>0</GroupNumber>
+      <FileNumber>0</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\platform\csp\STM32_CPAL_Driver\src\cpal_hal.c</PathWithFileName>
+      <FilenameWithoutPath>cpal_hal.c</FilenameWithoutPath>
     </File>
   </Group>
 

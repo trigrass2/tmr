@@ -97,13 +97,13 @@ void systemInit(void)
 
     // Configure the rest of the stuff
     adcInit();
-#endif
 
 #ifndef FY90Q
     i2cInit(I2C2);
 #endif
     // sleep for 100ms
     delay(100);
+#endif
 
 }
 
