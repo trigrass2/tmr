@@ -148,324 +148,13 @@ static void I2C2_StructInit(void)
   I2C2_DevStructure.pCPAL_TransferRx = &I2C2_RXTransfer;
 }
 
-static uint32_t I2C2_Status (void)
-{
-  I2C2_DevStructure.pCPAL_TransferTx = &I2C2_TXTransfer;     
-  I2C2_DevStructure.pCPAL_TransferTx->wAddr1 = (uint32_t)I2C2_ADDR;
-  
-  return CPAL_I2C_IsDeviceReady(&I2C2_DevStructure);
-}
 
-/**
-  * @brief  Checks the LM75 status.
-  * @param  None
-  * @retval ErrorStatus: LM75 Status (ERROR or SUCCESS).
-  */
-ErrorStatus I2C2_GetStatus(void)
-{  
-  /* Test if LM75 is ready */
-  while ((I2C2_Status() == CPAL_FAIL) && I2C2_Timeout)  
-  {
-    I2C2_Timeout--;
-  }
-  
-  /* If LM75 is not responding return ERROR */
-  if (I2C2_Timeout == 0)
-  {
-    return ERROR;
-  }
-  
-  /* In other case return SUCCESS */
-  return SUCCESS;  
-}
-/**
-  * @brief  Read the specified register from the LM75.
-  * @param  RegName: specifies the LM75 register to be read.
-  *              This member can be one of the following values:  
-  *                  - I2C2_REG_TEMP: temperature register
-  *                  - I2C2_REG_TOS: Over-limit temperature register
-  *                  - I2C2_REG_THYS: Hysteresis temperature register
-  * @retval LM75 register value.
-  */
-uint16_t I2C2_ReadReg(uint8_t RegName)
-{   
-  uint16_t tmp = 0;
-  
-  I2C2_Buffer[0] = 0;
-  I2C2_Buffer[1] = 0;
-  
-  /* Disable all options */
-  I2C2_DevStructure.wCPAL_Options = 0;
-
-  /* point to CPAL_TransferTypeDef structure */
-  I2C2_DevStructure.pCPAL_TransferRx = &I2C2_RXTransfer;
-  
-  /* Configure transfer parameters */  
-  I2C2_DevStructure.pCPAL_TransferRx->wNumData = 2;
-  I2C2_DevStructure.pCPAL_TransferRx->pbBuffer = I2C2_Buffer ;
-  #if 0
-  I2C2_DevStructure.pCPAL_TransferRx->wAddr1   = (uint32_t)I2C2_ADDR;
-  #else
-  I2C2_DevStructure.pCPAL_TransferRx->wAddr1   = (uint32_t)(0x69 << 1);
-  #endif
-  I2C2_DevStructure.pCPAL_TransferRx->wAddr2   = (uint32_t)RegName;
-  
-  /* Read Operation */
-  if(CPAL_I2C_Read(&I2C2_DevStructure) == CPAL_PASS)
-  {
-    while ((I2C2_DevStructure.CPAL_State != CPAL_STATE_READY) && (I2C2_DevStructure.CPAL_State != CPAL_STATE_ERROR) )
-    { }
-  }
-  
-  /* Store I2C2_I2C received data */
-  tmp = (uint16_t)(I2C2_Buffer[0] << 8);
-  tmp |= I2C2_Buffer[1];
-  
-  /* return a Reg value */
-  return (uint16_t)tmp;  
-}
-
-/**
-  * @brief  Write to the specified register of the LM75.
-  * @param  RegName: specifies the LM75 register to be written.
-  *              This member can be one of the following values:    
-  *                  - I2C2_REG_TOS: Over-limit temperature register
-  *                  - I2C2_REG_THYS: Hysteresis temperature register
-  * @param  RegValue: value to be written to LM75 register.  
-  * @retval None
-  */
-uint8_t I2C2_WriteReg(uint8_t RegName, uint16_t RegValue)
-{   
-  I2C2_Buffer[0] = (uint8_t)(RegValue >> 8);
-  I2C2_Buffer[1] = (uint8_t)(RegValue);
-     
-  /* Disable all options */
-  I2C2_DevStructure.wCPAL_Options = 0;
-  
-  /* point to CPAL_TransferTypeDef structure */
-  I2C2_DevStructure.pCPAL_TransferTx = &I2C2_TXTransfer;
-  
-  /* Configure transfer parameters */  
-  I2C2_DevStructure.pCPAL_TransferTx->wNumData = 2;
-  I2C2_DevStructure.pCPAL_TransferTx->pbBuffer = I2C2_Buffer ;
-  I2C2_DevStructure.pCPAL_TransferTx->wAddr1   = (uint32_t)I2C2_ADDR;
-  I2C2_DevStructure.pCPAL_TransferTx->wAddr2   = (uint32_t)RegName;
-  
-  /* Write Operation */
-  if(CPAL_I2C_Write(&I2C2_DevStructure) == CPAL_PASS)
-  {
-    while ((I2C2_DevStructure.CPAL_State != CPAL_STATE_READY) && (I2C2_DevStructure.CPAL_State != CPAL_STATE_ERROR) )
-    { }
-    
-    if (I2C2_DevStructure.CPAL_State == CPAL_STATE_ERROR)
-    {
-      return I2C2_FAIL;
-    }
-  }
-  else
-  {
-    return I2C2_FAIL;
-  }
-  
-  return I2C2_OK;
-}
-
-/**
-  * @brief  Read Temperature register of LM75: double temperature value.
-  * @param  None
-  * @retval LM75 measured temperature value.
-  */
-uint16_t I2C2_ReadTemp(void)
-{   
-  uint16_t tmp = 0;
-  
-  I2C2_Buffer[0] = 0;
-  I2C2_Buffer[1] = 0;
-  
-  /* Disable all options */
-  I2C2_DevStructure.wCPAL_Options = 0;
-
-  /* point to CPAL_TransferTypeDef structure */
-  I2C2_DevStructure.pCPAL_TransferRx = &I2C2_RXTransfer;
-  
-  /* Configure transfer parameters */  
-  I2C2_DevStructure.pCPAL_TransferRx->wNumData = 2;
-  I2C2_DevStructure.pCPAL_TransferRx->pbBuffer = I2C2_Buffer ;
-  I2C2_DevStructure.pCPAL_TransferRx->wAddr1   = (uint32_t)I2C2_ADDR;
-  I2C2_DevStructure.pCPAL_TransferRx->wAddr2   = (uint32_t)I2C2_REG_TEMP;
-  
-  /* Read Operation */
-  if(CPAL_I2C_Read(&I2C2_DevStructure) == CPAL_PASS)
-  {
-    while ((I2C2_DevStructure.CPAL_State != CPAL_STATE_READY) && (I2C2_DevStructure.CPAL_State != CPAL_STATE_ERROR) )
-    { }
-  }
-  
-  /* Store I2C2_I2C received data */
-  tmp = (uint16_t)(I2C2_Buffer[0] << 8);
-  tmp |= I2C2_Buffer[1];    
-  
-  /* Return Temperature value */
-  return (uint16_t)(tmp >> 7);
-}
-
-/**
-  * @brief  Read the configuration register from the LM75.
-  * @param  None
-  * @retval LM75 configuration register value.
-  */
-uint8_t I2C2_ReadConfReg(void)
-{    
-  I2C2_Buffer[0] = 0;
-  
-  /* Disable all options */
-  I2C2_DevStructure.wCPAL_Options = 0;
-  
-  /* point to CPAL_TransferTypeDef structure */
-  I2C2_DevStructure.pCPAL_TransferRx = &I2C2_RXTransfer;
-  
-  /* Configure transfer parameters */  
-  I2C2_DevStructure.pCPAL_TransferRx->wNumData = 1;
-  I2C2_DevStructure.pCPAL_TransferRx->pbBuffer = I2C2_Buffer ;
-  I2C2_DevStructure.pCPAL_TransferRx->wAddr1   = (uint32_t)I2C2_ADDR;
-  I2C2_DevStructure.pCPAL_TransferRx->wAddr2   = (uint32_t)I2C2_REG_CONF;
-  
-  /* Read Operation */
-  if(CPAL_I2C_Read(&I2C2_DevStructure) == CPAL_PASS)
-  {
-    while ((I2C2_DevStructure.CPAL_State != CPAL_STATE_READY) && (I2C2_DevStructure.CPAL_State != CPAL_STATE_ERROR) )
-    { }
-  }
-  
-  /* Return Temperature value */
-  return (uint8_t)I2C2_Buffer[0];
-}
-
-/**
-  * @brief  Write to the configuration register of the LM75.
-  * @param  RegValue: specifies the value to be written to LM75 configuration 
-  *         register.
-  * @retval None
-  */
-uint8_t I2C2_WriteConfReg(uint8_t RegValue)
-{   
-  I2C2_Buffer[0] = (uint8_t)(RegValue);
-    
-  /* Disable all options */
-  I2C2_DevStructure.wCPAL_Options = 0;
-  
-  /* point to CPAL_TransferTypeDef structure */
-  I2C2_DevStructure.pCPAL_TransferTx = &I2C2_TXTransfer;
-  
-  /* Configure transfer parameters */  
-  I2C2_DevStructure.pCPAL_TransferTx->wNumData = 1;
-  I2C2_DevStructure.pCPAL_TransferTx->pbBuffer = I2C2_Buffer ;
-  I2C2_DevStructure.pCPAL_TransferTx->wAddr1   = (uint32_t)I2C2_ADDR;
-  I2C2_DevStructure.pCPAL_TransferTx->wAddr2   = (uint32_t)I2C2_REG_CONF;
-  
-  /* Write Operation */
-  if(CPAL_I2C_Write(&I2C2_DevStructure) == CPAL_PASS)
-  {
-    while ((I2C2_DevStructure.CPAL_State != CPAL_STATE_READY) && (I2C2_DevStructure.CPAL_State != CPAL_STATE_ERROR) )
-    { }
-    
-    if (I2C2_DevStructure.CPAL_State == CPAL_STATE_ERROR)
-    {
-      return I2C2_FAIL;
-    }
-  }
-  else
-  {
-    return I2C2_FAIL;
-  }
-  
-  return I2C2_OK;
-  
-}
-
-/**
-  * @brief  Enables or disables the LM75.
-  * @param  NewState: specifies the LM75 new status. This parameter can be ENABLE
-  *         or DISABLE.  
-  * @retval None
-  */
-uint8_t I2C2_ShutDown(FunctionalState NewState)
-{   
-  __IO uint8_t RegValue = 0;    
-  
-  I2C2_Buffer[0] = 0;
-  		  
-  /* Disable all options */
-  I2C2_DevStructure.wCPAL_Options = 0;
-
-  /* point to CPAL_TransferTypeDef structure */
-  I2C2_DevStructure.pCPAL_TransferRx = &I2C2_RXTransfer;
-  
-  /* Configure transfer parameters */  
-  I2C2_DevStructure.pCPAL_TransferRx->wNumData = 1;
-  I2C2_DevStructure.pCPAL_TransferRx->pbBuffer = I2C2_Buffer ;
-  I2C2_DevStructure.pCPAL_TransferRx->wAddr1   = (uint32_t)I2C2_ADDR;
-  I2C2_DevStructure.pCPAL_TransferRx->wAddr2   = (uint32_t)I2C2_REG_CONF;
-  
-  /* Read Operation */
-  if(CPAL_I2C_Read(&I2C2_DevStructure) == CPAL_PASS)
-  {
-    while ((I2C2_DevStructure.CPAL_State != CPAL_STATE_READY) && (I2C2_DevStructure.CPAL_State != CPAL_STATE_ERROR) )
-    { }
-  }
-  
-  /* Get received data */
-  RegValue = (uint8_t)I2C2_Buffer[0];
-  
-  /*---------------------------- Transmission Phase ---------------------------*/
-  
-  /* Enable or disable SD bit */
-  if (NewState != DISABLE)
-  {
-    /* Enable LM75 */
-    I2C2_Buffer[0] = RegValue & I2C2_SD_RESET;
-  }
-  else
-  {
-    /* Disable LM75 */
-    I2C2_Buffer[0] = RegValue | I2C2_SD_SET;
-  }  
-  
-  /* point to CPAL_TransferTypeDef structure */
-  I2C2_DevStructure.pCPAL_TransferTx = &I2C2_TXTransfer;
-  
-  /* Configure transfer parameters */  
-  I2C2_DevStructure.pCPAL_TransferTx->wNumData = 1;
-  I2C2_DevStructure.pCPAL_TransferTx->pbBuffer = I2C2_Buffer ;
-  I2C2_DevStructure.pCPAL_TransferTx->wAddr1   = (uint32_t)I2C2_ADDR;
-  I2C2_DevStructure.pCPAL_TransferTx->wAddr2   = (uint32_t)I2C2_REG_CONF;
-  
-  /* Write Operation */
-  if(CPAL_I2C_Write(&I2C2_DevStructure) == CPAL_PASS)
-  {
-    while ((I2C2_DevStructure.CPAL_State != CPAL_STATE_READY) && (I2C2_DevStructure.CPAL_State != CPAL_STATE_ERROR) )
-    { }
-    
-    if (I2C2_DevStructure.CPAL_State == CPAL_STATE_ERROR)
-    {
-      return I2C2_FAIL;
-    }
-  }
-  else
-  {
-    return I2C2_FAIL;
-  }
-  
-  return I2C2_OK;
-}
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
 
-uint8_t I2Cx_read_byte(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg)
+uint8_t i2c_rx_byte(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg)
 {
-    uint8_t tmp = 0;
-  
-    I2C2_Buffer[0] = 0;
+    uint8_t rx_data = 0;
   
     /* Disable all options */
     I2C2_DevStructure.wCPAL_Options = 0;
@@ -475,7 +164,7 @@ uint8_t I2Cx_read_byte(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg)
   
     /* Configure transfer parameters */  
     I2C2_DevStructure.pCPAL_TransferRx->wNumData = 1;
-    I2C2_DevStructure.pCPAL_TransferRx->pbBuffer = I2C2_Buffer ;
+    I2C2_DevStructure.pCPAL_TransferRx->pbBuffer = &rx_data ;
     I2C2_DevStructure.pCPAL_TransferRx->wAddr1   = (uint32_t)(addr << 1);
     I2C2_DevStructure.pCPAL_TransferRx->wAddr2   = (uint32_t)reg;
   
@@ -486,26 +175,76 @@ uint8_t I2Cx_read_byte(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg)
         { }
     }
   
-    /* Store I2C2_I2C received data */
-    tmp = I2C2_Buffer[0];
-  
     /* return a Reg value */
-    return (uint8_t)tmp;  
+    return rx_data;  
 }
 
-I2C2_Status_TypDef I2Cx_read_byte_buf(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t* buf)
-{
+I2C2_Status_TypDef i2c_rx_byte_buf(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t* buf)
+{   
     return I2C2_OK;
 }
 
-I2C2_Status_TypDef I2Cx_read_mbytes_buf(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t len, uint8_t* buf)
+I2C2_Status_TypDef i2c_rx_mbytes_buf(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t len, uint8_t* buf)
 {
+    /* Disable all options */
+    I2C2_DevStructure.wCPAL_Options = 0;
+
+    /* point to CPAL_TransferTypeDef structure */
+    I2C2_DevStructure.pCPAL_TransferRx = &I2C2_RXTransfer;
+  
+    /* Configure transfer parameters */  
+    I2C2_DevStructure.pCPAL_TransferRx->wNumData = len;
+    I2C2_DevStructure.pCPAL_TransferRx->pbBuffer = buf ;
+    I2C2_DevStructure.pCPAL_TransferRx->wAddr1   = (uint32_t)(addr << 1);
+    I2C2_DevStructure.pCPAL_TransferRx->wAddr2   = (uint32_t)reg;
+  
+    /* Read Operation */
+    if(CPAL_I2C_Read(&I2C2_DevStructure) == CPAL_PASS)
+    {
+        while ((I2C2_DevStructure.CPAL_State != CPAL_STATE_READY) && (I2C2_DevStructure.CPAL_State != CPAL_STATE_ERROR) )
+        { }
+    }
+
     return I2C2_OK;
 }
 
-I2C2_Status_TypDef I2Cx_write_byte(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t data)
+I2C2_Status_TypDef i2c_tx_cmd(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t cmd)
 {
-    I2C2_Buffer[0] = (uint8_t)(data);
+    uint8_t tx_cmd = cmd;
+     
+    /* Disable all options */
+    I2C2_DevStructure.wCPAL_Options = CPAL_OPT_NO_MEM_ADDR;
+  
+    /* point to CPAL_TransferTypeDef structure */
+    I2C2_DevStructure.pCPAL_TransferTx = &I2C2_TXTransfer;
+  
+    /* Configure transfer parameters */  
+    I2C2_DevStructure.pCPAL_TransferTx->wNumData = 1;
+    I2C2_DevStructure.pCPAL_TransferTx->pbBuffer = &tx_cmd ;
+    I2C2_DevStructure.pCPAL_TransferTx->wAddr1   = (uint32_t)(addr << 1);
+  
+    /* Write Operation */
+    if(CPAL_I2C_Write(&I2C2_DevStructure) == CPAL_PASS)
+    {
+        while ((I2C2_DevStructure.CPAL_State != CPAL_STATE_READY) && (I2C2_DevStructure.CPAL_State != CPAL_STATE_ERROR) )
+        { }
+    
+        if (I2C2_DevStructure.CPAL_State == CPAL_STATE_ERROR)
+        {
+            return I2C2_FAIL;
+        }
+    }
+    else
+    {
+        return I2C2_FAIL;
+    }
+  
+    return I2C2_OK;
+}
+
+I2C2_Status_TypDef i2c_tx_byte(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t data)
+{
+    uint8_t tx_data = data;
      
     /* Disable all options */
     I2C2_DevStructure.wCPAL_Options = 0;
@@ -515,7 +254,7 @@ I2C2_Status_TypDef I2Cx_write_byte(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t r
   
     /* Configure transfer parameters */  
     I2C2_DevStructure.pCPAL_TransferTx->wNumData = 1;
-    I2C2_DevStructure.pCPAL_TransferTx->pbBuffer = I2C2_Buffer ;
+    I2C2_DevStructure.pCPAL_TransferTx->pbBuffer = &tx_data ;
     I2C2_DevStructure.pCPAL_TransferTx->wAddr1   = (uint32_t)(addr << 1);
     I2C2_DevStructure.pCPAL_TransferTx->wAddr2   = (uint32_t)reg;
   
@@ -538,12 +277,12 @@ I2C2_Status_TypDef I2Cx_write_byte(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t r
     return I2C2_OK;
 }
 
-I2C2_Status_TypDef I2Cx_write_byte_buf(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t* buf)
+I2C2_Status_TypDef i2c_tx_byte_buf(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t* buf)
 {
     return I2C2_OK;
 }
 
-I2C2_Status_TypDef I2Cx_write_mbytes_buf(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t len, uint8_t* buf)
+I2C2_Status_TypDef i2c_tx_mdatas_buf(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t len, uint8_t* buf)
 {
     return I2C2_OK;
 }

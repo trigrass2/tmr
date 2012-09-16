@@ -446,8 +446,8 @@
 
 #define _CPAL_TIMEOUT_DEINIT()         SysTick->CTRL = 0        /*<! Disable the systick timer */ 
 
-#if 0
-#define CPAL_I2C_TIMEOUT_Manager       SysTick_Handler          /*<! This callback is used to handle Timeout error. 
+#if 1
+#define CPAL_I2C_TIMEOUT_Manager       SysTick_Handler_          /*<! This callback is used to handle Timeout error. 
                                                                      When a timeout occurs CPAL_TIMEOUT_UserCallback 
                                                                      is called to handle this error */ 
 #endif
@@ -544,7 +544,7 @@
 //#define CPAL_DEBUG
 
 #ifdef CPAL_DEBUG
-#define CPAL_LOG(Str)                   printf(Str)
+#define CPAL_LOG(Str)                   printf(Str);
 #include <stdio.h>                     /* This header file must be included when using CPAL_DEBUG option   */
 #else
 #define CPAL_LOG(Str)                   ((void)0)

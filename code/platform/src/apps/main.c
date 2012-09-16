@@ -1,5 +1,6 @@
 /* Standard includes. */
 #include <stdio.h>
+#include <math.h>
 
 /* Scheduler includes. */
 #include "FreeRTOS.h"
@@ -65,14 +66,23 @@ unsigned int data_g[6] = {0};
 //#define BEEP_ENABLE
 
 // MS5611
-unsigned long D1;    // ADC value of the pressure conversion
-unsigned long D2;    // ADC value of the temperature conversion
-unsigned int C[8];   // calibration coefficients
-double P;   // compensated pressure value
-double T;   // compensated temperature value
-double dT;   // difference between actual and measured temperature
-double OFF;   // offset at actual temperature
-double SENS;   // sensitivity at actual temperature
+const float sea_press = 1013.25f;
+
+uint32_t D1=0;    // ADC value of the pressure conversion
+uint32_t D2=0;    // ADC value of the temperature conversion
+uint16_t C[8];   // calibration coefficients
+uint8_t C8[16];   // calibration coefficients
+
+int32_t P=0;   // compensated pressure value
+int32_t TEMP=0;   // compensated temperature value
+int32_t T2=0;   // compensated temperature value
+
+int32_t dT=0;;   // difference between actual and measured temperature
+int64_t OFF=0;   // offset at actual temperature
+int64_t SENS=0;   // sensitivity at actual temperature
+int64_t OFF2=0;   // offset at actual temperature
+int64_t SENS2=0;   // sensitivity at actual temperature
+
 
 unsigned char ms_crc4 = 0;
 unsigned int nprom[] = {0x3132,0x3334,0x3536,0x3738,0x3940,0x4142,0x4344,0x450B}; // CRC =0x0B so..  0x4500 + 0x0B
@@ -111,7 +121,7 @@ uint8_t I2C_ByteRead(u16 Addr, u8 Reg);
 void I2C_ByteWrite(u16 Addr, u8 Reg,u8 Data,u8 Cmd);
 void I2C_MutiRead(u8* pBuffer, u8 Addr, u8 Reg,u8 Count);
 void I2C2_Configuration(void);
-unsigned char crc4(unsigned int n_prom[]);
+uint8_t crc4(uint16_t n_prom[]);
 uint8_t USART_Scanf(uint32_t MinValue, uint32_t MaxValue);
 void RTC_TimeShow(void);
 void RTC_DateShow(void);
@@ -494,33 +504,50 @@ void vDiagTask( void *pvParameters )
     u16 delay=0, i=0;
     u32 tick_s=0, tick_e=0;
 
-    delay = 3000 / portTICK_RATE_MS;
+    delay = 5000 / portTICK_RATE_MS;
 
     System_Init();
     I2C2_Config();
     
-    I2Cx_write_byte(CPAL_I2C2, MPU6050_ADDRESS, MPU6050_RA_PWR_MGMT_1, 1 << MPU6050_PWR1_DEVICE_RESET_BIT);
+    i2c_tx_byte(CPAL_I2C2, MPU6050_ADDRESS, MPU6050_RA_PWR_MGMT_1, 1 << MPU6050_PWR1_DEVICE_RESET_BIT);
     vTaskDelay(100);
     
-    I2Cx_write_byte(CPAL_I2C2, MPU6050_ADDRESS, MPU6050_RA_PWR_MGMT_1, 0x0);
+    i2c_tx_byte(CPAL_I2C2, MPU6050_ADDRESS, MPU6050_RA_PWR_MGMT_1, 0x0);
 
-    I2Cx_write_byte(CPAL_I2C2, MPU6050_ADDRESS, MPU6050_RA_INT_PIN_CFG, 1 << MPU6050_INTCFG_I2C_BYPASS_EN_BIT);
+    i2c_tx_byte(CPAL_I2C2, MPU6050_ADDRESS, MPU6050_RA_INT_PIN_CFG, 1 << MPU6050_INTCFG_I2C_BYPASS_EN_BIT);
     
     while(1)
     {
+        #if 0
         printf("\n\r---------------------------------------------------------------------------------\n\r");
         vTaskDelay(100);
 
         for(i=0;i<118;i++)
         {
+            i2c_rx_mbytes_buf(CPAL_I2C2, MPU6050_ADDRESS, i, 1, (data_mpu+i));
+            //printf("0x%02X, 0x%02X",data_mpu[0],data_mpu[1]);
+        }
+        
+        for(i=0;i<118;i++)
+        {
             /* Get the current Time and Date */
             RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
-            reg=I2Cx_read_byte(CPAL_I2C2, MPU6050_ADDRESS, i);
-            printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MPU6050 REG[%03d] = 0x%02X\n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, i, reg);
+            //reg=i2c_rx_data(CPAL_I2C2, MPU6050_ADDRESS, i);
+            //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MPU6050 REG[%03d] = 0x%02X\n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, i, reg);        
+            printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MPU6050 REG[%03d] = 0x%02X\n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, i, data_mpu[i]);
 
             vTaskDelay(20);
         }
 
+        while(data_mpu[117] != 0x68)
+        {
+            RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
+            printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MPU6050 Read Fialed!!!!\n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds);
+            vTaskDelay(delay);
+        }
+        #endif
+        
+        #if 0
         printf("\n\r---------------------------------------------------------------------------------\n\r");
         vTaskDelay(100);
 
@@ -528,27 +555,98 @@ void vDiagTask( void *pvParameters )
         {
             /* Get the current Time and Date */
             RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
-            reg=I2Cx_read_byte(CPAL_I2C2, HMC5883L_ADDRESS, i);
-            printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] HMC5883L REG[%03d] = 0x%02X\n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, i, reg);
+            reg=i2c_rx_byte(CPAL_I2C2, HMC5883L_ADDRESS, i);
+            printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] HMC5883L REG[%02d] = 0x%02X\n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, i, reg);
 
             vTaskDelay(20);
         }
 
-        #if 0
+        while(reg != 0x33)
+        {
+            RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
+            printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] HMC5883L Read Fialed!!!!\n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds);
+            vTaskDelay(delay);
+        }
+        #endif
+
+        #if 1
 
         printf("\n\r---------------------------------------------------------------------------------\n\r");
         vTaskDelay(100);
 
-        I2Cx_write_byte(CPAL_I2C2, MS5611_ADDRESS, CMD_RESET, 0x0);
+        i2c_tx_cmd(CPAL_I2C2, MS5611_ADDRESS, CMD_RESET);
         vTaskDelay(100);
 
         // PROM READ SEQUENCE
         for(i=0 ; i<8 ; i++)
         {
             RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
-            I2C_MutiRead((u8*)&(C[i]), MS5611_ADDRESS, (CMD_PROM_RD + (i<<1)), 2);
+            
+            // PROM READ SEQUENCE
+            i2c_rx_mbytes_buf(CPAL_I2C2, MS5611_ADDRESS, (CMD_PROM_RD + (i<<1)), 2, (uint8_t*)&C[i]);
+            C[i]= (C[i]>>8) | ((C[i]&0x00FF)<<8);
+
+            //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 C[%02d] = 0x%04X\n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, i, C[i]);
+            //vTaskDelay(20);
         }
+
+        printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 CRC of PROM = 0x%01X\n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, crc4(C));
+        vTaskDelay(20);
+
         #endif
+
+        while(crc4(C) != 0x0F)
+        {
+            RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
+            //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 Read Fialed!!!!\n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds);
+            //vTaskDelay(delay);
+        }
+
+        
+        // CONVERSION SEQUENCE
+        
+        // D1
+        i2c_tx_cmd(CPAL_I2C2, MS5611_ADDRESS, (CMD_ADC_CONV|CMD_ADC_D1|CMD_ADC_4096)); // ADC command for MS5611
+        
+        delay = 30 / portTICK_RATE_MS; // delay 200 ms
+        vTaskDelay(delay);
+        
+        //I2C_MutiRead((u8*)&(D1), MS5611_ADDRESS, CMD_ADC_READ, 3);
+        i2c_rx_mbytes_buf(CPAL_I2C2, MS5611_ADDRESS, CMD_ADC_READ, 3, (uint8_t*)&(D1));
+        D1 = (D1 & 0x00FF00)|((D1 & 0x0000FF) << 16)|((D1 & 0xFF0000) >> 16);
+        
+        // D2
+        i2c_tx_cmd(CPAL_I2C2, MS5611_ADDRESS, (CMD_ADC_CONV|CMD_ADC_D2|CMD_ADC_4096)); // ADC command for MS5611
+        
+        delay = 30 / portTICK_RATE_MS; // delay 200 ms
+        vTaskDelay(delay);
+        
+        i2c_rx_mbytes_buf(CPAL_I2C2, MS5611_ADDRESS, CMD_ADC_READ, 3, (uint8_t*)&(D2));
+        D2 = (D2 & 0x00FF00)|((D2 & 0x0000FF) << 16)|((D2 & 0xFF0000) >> 16);
+
+        dT = D2 - ( (uint32_t)(C[5]) * pow(2,8) );
+        
+        OFF = ( (uint64_t)(C[2]) * pow(2,17) ) + ( (uint64_t)(C[4]) * dT ) / pow(2,6);
+        SENS = ( (uint64_t)(C[1]) * pow(2,16) ) + ( (uint64_t)(C[3]) * dT ) / pow(2,7);
+
+        TEMP = 2000 + ( dT * (uint32_t)(C[6]) ) / pow(2,23);
+        P = ( D1 * SENS / pow(2,21) - OFF ) / pow(2,15);
+
+       
+        //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 D1 = %d , D2 = %d \n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, D1, D2);
+        //vTaskDelay(300);
+        
+        //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 dT = %d , TEMP = %d \n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, dT, TEMP);
+        //vTaskDelay(300);
+
+        //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 OFF = %lld , SENS = %lld , P = %d \n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, OFF, SENS, P);
+        //vTaskDelay(200);
+
+        RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
+        printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 ALT = %f \n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, (((pow((sea_press / ((float)P/100.0f)), 1/5.257f) - 1.0f) * (((float)TEMP/100.0f) + 273.15f)) / 0.0065f));
+        vTaskDelay(200);
+        
+        vTaskDelay(delay);
     }
 }
 #endif
@@ -763,12 +861,12 @@ void I2C_MutiRead(u8* pBuffer, u8 Addr, u8 Reg,u8 Count)
 //!
 //! @return crc code
 //********************************************************
-unsigned char crc4(unsigned int n_prom[])
+uint8_t crc4(uint16_t n_prom[])
 {
-    int cnt;    // simple counter
-    unsigned int n_rem;    // crc reminder
-    unsigned int crc_read;    // original value of the crc
-    unsigned char  n_bit;
+    uint8_t cnt;    // simple counter
+    uint16_t n_rem;    // crc reminder
+    uint16_t crc_read;    // original value of the crc
+    uint8_t  n_bit;
     n_rem = 0x00;
     crc_read=n_prom[7];    //save read CRC
     n_prom[7]=(0xFF00 & (n_prom[7]));    //CRC byte is replaced by 0
@@ -776,8 +874,8 @@ unsigned char crc4(unsigned int n_prom[])
     for (cnt = 0; cnt < 16; cnt++)    // operation is performed on bytes
     {
         // choose LSB or MSB
-        if (cnt%2==1) n_rem ^= (unsigned short) ((n_prom[cnt>>1]) & 0x00FF);
-        else n_rem ^= (unsigned short) (n_prom[cnt>>1]>>8);
+        if (cnt%2==1) n_rem ^= (uint16_t) ((n_prom[cnt>>1]) & 0x00FF);
+        else n_rem ^= (uint16_t) (n_prom[cnt>>1]>>8);
 
         for (n_bit = 8; n_bit > 0; n_bit--)
         {
@@ -818,9 +916,10 @@ void System_Init(void)
     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
     GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
     GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
-    GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
+    GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_DOWN;
 
     GPIO_Init(GPIOB, &GPIO_InitStruct);
+    GPIO_ResetBits(GPIOB, GPIO_Pin_12);
     //------------------------------------------------
 
     #if 1

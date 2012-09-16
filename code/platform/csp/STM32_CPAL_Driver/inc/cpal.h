@@ -44,7 +44,13 @@ extern "C" {
 /* If STM32F2XX family is used */   
 #ifdef STM32F2XX
 #include "stm32f2xx.h"
+#endif
+
+/* If STM32F4XX family is used */   
+#ifdef STM32F2XX
+#include "stm32f4xx.h"
 #endif 
+
   
 /* Exported types ------------------------------------------------------------*/
 

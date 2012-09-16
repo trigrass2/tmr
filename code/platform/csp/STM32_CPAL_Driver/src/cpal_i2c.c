@@ -473,10 +473,11 @@ uint32_t CPAL_I2C_Write(CPAL_InitTypeDef* pDevInitStruct)
       __CPAL_I2C_TIMEOUT(!(__CPAL_I2C_HAL_GET_BUSY(pDevInitStruct->CPAL_Dev)), CPAL_I2C_TIMEOUT_BUSY);
     }
         
-    /* If No memory Address Option Bit is Selected or Slave Mode selected */   
+    /* If No Memory Address Option Bit is Selected or Slave Mode selected */   
     if (((pDevInitStruct->wCPAL_Options & CPAL_OPT_NO_MEM_ADDR) != 0) 
        || (pDevInitStruct->CPAL_Mode == CPAL_MODE_SLAVE))
-    {             
+    {
+      CPAL_LOG("\n\rLOG : I2C Device Master No Memory Address Mode");
       /* Switch Programing Mode Enable DMA or IT Buffer */
       I2C_Enable_DMA_IT(pDevInitStruct, CPAL_DIRECTION_TX);      
     }
@@ -593,11 +594,11 @@ uint32_t CPAL_I2C_Read(CPAL_InitTypeDef* pDevInitStruct)
 #endif /* CPAL_I2C_DMA_1BYTE_CASE */
     
 #ifdef CPAL_I2C_MASTER_MODE    
-    /* If "No Memory Address" Option Bit is not selected and Master Mode selected */
+    /* If "No Memory Address" Option Bit is "not selected" and Master Mode selected */
     if (((pDevInitStruct->wCPAL_Options & CPAL_OPT_NO_MEM_ADDR) == 0) 
        && (pDevInitStruct->CPAL_Mode == CPAL_MODE_MASTER ))
     {       
-      CPAL_LOG("\n\rLOG : I2C Device Master No Addr Mem Mode");
+      CPAL_LOG("\n\rLOG : I2C Device Master Memory Address Mode");
       
       /* Generate Start */
       __CPAL_I2C_HAL_START(pDevInitStruct->CPAL_Dev);
@@ -639,7 +640,7 @@ uint32_t CPAL_I2C_Read(CPAL_InitTypeDef* pDevInitStruct)
       }      
   #endif /* CPAL_I2C_10BIT_ADDR_MODE */     
       
-      CPAL_LOG("\n\rLOG : I2C Device Target Address Sent ");
+      CPAL_LOG("\n\rLOG : I2C Device Target Address Sent");
       
       /* Clear ADDR flag: (Read SR1 followed by read of SR2), SR1 read operation is already done */
       __CPAL_I2C_HAL_CLEAR_ADDR(pDevInitStruct->CPAL_Dev); 
@@ -1262,6 +1263,7 @@ uint32_t CPAL_I2C_DMA_RX_IRQHandler(CPAL_InitTypeDef* pDevInitStruct)
   * @param  None
   * @retval CPAL_PASS or CPAL_FAIL. 
   */
+#ifdef CPAL_I2C_TIMEOUT_Manager
 void CPAL_I2C_TIMEOUT_Manager(void)
 {
   uint32_t index = 0;
@@ -1301,7 +1303,7 @@ void CPAL_I2C_TIMEOUT_Manager(void)
     }
   }  
 }
-
+#endif
 
 /**
   * @brief  This function Manages I2C Timeouts when Timeout occurred.
@@ -1465,7 +1467,7 @@ static uint32_t I2C_MASTER_ADDR_Handle(CPAL_InitTypeDef* pDevInitStruct)
     I2C_Enable_DMA_IT(pDevInitStruct, CPAL_DIRECTION_RX);
   }
   
-#if defined (STM32L1XX_MD) || defined (STM32F2XX) 
+#if defined (STM32L1XX_MD) || defined (STM32F2XX) || defined (STM32F4XX)
   /* If CPAL_State is CPAL_STATE_BUSY_RX and receiving one byte */  
   if ((pDevInitStruct->CPAL_State == CPAL_STATE_BUSY_RX) && (pDevInitStruct->pCPAL_TransferRx->wNumData == 1))
   { 
@@ -1545,7 +1547,7 @@ static uint32_t I2C_MASTER_ADDR_Handle(CPAL_InitTypeDef* pDevInitStruct)
     __CPAL_I2C_HAL_CLEAR_ADDR(pDevInitStruct->CPAL_Dev);
   }
  #endif /* CPAL_I2C_CLOSECOM_METHOD2 */ 
-#endif /* STM32L1XX_MD || STM32F2XX */
+#endif /* STM32L1XX_MD || STM32F2XX || STM32F4XX */
   
 #ifdef CPAL_I2C_10BIT_ADDR_MODE
   /* If CPAL_State is not CPAL_STATE_BUSY */
@@ -1740,7 +1742,7 @@ static uint32_t I2C_MASTER_RXNE_Handle(CPAL_InitTypeDef* pDevInitStruct)
   /* If Interrupt Programming Model selected */
   if (pDevInitStruct->CPAL_ProgModel == CPAL_PROGMODEL_INTERRUPT)
   {  
-#if defined (STM32L1XX_MD) || defined (STM32F2XX)
+#if defined (STM32L1XX_MD) || defined (STM32F2XX) || defined (STM32F4XX)
     /* if less than 3 bytes remaining for reception */ 
     if (pDevInitStruct->pCPAL_TransferRx->wNumData <= 3)
     {  

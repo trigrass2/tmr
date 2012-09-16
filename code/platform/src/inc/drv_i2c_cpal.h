@@ -60,7 +60,7 @@ typedef enum
 
 /* Select interrupt programming model : By default DMA programming model is selected.
  To select interrupt programming model uncomment this define */
-//#define I2C2_IT
+#define I2C2_IT
 
 /* Maximum Timeout values for waiting until device is ready for communication.*/
    
@@ -89,13 +89,14 @@ uint8_t I2C2_ReadConfReg(void);
 uint8_t I2C2_WriteConfReg(uint8_t RegValue);
 uint8_t I2C2_ShutDown(FunctionalState NewState);
 
-uint8_t I2Cx_read_byte(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg);
-I2C2_Status_TypDef I2Cx_read_byte_buf(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t* buf);
-I2C2_Status_TypDef I2Cx_read_mbytes_buf(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t len, uint8_t* buf);
+uint8_t i2c_rx_byte(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg);
+I2C2_Status_TypDef i2c_rx_byte_buf(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t* buf);
+I2C2_Status_TypDef i2c_rx_mbytes_buf(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t len, uint8_t* buf);
 
-I2C2_Status_TypDef I2Cx_write_byte(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t data);
-I2C2_Status_TypDef I2Cx_write_byte_buf(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t* buf);
-I2C2_Status_TypDef I2Cx_write_mbytes_buf(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t len, uint8_t* buf);
+I2C2_Status_TypDef i2c_tx_cmd(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t cmd);
+I2C2_Status_TypDef i2c_tx_byte(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t data);
+I2C2_Status_TypDef i2c_tx_byte_buf(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t* buf);
+I2C2_Status_TypDef i2c_tx_mbytes_buf(CPAL_DevTypeDef i2cx, uint8_t addr, uint8_t reg, uint8_t len, uint16_t* buf);
  
 #ifdef __cplusplus
 }

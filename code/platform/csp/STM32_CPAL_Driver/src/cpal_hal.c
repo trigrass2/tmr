@@ -37,6 +37,11 @@
  #include "stm32f2xx.h"
 #endif
 
+/* If STM32F2XX family is used */   
+#ifdef STM32F4XX
+ #include "stm32f4xx.h"
+#endif
+
 #include "misc.h"
 #include "cpal.h"
 
