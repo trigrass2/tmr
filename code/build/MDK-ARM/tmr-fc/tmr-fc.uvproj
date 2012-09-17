@@ -346,9 +346,9 @@
             <uThumb>0</uThumb>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>STM32F4XX, USE_STDPERIPH_DRIVER</Define>
+              <Define>STM32F4XX, USE_STDPERIPH_DRIVER, USE_USB_OTG_FS</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\platform\sys\inc;..\..\..\platform\src\inc;..\..\..\platform\inc;..\..\..\utilities\freertos\Source\portable\RVDS\ARM_CM4F;..\..\..\utilities\umpl\platform\include\linux;..\..\..\utilities\freertos\Source\include;..\..\..\utilities\umpl\platform\include;..\..\..\utilities\umpl\lite;..\..\..\utilities\fatfs\inc;..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\inc;..\..\..\platform\csp\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\platform\csp\STM32_CPAL_Driver\inc</IncludePath>
+              <IncludePath>..\..\..\platform\sys\inc;..\..\..\platform\src\inc;..\..\..\platform\inc;..\..\..\utilities\freertos\Source\portable\RVDS\ARM_CM4F;..\..\..\utilities\umpl\platform\include\linux;..\..\..\utilities\freertos\Source\include;..\..\..\utilities\umpl\platform\include;..\..\..\utilities\umpl\lite;..\..\..\utilities\fatfs\inc;..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\inc;..\..\..\platform\csp\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\platform\csp\STM32_CPAL_Driver\inc;..\..\..\platform\csp\STM32_USB_Device_Library\Core\inc;..\..\..\platform\csp\STM32_USB_OTG_Driver\inc;..\..\..\platform\csp\STM32_USB_Device_Library\Class\hid\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1175,6 +1175,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\platform\sys\cpal_usercallback.c</FilePath>
             </File>
+            <File>
+              <FileName>usb_bsp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\sys\usb_bsp.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1418,6 +1423,51 @@
               <FileName>cpal_hal.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\platform\csp\STM32_CPAL_Driver\src\cpal_hal.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>STM32_USB_Device_Library</GroupName>
+          <Files>
+            <File>
+              <FileName>usbd_req.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\csp\STM32_USB_Device_Library\Core\src\usbd_req.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\csp\STM32_USB_Device_Library\Core\src\usbd_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_ioreq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\csp\STM32_USB_Device_Library\Core\src\usbd_ioreq.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_hid_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\csp\STM32_USB_Device_Library\Class\hid\src\usbd_hid_core.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>STM32_USB_OTG_Driver</GroupName>
+          <Files>
+            <File>
+              <FileName>usb_dcd_int.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\csp\STM32_USB_OTG_Driver\src\usb_dcd_int.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_dcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\csp\STM32_USB_OTG_Driver\src\usb_dcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\csp\STM32_USB_OTG_Driver\src\usb_core.c</FilePath>
             </File>
           </Files>
         </Group>

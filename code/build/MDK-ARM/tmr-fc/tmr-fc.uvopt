@@ -297,10 +297,10 @@
       <FileType>2</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>20</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>176</TopLine>
-      <CurrentLine>182</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>210</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\platform\sys\startup_stm32f4xx.s</PathWithFileName>
       <FilenameWithoutPath>startup_stm32f4xx.s</FilenameWithoutPath>
@@ -829,10 +829,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>14</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>2096</TopLine>
-      <CurrentLine>2101</CurrentLine>
+      <TopLine>1633</TopLine>
+      <CurrentLine>1651</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\utilities\freertos\Source\tasks.c</PathWithFileName>
       <FilenameWithoutPath>tasks.c</FilenameWithoutPath>
@@ -929,8 +929,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>1</CurrentLine>
+      <TopLine>106</TopLine>
+      <CurrentLine>85</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\platform\src\apps\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -997,6 +997,20 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\platform\sys\cpal_usercallback.c</PathWithFileName>
       <FilenameWithoutPath>cpal_usercallback.c</FilenameWithoutPath>
+    </File>
+    <File>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>0</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>1</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>1</TopLine>
+      <CurrentLine>1</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\platform\sys\usb_bsp.c</PathWithFileName>
+      <FilenameWithoutPath>usb_bsp.c</FilenameWithoutPath>
     </File>
   </Group>
 
@@ -1478,14 +1492,14 @@
 
   <Group>
     <GroupName>STM32_CPAL_Driver</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <File>
       <GroupNumber>9</GroupNumber>
       <FileNumber>82</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1508,6 +1522,118 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\platform\csp\STM32_CPAL_Driver\src\cpal_hal.c</PathWithFileName>
       <FilenameWithoutPath>cpal_hal.c</FilenameWithoutPath>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>STM32_USB_Device_Library</GroupName>
+    <tvExp>1</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <File>
+      <GroupNumber>0</GroupNumber>
+      <FileNumber>0</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>19</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>1</TopLine>
+      <CurrentLine>31</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\platform\csp\STM32_USB_Device_Library\Core\src\usbd_req.c</PathWithFileName>
+      <FilenameWithoutPath>usbd_req.c</FilenameWithoutPath>
+    </File>
+    <File>
+      <GroupNumber>0</GroupNumber>
+      <FileNumber>0</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>114</TopLine>
+      <CurrentLine>141</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\platform\csp\STM32_USB_Device_Library\Core\src\usbd_core.c</PathWithFileName>
+      <FilenameWithoutPath>usbd_core.c</FilenameWithoutPath>
+    </File>
+    <File>
+      <GroupNumber>0</GroupNumber>
+      <FileNumber>0</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\platform\csp\STM32_USB_Device_Library\Core\src\usbd_ioreq.c</PathWithFileName>
+      <FilenameWithoutPath>usbd_ioreq.c</FilenameWithoutPath>
+    </File>
+    <File>
+      <GroupNumber>0</GroupNumber>
+      <FileNumber>0</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\platform\csp\STM32_USB_Device_Library\Class\hid\src\usbd_hid_core.c</PathWithFileName>
+      <FilenameWithoutPath>usbd_hid_core.c</FilenameWithoutPath>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>STM32_USB_OTG_Driver</GroupName>
+    <tvExp>1</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <File>
+      <GroupNumber>0</GroupNumber>
+      <FileNumber>0</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>4</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>1</TopLine>
+      <CurrentLine>26</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\platform\csp\STM32_USB_OTG_Driver\src\usb_dcd_int.c</PathWithFileName>
+      <FilenameWithoutPath>usb_dcd_int.c</FilenameWithoutPath>
+    </File>
+    <File>
+      <GroupNumber>0</GroupNumber>
+      <FileNumber>0</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\platform\csp\STM32_USB_OTG_Driver\src\usb_dcd.c</PathWithFileName>
+      <FilenameWithoutPath>usb_dcd.c</FilenameWithoutPath>
+    </File>
+    <File>
+      <GroupNumber>0</GroupNumber>
+      <FileNumber>0</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\platform\csp\STM32_USB_OTG_Driver\src\usb_core.c</PathWithFileName>
+      <FilenameWithoutPath>usb_core.c</FilenameWithoutPath>
     </File>
   </Group>
 
