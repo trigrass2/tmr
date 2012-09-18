@@ -123,7 +123,7 @@ typedef struct xMEMORY_REGION
 typedef struct xTASK_PARAMTERS
 {
 	pdTASK_CODE pvTaskCode;
-	const signed char * const pcName;
+	const signed char * pcName;
 	unsigned short usStackDepth;
 	void *pvParameters;
 	unsigned portBASE_TYPE uxPriority;

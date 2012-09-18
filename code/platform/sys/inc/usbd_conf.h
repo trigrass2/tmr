@@ -29,6 +29,10 @@
 #ifndef __USBD_CONF__H__
 #define __USBD_CONF__H__
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usb_conf.h"
 
@@ -94,6 +98,9 @@
   * @}
   */ 
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif //__USBD_CONF__H__
 

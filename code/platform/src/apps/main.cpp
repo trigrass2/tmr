@@ -634,13 +634,13 @@ void vDiagTask( void *pvParameters )
         i2c_rx_mbytes_buf(CPAL_I2C2, MS5611_ADDRESS, CMD_ADC_READ, 3, (uint8_t*)&(D2));
         D2 = (D2 & 0x00FF00)|((D2 & 0x0000FF) << 16)|((D2 & 0xFF0000) >> 16);
 
-        dT = D2 - ( (uint32_t)(C[5]) * pow(2,8) );
+        dT = D2 - ( (uint32_t)(C[5]) * pow(2.0,8) );
         
-        OFF = ( (uint64_t)(C[2]) * pow(2,17) ) + ( (uint64_t)(C[4]) * dT ) / pow(2,6);
-        SENS = ( (uint64_t)(C[1]) * pow(2,16) ) + ( (uint64_t)(C[3]) * dT ) / pow(2,7);
+        OFF = ( (uint64_t)(C[2]) * pow(2.0,17) ) + ( (uint64_t)(C[4]) * dT ) / pow(2.0,6);
+        SENS = ( (uint64_t)(C[1]) * pow(2.0,16) ) + ( (uint64_t)(C[3]) * dT ) / pow(2.0,7);
 
-        TEMP = 2000 + ( dT * (uint32_t)(C[6]) ) / pow(2,23);
-        P = ( D1 * SENS / pow(2,21) - OFF ) / pow(2,15);
+        TEMP = 2000 + ( dT * (uint32_t)(C[6]) ) / pow(2.0,23);
+        P = ( D1 * SENS / pow(2.0,21) - OFF ) / pow(2.0,15);
 
        
         //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 D1 = %d , D2 = %d \n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, D1, D2);
@@ -1172,11 +1172,14 @@ void System_Init(void)
         vTaskDelay(100);
     }
 
+		/*------------------------------ USB OTG FS Init ---------------------------------- */
+		#if 1
     USBD_Init(&USB_OTG_dev,          
             USB_OTG_FS_CORE_ID,
             &USR_desc, 
             &USBD_HID_cb, 
             &USR_cb);
+		#endif
 
 }
 
@@ -1737,3 +1740,25 @@ TestStatus eBuffercmp(uint8_t* pBuffer, uint32_t BufferLength)
   return PASSED;
 }
 
+#define MS561101BA_PROM_REG_COUNT 6 // number of registers in the PROM
+
+class MS561101BA {
+  public:
+    MS561101BA();
+    void init(uint8_t addr);
+    float getPressure(uint8_t OSR);
+    float getTemperature(uint8_t OSR);
+    int64_t getDeltaTemp(uint8_t OSR);
+    int32_t rawPressure(uint8_t OSR);
+    int32_t rawTemperature(uint8_t OSR);
+    int readPROM();
+    void reset();
+    unsigned long lastPresConv, lastTempConv;
+  private:
+    void startConversion(uint8_t command);
+    unsigned long getConversion(uint8_t command);
+    uint8_t _addr;
+    uint16_t _C[MS561101BA_PROM_REG_COUNT];
+    //unsigned long lastPresConv, lastTempConv;
+    int32_t presCache, tempCache;
+};

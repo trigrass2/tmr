@@ -346,7 +346,7 @@
             <uThumb>0</uThumb>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>STM32F4XX, USE_STDPERIPH_DRIVER, USE_USB_OTG_FS</Define>
+              <Define>STM32F4XX, USE_STDPERIPH_DRIVER, USE_USB_OTG_FS, HSE_VALUE=8000000</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\platform\sys\inc;..\..\..\platform\src\inc;..\..\..\platform\inc;..\..\..\utilities\freertos\Source\portable\RVDS\ARM_CM4F;..\..\..\utilities\umpl\platform\include\linux;..\..\..\utilities\freertos\Source\include;..\..\..\utilities\umpl\platform\include;..\..\..\utilities\umpl\lite;..\..\..\utilities\fatfs\inc;..\..\..\platform\csp\STM32F4xx_StdPeriph_Driver\inc;..\..\..\platform\csp\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\platform\csp\STM32_CPAL_Driver\inc;..\..\..\platform\csp\STM32_USB_Device_Library\Core\inc;..\..\..\platform\csp\STM32_USB_OTG_Driver\inc;..\..\..\platform\csp\STM32_USB_Device_Library\Class\hid\inc</IncludePath>
             </VariousControls>
@@ -1146,9 +1146,9 @@
           <GroupName>apps</GroupName>
           <Files>
             <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\platform\src\apps\main.c</FilePath>
+              <FileName>main.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\platform\src\apps\main.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -1179,6 +1179,21 @@
               <FileName>usb_bsp.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\platform\sys\usb_bsp.c</FilePath>
+            </File>
+            <File>
+              <FileName>msgoutput.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\sys\msgoutput.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_usr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\sys\usbd_usr.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_desc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\platform\sys\usbd_desc.c</FilePath>
             </File>
           </Files>
         </Group>

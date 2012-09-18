@@ -30,6 +30,10 @@
 #ifndef __USB_DESC_H
 #define __USB_DESC_H
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_def.h"
 
@@ -108,13 +112,10 @@ uint8_t *     USBD_USR_USRStringDesc (uint8_t speed, uint8_t idx , uint16_t *len
   * @}
   */ 
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* __USBD_DESC_H */
 
-/**
-  * @}
-  */ 
-
-/**
-* @}
-*/ 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

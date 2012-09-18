@@ -29,33 +29,12 @@
 #ifndef __USB_CONF__H__
 #define __USB_CONF__H__
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
-#if 0
-
-#if defined (USE_STM322xG_EVAL)
- #include "stm322xg_eval.h"
- #include "stm322xg_eval_lcd.h"
- #include "stm322xg_eval_ioe.h"
- #include "stm322xg_eval_sdio_sd.h"
-#elif defined(USE_STM324xG_EVAL)
- #include "stm32f4xx.h"
- #include "stm324xg_eval.h" 
- #include "stm324xg_eval_lcd.h"
- #include "stm324xg_eval_ioe.h"
- #include "stm324xg_eval_sdio_sd.h"
-#elif defined (USE_STM3210C_EVAL)
- #include "stm32f10x.h"
- #include "stm3210c_eval.h" 
- #include "stm3210c_eval_lcd.h"
- #include "stm3210c_eval_ioe.h"
- #include "stm3210c_eval_spi_sd.h"
-#else
- #error "Missing define: Evaluation board (ie. USE_STM322xG_EVAL)"
-#endif
-
-#else
 #include "stm32f4xx.h"
-#endif
 
 /** @addtogroup USB_OTG_DRIVER
   * @{
@@ -82,44 +61,11 @@
 *  when FS core is used.
 *******************************************************************************/
 #ifndef USE_USB_OTG_FS
- //#define USE_USB_OTG_FS
+ #define USE_USB_OTG_FS
 #endif /* USE_USB_OTG_FS */
 
 #ifdef USE_USB_OTG_FS 
  #define USB_OTG_FS_CORE
-#endif
-
-/****************** USB OTG HS PHY CONFIGURATION *******************************
-*  The USB OTG HS Core supports two PHY interfaces:
-*   (i)  An ULPI interface for the external High Speed PHY: the USB HS Core will 
-*        operate in High speed mode
-*   (ii) An on-chip Full Speed PHY: the USB HS Core will operate in Full speed mode
-*
-*  You can select the PHY to be used using one of these two defines:
-*   (i)  USE_ULPI_PHY: if the USB OTG HS Core is to be used in High speed mode 
-*   (ii) USE_EMBEDDED_PHY: if the USB OTG HS Core is to be used in Full speed mode
-*
-*  Notes: 
-*   - The USE_ULPI_PHY symbol is defined in the project compiler preprocessor as 
-*     default PHY when HS core is used.
-*   - On STM322xG-EVAL and STM324xG-EVAL boards, only configuration(i) is available.
-*     Configuration (ii) need a different hardware, for more details refer to your
-*     STM32 device datasheet.
-*******************************************************************************/
-#ifndef USE_USB_OTG_HS
- //#define USE_USB_OTG_HS
-#endif /* USE_USB_OTG_HS */
-
-#ifndef USE_ULPI_PHY
- //#define USE_ULPI_PHY
-#endif /* USE_ULPI_PHY */
-
-#ifndef USE_EMBEDDED_PHY
- //#define USE_EMBEDDED_PHY
-#endif /* USE_EMBEDDED_PHY */
-
-#ifdef USE_USB_OTG_HS 
- #define USB_OTG_HS_CORE
 #endif
 
 /*******************************************************************************
@@ -157,29 +103,6 @@
 *   (vi) In HS case12 FIFO locations should be reserved for internal DMA registers
 *        so total FIFO size should be 1012 Only instead of 1024       
 *******************************************************************************/
- 
-/****************** USB OTG HS CONFIGURATION **********************************/
-#ifdef USB_OTG_HS_CORE
- #define RX_FIFO_HS_SIZE                          512
- #define TX0_FIFO_HS_SIZE                         128
- #define TX1_FIFO_HS_SIZE                         372
- #define TX2_FIFO_HS_SIZE                          0
- #define TX3_FIFO_HS_SIZE                          0
- #define TX4_FIFO_HS_SIZE                          0
- #define TX5_FIFO_HS_SIZE                          0
-
-// #define USB_OTG_HS_SOF_OUTPUT_ENABLED
-
- #ifdef USE_ULPI_PHY
-  #define USB_OTG_ULPI_PHY_ENABLED
- #endif
- #ifdef USE_EMBEDDED_PHY 
-   #define USB_OTG_EMBEDDED_PHY_ENABLED
- #endif
- #define USB_OTG_HS_INTERNAL_DMA_ENABLED 
- #define USB_OTG_HS_DEDICATED_EP1_ENABLED
- #define USB_OTG_HS_LOW_PWR_MGMT_SUPPORT
-#endif
 
 /****************** USB OTG FS CONFIGURATION **********************************/
 #ifdef USB_OTG_FS_CORE
@@ -201,51 +124,17 @@
 #define USE_DEVICE_MODE
 //#define USE_OTG_MODE
 
-#ifndef USB_OTG_FS_CORE
- #ifndef USB_OTG_HS_CORE
-    #error  "USB_OTG_HS_CORE or USB_OTG_FS_CORE should be defined"
- #endif
-#endif
-
 #ifndef USE_DEVICE_MODE
  #ifndef USE_HOST_MODE
     #error  "USE_DEVICE_MODE or USE_HOST_MODE should be defined"
  #endif
 #endif
 
-#ifndef USE_USB_OTG_HS
- #ifndef USE_USB_OTG_FS
-    #error  "USE_USB_OTG_HS or USE_USB_OTG_FS should be defined"
- #endif
-#else //USE_USB_OTG_HS
- #ifndef USE_ULPI_PHY
-  #ifndef USE_EMBEDDED_PHY
-     #error  "USE_ULPI_PHY or USE_EMBEDDED_PHY should be defined"
-  #endif
- #endif
-#endif
-
 /****************** C Compilers dependant keywords ****************************/
 /* In HS mode and when the DMA is used, all variables and data structures dealing
    with the DMA during the transaction process should be 4-bytes aligned */    
-#ifdef USB_OTG_HS_INTERNAL_DMA_ENABLED
-  #if defined   (__GNUC__)        /* GNU Compiler */
-    #define __ALIGN_END    __attribute__ ((aligned (4)))
-    #define __ALIGN_BEGIN         
-  #else                           
-    #define __ALIGN_END
-    #if defined   (__CC_ARM)      /* ARM Compiler */
-      #define __ALIGN_BEGIN    __align(4)  
-    #elif defined (__ICCARM__)    /* IAR Compiler */
-      #define __ALIGN_BEGIN 
-    #elif defined  (__TASKING__)  /* TASKING Compiler */
-      #define __ALIGN_BEGIN    __align(4) 
-    #endif /* __CC_ARM */  
-  #endif /* __GNUC__ */ 
-#else
   #define __ALIGN_BEGIN
   #define __ALIGN_END   
-#endif /* USB_OTG_HS_INTERNAL_DMA_ENABLED */
 
 /* __packed keyword used to decrease the data type alignment to 1-byte */
 #if defined (__CC_ARM)         /* ARM Compiler */
@@ -293,16 +182,11 @@
   */ 
 
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif //__USB_CONF__H__
-
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

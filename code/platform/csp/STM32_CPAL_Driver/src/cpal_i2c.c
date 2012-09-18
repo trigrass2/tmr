@@ -1263,7 +1263,6 @@ uint32_t CPAL_I2C_DMA_RX_IRQHandler(CPAL_InitTypeDef* pDevInitStruct)
   * @param  None
   * @retval CPAL_PASS or CPAL_FAIL. 
   */
-#ifdef CPAL_I2C_TIMEOUT_Manager
 void CPAL_I2C_TIMEOUT_Manager(void)
 {
   uint32_t index = 0;
@@ -1303,7 +1302,6 @@ void CPAL_I2C_TIMEOUT_Manager(void)
     }
   }  
 }
-#endif
 
 /**
   * @brief  This function Manages I2C Timeouts when Timeout occurred.

@@ -29,6 +29,10 @@
 #ifndef __USBD_CORE_H
 #define __USBD_CORE_H
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usb_dcd.h"
 #include "usbd_def.h"
@@ -103,6 +107,10 @@ USBD_Status USBD_SetCfg(USB_OTG_CORE_HANDLE  *pdev, uint8_t cfgidx);
 /**
   * @}
   */ 
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __USBD_CORE_H */
 
