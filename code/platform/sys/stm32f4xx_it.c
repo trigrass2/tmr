@@ -197,62 +197,6 @@ void SD_SDIO_DMA_IRQHANDLER(void)
 * @param  None
 * @retval None
 */
-void EXTI15_10_IRQHandler(void)
-{
-  if (EXTI_GetITStatus(KEY_BUTTON_EXTI_LINE) != RESET)
-  {
-    
-    if (USB_OTG_dev.dev.DevRemoteWakeup)
-    {     
-      if((USB_OTG_dev.cfg.low_power)&&(USB_OTG_dev.dev.device_status==USB_OTG_SUSPENDED))
-      {
-       
-	/* Reset SLEEPDEEP and SLEEPONEXIT bits */
-	SCB->SCR &= (uint32_t)~((uint32_t)(SCB_SCR_SLEEPDEEP_Msk | SCB_SCR_SLEEPONEXIT_Msk));
-        
-	/* After wake-up from sleep mode, reconfigure the system clock */
-        /* After wake-up from STOP reconfigure the system clock */
-        
-        /* Enable HSE */
-        RCC_HSEConfig(RCC_HSE_ON);
-        
-        /* Wait till HSE is ready */
-        while (RCC_GetFlagStatus(RCC_FLAG_HSERDY) == RESET)
-        {}
-        
-        /* Enable PLL */
-        RCC_PLLCmd(ENABLE);
-        
-        /* Wait till PLL is ready */
-        while (RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET)
-        {}
-        
-        /* Select PLL as system clock source */
-        RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
-        
-        /* Wait till PLL is used as system clock source */
-        while (RCC_GetSYSCLKSource() != 0x08)
-        {}
-
-        USB_OTG_UngateClock(&USB_OTG_dev);
-      }
-
-      
-      USB_OTG_ActiveRemoteWakeup(&USB_OTG_dev);
-      USB_OTG_dev.dev.device_status = USB_OTG_dev.dev.device_old_status;
-      remote_wakeup =1;
-      UsrLog("> USB Device woke up.\n");
-    }
-    /* Clear the EXTI line pending bit */
-    EXTI_ClearITPendingBit(KEY_BUTTON_EXTI_LINE);
-  }
-}
-
-/**
-* @brief  This function handles EXTI15_10_IRQ Handler.
-* @param  None
-* @retval None
-*/
 #ifdef USE_USB_OTG_FS  
 void OTG_FS_WKUP_IRQHandler(void)
 {

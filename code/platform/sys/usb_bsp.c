@@ -104,9 +104,9 @@ void USB_OTG_BSP_Init(USB_OTG_CORE_HANDLE *pdev)
   
   /* Configure SOF VBUS ID DM DP Pins */
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8  | 
-    GPIO_Pin_9  | 
-      GPIO_Pin_11 | 
-        GPIO_Pin_12;
+                                GPIO_Pin_9  | 
+                                GPIO_Pin_11 | 
+                                GPIO_Pin_12;
   
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
