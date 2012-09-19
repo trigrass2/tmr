@@ -238,7 +238,7 @@ u8 pca9536dp[4]={0};
 #define TRUE   (1)                      /* Boolean true value.   */
 #define FALSE  (0)                      /* Boolean false value.  */
 
-#if 0
+#if 1
 void vDiagTask( void *pvParameters )
 {
     u16 delay=0, i=0;
@@ -406,7 +406,7 @@ void vDiagTask( void *pvParameters )
     //------------------------------------------------
     I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0xBB, FALSE); // LS0
 
-    delay = 1500 / portTICK_RATE_MS;
+    delay = 500 / portTICK_RATE_MS;
 
     while(1)
     {
@@ -437,9 +437,9 @@ void vDiagTask( void *pvParameters )
         printf("\n\rEnter Sleep, xTickCount = %d\n\r",tick_s);
         vTaskDelay(100);
 
-        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xFF, FALSE); // PWR_LED (ON), APC250 (OFF)
+        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xFF, FALSE); // PWR_LED (OFF), APC250 (OFF)
         vTaskDelay(delay);
-        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xFE, FALSE); // PWR_LED (ON), APC250 (ON)
+        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xF6, FALSE); // PWR_LED (ON), APC250 (ON)
         vTaskDelay(100);
 
         tick_e=xTaskGetTickCount();
@@ -488,22 +488,28 @@ void vDiagTask( void *pvParameters )
             }
         }
 
+        #if 1
+        while(1)
+            #endif
+        {
+            tick_s=xTaskGetTickCount();
+            printf("\n\rEnter Sleep, xTickCount = %d\n\r",tick_s);
+            vTaskDelay(10);
         
-        tick_s=xTaskGetTickCount();
-        printf("\n\rEnter Sleep, xTickCount = %d\n\r",tick_s);
-        vTaskDelay(100);
+            I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xFF, FALSE); // PWR_LED (OFF), APC250 (OFF)
+            vTaskDelay(delay);
+            I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xF6, FALSE); // PWR_LED (ON), APC250 (ON)
+            vTaskDelay(10);
         
-        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xF7, FALSE); // PWR_LED (ON), APC250 (OFF)
-        vTaskDelay(delay);
-        I2C_ByteWrite(PCA9536DP_ADDRESS, 0x01, 0xF6, FALSE); // PWR_LED (ON), APC250 (ON)
-        vTaskDelay(100);
-
-        
-        tick_e=xTaskGetTickCount();
-        printf("\n\rLeave Sleep, xTickCount = %d\n\r",tick_e);
-        vTaskDelay(100);
-        printf("\n\rTime Spent = %f ms\n\r",(float)(tick_e-tick_s)/portTICK_RATE_MS);
-        vTaskDelay(100);
+            tick_e=xTaskGetTickCount();
+            printf("\n\rLeave Sleep, xTickCount = %d\n\r",tick_e);
+            vTaskDelay(10);
+					
+            printf("\n\rTime Spent = %f ms\n\r",(float)(tick_e-tick_s)/portTICK_RATE_MS);
+            vTaskDelay(10);
+					
+            vTaskDelay(delay);
+        }
 
     }
     //------------------------------------------------
