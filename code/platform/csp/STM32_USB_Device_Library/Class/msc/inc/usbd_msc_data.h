@@ -30,6 +30,10 @@
 #ifndef _USBD_MSC_DATA_H_
 #define _USBD_MSC_DATA_H_
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_conf.h"
 
@@ -91,14 +95,10 @@ extern const uint8_t MSC_Mode_Sense10_data[] ;
   * @}
   */ 
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* _USBD_MSC_DATA_H_ */
-
-/**
-  * @}
-  */ 
-
-/**
-* @}
-*/ 
-
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

@@ -1007,7 +1007,7 @@
       <Focus>0</Focus>
       <ColumnNumber>4</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>246</TopLine>
+      <TopLine>27</TopLine>
       <CurrentLine>28</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\platform\sys\stm32f4xx_it.c</PathWithFileName>

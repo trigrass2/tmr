@@ -29,6 +29,11 @@
 
 #ifndef __USBD_MEM_H
 #define __USBD_MEM_H
+
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_def.h"
 
@@ -97,16 +102,10 @@ extern USBD_STORAGE_cb_TypeDef *USBD_STORAGE_fops;
   * @}
   */ 
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* __USBD_MEM_H */
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
-
-/**
-* @}
-*/ 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

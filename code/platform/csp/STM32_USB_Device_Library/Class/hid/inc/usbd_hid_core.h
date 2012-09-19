@@ -30,6 +30,10 @@
 #ifndef __USB_HID_CORE_H_
 #define __USB_HID_CORE_H_
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 #include  "usbd_ioreq.h"
 
 /** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
@@ -104,13 +108,10 @@ uint8_t USBD_HID_SendReport (USB_OTG_CORE_HANDLE  *pdev,
   * @}
   */ 
 
-#endif  // __USB_HID_CORE_H_
-/**
-  * @}
-  */ 
+#ifdef __cplusplus
+}
+#endif
 
-/**
-  * @}
-  */ 
-  
+#endif  // __USB_HID_CORE_H_
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

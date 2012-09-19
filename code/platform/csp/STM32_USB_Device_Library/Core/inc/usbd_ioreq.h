@@ -30,6 +30,10 @@
 #ifndef __USBD_IOREQ_H_
 #define __USBD_IOREQ_H_
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include  "usbd_def.h"
 #include  "usbd_core.h"
@@ -109,13 +113,10 @@ uint16_t  USBD_GetRxCount (USB_OTG_CORE_HANDLE  *pdev ,
   * @}
   */ 
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* __USBD_IOREQ_H_ */
-
-/**
-  * @}
-  */ 
-
-/**
-* @}
-*/ 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

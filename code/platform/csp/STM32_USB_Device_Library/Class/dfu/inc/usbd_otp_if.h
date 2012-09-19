@@ -29,6 +29,10 @@
 #ifndef __OTP_IF_MAL_H
 #define __OTP_IF_MAL_H
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_dfu_mal.h"
 
@@ -44,6 +48,10 @@ extern DFU_MAL_Prop_TypeDef DFU_Otp_cb;
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
-#endif /* __OTP_IF_MAL_H */
+#ifdef __cplusplus
+}
+#endif
 
+#endif /* __OTP_IF_MAL_H */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

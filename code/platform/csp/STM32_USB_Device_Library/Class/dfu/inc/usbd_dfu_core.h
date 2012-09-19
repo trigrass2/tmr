@@ -30,6 +30,10 @@
 #ifndef __USB_DFU_CORE_H_
 #define __USB_DFU_CORE_H_
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 #include  "usbd_ioreq.h"
 #include  "usbd_dfu_mal.h"
 
@@ -181,13 +185,10 @@ extern USBD_Class_cb_TypeDef  DFU_cb;
   * @}
   */ 
 
-#endif  // __USB_DFU_CORE_H_
-/**
-  * @}
-  */ 
+#ifdef __cplusplus
+}
+#endif
 
-/**
-  * @}
-  */ 
-  
+#endif  // __USB_DFU_CORE_H_
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

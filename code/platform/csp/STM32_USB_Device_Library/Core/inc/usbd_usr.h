@@ -29,6 +29,10 @@
 #ifndef __USBD_USR_H__
 #define __USBD_USR_H__
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_core.h"
 
@@ -120,22 +124,10 @@ void     USBD_USR_HS_DeviceDisconnected(void);
   * @}
   */ 
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif /*__USBD_USR_H__*/
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
-
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-
-
-
 

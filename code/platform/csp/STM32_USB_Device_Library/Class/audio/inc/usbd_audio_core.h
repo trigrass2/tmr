@@ -30,6 +30,10 @@
 #ifndef __USB_AUDIO_CORE_H_
 #define __USB_AUDIO_CORE_H_
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 #include "usbd_ioreq.h"
 #include "usbd_req.h"
 #include "usbd_desc.h"
@@ -152,13 +156,10 @@ extern USBD_Class_cb_TypeDef  AUDIO_cb;
   * @}
   */ 
 
-#endif  // __USB_AUDIO_CORE_H_
-/**
-  * @}
-  */ 
+#ifdef __cplusplus
+}
+#endif
 
-/**
-  * @}
-  */ 
-  
+#endif  // __USB_AUDIO_CORE_H_
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

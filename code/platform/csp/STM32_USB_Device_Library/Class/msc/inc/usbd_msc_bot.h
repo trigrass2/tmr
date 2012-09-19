@@ -33,6 +33,10 @@
 #ifndef __USBD_MSC_BOT_H
 #define __USBD_MSC_BOT_H
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
   * @{
   */
@@ -141,13 +145,10 @@ void  MSC_BOT_CplClrFeature (USB_OTG_CORE_HANDLE  *pdev,
   * @}
   */ 
 
-#endif /* __USBD_MSC_BOT_H */
-/**
-  * @}
-  */ 
+#ifdef __cplusplus
+}
+#endif
 
-/**
-* @}
-*/ 
+#endif /* __USBD_MSC_BOT_H */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

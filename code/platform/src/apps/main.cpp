@@ -41,18 +41,18 @@ typedef enum {FAILED = 0, PASSED = !FAILED} TestStatus;
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+
+// SDIO
 uint8_t Buffer_Block_Tx[BLOCK_SIZE], Buffer_Block_Rx[BLOCK_SIZE];
 uint8_t Buffer_MultiBlock_Tx[MULTI_BUFFER_SIZE], Buffer_MultiBlock_Rx[MULTI_BUFFER_SIZE];
 volatile TestStatus EraseStatus = FAILED, TransferStatus1 = FAILED, TransferStatus2 = FAILED;
 SD_Error Status = SD_OK;
 __IO uint32_t SDCardOperation = SD_OPERATION_ERASE;
 
-#ifdef USB_OTG_HS_INTERNAL_DMA_ENABLED
-  #if defined ( __ICCARM__ ) /*!< IAR Compiler */
-    #pragma data_alignment=4   
-  #endif
-#endif /* USB_OTG_HS_INTERNAL_DMA_ENABLED */
+// USB OTG FS
 __ALIGN_BEGIN USB_OTG_CORE_HANDLE  USB_OTG_dev __ALIGN_END;
+extern USB_OTG_CORE_HANDLE           USB_OTG_dev;
+static uint8_t *USBD_HID_GetPos (void);
 
 /* Private function prototypes -----------------------------------------------*/
 void NVIC_Configuration(void);
@@ -245,6 +245,7 @@ void vDiagTask( void *pvParameters )
     u32 count=0;
     u32 tick_s=0, tick_e=0;
     double vbatV=0;
+    uint8_t *buf;
 
     if( pvParameters != NULL )
         delay = *((unsigned int*)pvParameters);
@@ -490,7 +491,7 @@ void vDiagTask( void *pvParameters )
 
         #if 1
         while(1)
-            #endif
+        #endif
         {
             tick_s=xTaskGetTickCount();
             printf("\n\rEnter Sleep, xTickCount = %d\n\r",tick_s);
@@ -509,6 +510,12 @@ void vDiagTask( void *pvParameters )
             vTaskDelay(10);
 					
             vTaskDelay(delay);
+  
+            buf = USBD_HID_GetPos();
+            if((buf[1] != 0) ||(buf[2] != 0))
+            {
+                USBD_HID_SendReport (&USB_OTG_dev, buf, 4);
+            }
         }
 
     }
@@ -1744,6 +1751,45 @@ TestStatus eBuffercmp(uint8_t* pBuffer, uint32_t BufferLength)
   }
 
   return PASSED;
+}
+
+/**
+* @brief  USBD_HID_GetPos
+* @param  None
+* @retval Pointer to report
+*/
+static uint8_t *USBD_HID_GetPos (void)
+{
+  static int8_t  x = 0 , y = 0 ;
+  static uint8_t HID_Buffer [4];
+
+  #if 0
+  switch (IOE_JoyStickGetState())
+  {
+  case JOY_LEFT:
+    x -= CURSOR_STEP;
+    break;  
+    
+  case JOY_RIGHT:
+    x += CURSOR_STEP;
+    break;
+    
+  case JOY_UP:
+    y -= CURSOR_STEP;
+    break;
+    
+  case JOY_DOWN:
+    y += CURSOR_STEP;
+    break;
+  }
+  #endif
+  
+  HID_Buffer[0] = 0;
+  HID_Buffer[1] = x;
+  HID_Buffer[2] = y;
+  HID_Buffer[3] = 0;
+  
+  return HID_Buffer;
 }
 
 #define MS561101BA_PROM_REG_COUNT 6 // number of registers in the PROM

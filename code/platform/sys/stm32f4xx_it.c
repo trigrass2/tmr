@@ -46,12 +46,7 @@
 __IO uint32_t remote_wakeup =0;
 /* Private function prototypes -----------------------------------------------*/
 extern USB_OTG_CORE_HANDLE           USB_OTG_dev;
-static uint8_t *USBD_HID_GetPos (void);
 extern uint32_t USBD_OTG_ISR_Handler (USB_OTG_CORE_HANDLE *pdev);
-#ifdef USB_OTG_HS_DEDICATED_EP1_ENABLED 
-extern uint32_t USBD_OTG_EP1IN_ISR_Handler (USB_OTG_CORE_HANDLE *pdev);
-extern uint32_t USBD_OTG_EP1OUT_ISR_Handler (USB_OTG_CORE_HANDLE *pdev);
-#endif
 
 /******************************************************************************/
 /*            Cortex-M4 Processor Exceptions Handlers                         */
@@ -150,14 +145,6 @@ void PendSV_Handler(void)
   */
 void SysTick_Handler(void)
 {
-    uint8_t *buf;
-  
-    buf = USBD_HID_GetPos();
-    if((buf[1] != 0) ||(buf[2] != 0))
-    {
-        USBD_HID_SendReport (&USB_OTG_dev, buf, 4);
-    }
-
     // I2C CPAL
     CPAL_I2C_TIMEOUT_Manager();		
 
@@ -240,45 +227,6 @@ void OTG_FS_WKUP_IRQHandler(void)
 void OTG_FS_IRQHandler(void)
 {
   USBD_OTG_ISR_Handler (&USB_OTG_dev);
-}
-
-/**
-* @brief  USBD_HID_GetPos
-* @param  None
-* @retval Pointer to report
-*/
-static uint8_t *USBD_HID_GetPos (void)
-{
-  int8_t  x = 0 , y = 0 ;
-  static uint8_t HID_Buffer [4];
-
-  #if 0
-  switch (IOE_JoyStickGetState())
-  {
-  case JOY_LEFT:
-    x -= CURSOR_STEP;
-    break;  
-    
-  case JOY_RIGHT:
-    x += CURSOR_STEP;
-    break;
-    
-  case JOY_UP:
-    y -= CURSOR_STEP;
-    break;
-    
-  case JOY_DOWN:
-    y += CURSOR_STEP;
-    break;
-  }
-  #endif
-  
-  HID_Buffer[0] = 0;
-  HID_Buffer[1] = x;
-  HID_Buffer[2] = y;
-  HID_Buffer[3] = 0;
-  
-  return HID_Buffer;
 }
 
 /******************************************************************************/

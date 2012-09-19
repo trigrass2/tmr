@@ -30,6 +30,10 @@
 #ifndef __USBD_DEF_H
 #define __USBD_DEF_H
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_conf.h"
 
@@ -144,13 +148,10 @@
   * @}
   */ 
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* __USBD_DEF_H */
-
-/**
-  * @}
-  */ 
-
-/**
-* @}
-*/ 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

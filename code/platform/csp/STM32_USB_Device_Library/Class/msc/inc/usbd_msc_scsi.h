@@ -29,6 +29,10 @@
 #ifndef __USBD_MSC_SCSI_H
 #define __USBD_MSC_SCSI_H
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_def.h"
 
@@ -178,18 +182,10 @@ void   SCSI_SenseCode(uint8_t lun,
   * @}
   */ 
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* __USBD_MSC_SCSI_H */
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
-
-/**
-* @}
-*/ 
-
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

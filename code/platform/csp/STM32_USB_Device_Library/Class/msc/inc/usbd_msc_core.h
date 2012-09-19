@@ -26,8 +26,13 @@
   */ 
 
 /* Define to prevent recursive inclusion -------------------------------------*/
+
 #ifndef _USB_MSC_CORE_H_
 #define _USB_MSC_CORE_H_
+
+#ifdef __cplusplus
+ extern "C" {
+#endif
 
 #include  "usbd_ioreq.h"
 
@@ -68,10 +73,12 @@ extern USBD_Class_cb_TypeDef  USBD_MSC_cb;
 
 /**
   * @}
-  */ 
+  */
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif  // _USB_MSC_CORE_H_
-/**
-  * @}
-  */ 
-  
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
