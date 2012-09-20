@@ -25,11 +25,16 @@
   ******************************************************************************
   */ 
 
-/* Includes ------------------------------------------------------------------*/
+/* Define to prevent recursive inclusion -------------------------------------*/
 
 #ifndef __USB_CDC_CORE_H_
 #define __USB_CDC_CORE_H_
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
+/* Includes ------------------------------------------------------------------*/
 #include  "usbd_ioreq.h"
 
 /** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
@@ -131,13 +136,10 @@ extern USBD_Class_cb_TypeDef  USBD_CDC_cb;
   * @}
   */ 
 
-#endif  // __USB_CDC_CORE_H_
-/**
-  * @}
-  */ 
+#ifdef __cplusplus
+}
+#endif
 
-/**
-  * @}
-  */ 
-  
+#endif  // __USB_CDC_CORE_H_
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

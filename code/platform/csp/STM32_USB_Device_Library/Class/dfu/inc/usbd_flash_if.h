@@ -29,6 +29,10 @@
 #ifndef __FLASH_IF_MAL_H
 #define __FLASH_IF_MAL_H
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_dfu_mal.h"
 
@@ -53,6 +57,11 @@ extern DFU_MAL_Prop_TypeDef DFU_Flash_cb;
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* __FLASH_IF_MAL_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

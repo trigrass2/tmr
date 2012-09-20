@@ -29,6 +29,10 @@
 #ifndef __MEM_IF_MAL_H
 #define __MEM_IF_MAL_H
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usb_conf.h"
 
@@ -46,6 +50,9 @@ extern DFU_MAL_Prop_TypeDef DFU_Mem_cb;
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
-#endif /* __MEM_IF_MAL_H */
+#ifdef __cplusplus
+}
+#endif
 
+#endif /* __MEM_IF_MAL_H */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

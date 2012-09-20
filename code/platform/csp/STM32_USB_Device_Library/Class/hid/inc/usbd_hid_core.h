@@ -25,8 +25,7 @@
   ******************************************************************************
   */ 
 
-/* Includes ------------------------------------------------------------------*/
-
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __USB_HID_CORE_H_
 #define __USB_HID_CORE_H_
 
@@ -34,6 +33,7 @@
  extern "C" {
 #endif
 
+/* Includes ------------------------------------------------------------------*/
 #include  "usbd_ioreq.h"
 
 /** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY

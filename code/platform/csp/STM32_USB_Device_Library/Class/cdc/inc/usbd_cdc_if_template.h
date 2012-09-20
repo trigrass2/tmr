@@ -29,6 +29,10 @@
 #ifndef __USBD_CDC_IF_TEMPLATE_H
 #define __USBD_CDC_IF_TEMPLATE_H
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usb_conf.h"
 #include "usbd_conf.h"
@@ -41,6 +45,11 @@ extern CDC_IF_Prop_TypeDef  TEMPLATE_fops;
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-#endif /* __USBD_CDC_IF_TEMPLATE_H */
 
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __USBD_CDC_IF_TEMPLATE_H */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

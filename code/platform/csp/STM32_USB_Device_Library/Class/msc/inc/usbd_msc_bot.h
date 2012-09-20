@@ -27,15 +27,15 @@
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 
-#include "usbd_core.h"
-
-/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __USBD_MSC_BOT_H
 #define __USBD_MSC_BOT_H
 
 #ifdef __cplusplus
  extern "C" {
 #endif
+
+/* Includes ------------------------------------------------------------------*/
+#include "usbd_core.h"
 
 /** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
   * @{

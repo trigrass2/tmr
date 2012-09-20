@@ -34,6 +34,7 @@
  extern "C" {
 #endif
 
+/* Includes ------------------------------------------------------------------*/
 #include  "usbd_ioreq.h"
 
 /** @addtogroup USBD_MSC_BOT

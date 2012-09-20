@@ -25,7 +25,7 @@
   ******************************************************************************
   */ 
 
-/* Includes ------------------------------------------------------------------*/
+/* Define to prevent recursive inclusion -------------------------------------*/
 
 #ifndef __USB_DFU_CORE_H_
 #define __USB_DFU_CORE_H_
@@ -34,6 +34,7 @@
  extern "C" {
 #endif
 
+/* Includes ------------------------------------------------------------------*/
 #include  "usbd_ioreq.h"
 #include  "usbd_dfu_mal.h"
 
@@ -191,4 +192,5 @@ extern USBD_Class_cb_TypeDef  DFU_cb;
 
 #endif  // __USB_DFU_CORE_H_
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
 

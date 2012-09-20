@@ -29,6 +29,10 @@
 #ifndef __DFU_MAL_H
 #define __DFU_MAL_H
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usb_conf.h"
 
@@ -76,6 +80,12 @@ uint8_t *MAL_Read  (uint32_t SectorAddress, uint32_t DataLength);
 uint16_t MAL_GetStatus(uint32_t SectorAddress ,uint8_t Cmd, uint8_t *buffer);
 
 extern uint8_t  MAL_Buffer[XFERSIZE]; /* RAM Buffer for Downloaded Data */
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* __DFU_MAL_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

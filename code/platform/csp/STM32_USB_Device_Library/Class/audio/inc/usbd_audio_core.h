@@ -25,7 +25,7 @@
   ******************************************************************************
   */ 
 
-/* Includes ------------------------------------------------------------------*/
+/* Define to prevent recursive inclusion -------------------------------------*/
 
 #ifndef __USB_AUDIO_CORE_H_
 #define __USB_AUDIO_CORE_H_
@@ -34,6 +34,7 @@
  extern "C" {
 #endif
 
+/* Includes ------------------------------------------------------------------*/
 #include "usbd_ioreq.h"
 #include "usbd_req.h"
 #include "usbd_desc.h"

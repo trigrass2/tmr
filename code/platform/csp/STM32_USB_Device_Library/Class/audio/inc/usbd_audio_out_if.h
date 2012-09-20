@@ -30,6 +30,11 @@
 #ifndef __USB_AUDIO_OUT_IF_H_
 #define __USB_AUDIO_OUT_IF_H_
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
+/* Includes ------------------------------------------------------------------*/
 #ifdef STM32F2XX
  #include "stm322xg_usb_audio_codec.h"
 #elif defined(STM32F4XX)
@@ -113,13 +118,10 @@ extern AUDIO_FOPS_TypeDef  AUDIO_OUT_fops;
   * @}
   */ 
 
-#endif  /* __USB_AUDIO_OUT_IF_H_ */
-/**
-  * @}
-  */ 
+#ifdef __cplusplus
+}
+#endif
 
-/**
-  * @}
-  */ 
-  
+#endif  /* __USB_AUDIO_OUT_IF_H_ */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
