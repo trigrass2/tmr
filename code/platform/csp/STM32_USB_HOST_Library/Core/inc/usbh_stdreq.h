@@ -29,6 +29,10 @@
 #ifndef __USBH_STDREQ_H
 #define __USBH_STDREQ_H
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usb_conf.h"
 #include "usb_hcd.h"
@@ -142,20 +146,10 @@ USBH_DescHeader_t      *USBH_GetNextDesc (uint8_t   *pbuf,
   * @}
   */ 
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* __USBH_STDREQ_H */
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
-
-/**
-* @}
-*/ 
-
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-
 

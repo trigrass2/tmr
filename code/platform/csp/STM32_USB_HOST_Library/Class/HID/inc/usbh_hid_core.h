@@ -29,6 +29,10 @@
 #ifndef __USBH_HID_CORE_H
 #define __USBH_HID_CORE_H
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usbh_core.h"
 #include "usbh_stdreq.h"
@@ -181,23 +185,10 @@ USBH_Status USBH_Set_Report (USB_OTG_CORE_HANDLE *pdev,
   * @}
   */ 
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __USBH_HID_CORE_H */
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

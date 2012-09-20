@@ -29,6 +29,10 @@
 #ifndef __USBH_HCS_H
 #define __USBH_HCS_H
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usbh_core.h"
 
@@ -107,23 +111,10 @@ uint8_t USBH_Modify_Channel (USB_OTG_CORE_HANDLE *pdev,
   * @}
   */ 
 
-
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __USBH_HCS_H */
-
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
-
-/**
-* @}
-*/ 
-
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-
 

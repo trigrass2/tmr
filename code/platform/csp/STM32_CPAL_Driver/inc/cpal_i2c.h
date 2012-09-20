@@ -20,6 +20,14 @@
   ******************************************************************************
   */
 
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __CPAL_I2C_H
+#define __CPAL_I2C_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 /* If STM32F10X family is used */
 #if defined (STM32F10X_LD) || defined (STM32F10X_LD_VL) || defined (STM32F10X_MD) || defined (STM32F10X_MD_VL)\
@@ -42,17 +50,7 @@
 #include "cpal_i2c_hal_stm32f4xx.h"
 #endif
 
-
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __CPAL_I2C_H
-#define __CPAL_I2C_H
-
-#ifdef __cplusplus
- extern "C" {
-#endif
-
-/* Includes ------------------------------------------------------------------*/
-
+  
 /* Exported types ------------------------------------------------------------*/
    
 /*========= CPAL_I2CError_TypeDef =========*/ 
@@ -315,3 +313,4 @@ void CPAL_I2C_DUALF_UserCallback(CPAL_InitTypeDef* pDevInitStruct); /*<!This fun
 #endif /*__CPAL_I2C_H */
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
+  

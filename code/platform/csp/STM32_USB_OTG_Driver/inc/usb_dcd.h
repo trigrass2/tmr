@@ -29,6 +29,10 @@
 #ifndef __DCD_H__
 #define __DCD_H__
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usb_core.h"
 
@@ -149,16 +153,10 @@ void DCD_SetEPStatus (USB_OTG_CORE_HANDLE *pdev ,
 * @}
 */ 
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif //__DCD_H__
-
-
-/**
-* @}
-*/ 
-
-/**
-* @}
-*/ 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

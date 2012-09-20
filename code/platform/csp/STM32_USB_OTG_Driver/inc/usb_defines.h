@@ -29,6 +29,10 @@
 #ifndef __USB_DEF_H__
 #define __USB_DEF_H__
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include  "usb_conf.h"
 
@@ -235,15 +239,10 @@ enum USB_OTG_SPEED {
   USB_SPEED_HIGH
 };
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif //__USB_DEFINES__H__
-
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

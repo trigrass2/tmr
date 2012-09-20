@@ -25,6 +25,14 @@
   ******************************************************************************
   */ 
 
+/* Define to prevent recursive  ----------------------------------------------*/
+#ifndef  __USBH_DEF_H
+#define  __USBH_DEF_H
+
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /** @addtogroup USBH_LIB
   * @{
   */
@@ -37,10 +45,7 @@
   * @brief This file is includes USB descriptors
   * @{
   */ 
-
-#ifndef  USBH_DEF_H
-#define  USBH_DEF_H
-
+  
 #ifndef USBH_NULL
 #define USBH_NULL ((void *)0)
 #endif
@@ -282,7 +287,11 @@ typedef struct _EndpointDescriptor
   uint8_t   bInterval;          /* is used to specify the polling interval of certain transfers. */
 }
 USBH_EpDesc_TypeDef;
+
+#ifdef __cplusplus
+}
 #endif
 
+#endif /* __USBH_DEF_H */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

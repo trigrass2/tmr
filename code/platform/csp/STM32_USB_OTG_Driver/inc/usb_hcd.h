@@ -29,6 +29,10 @@
 #ifndef __USB_HCD_H__
 #define __USB_HCD_H__
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usb_regs.h"
 #include "usb_core.h"
@@ -94,15 +98,10 @@ HC_STATUS HCD_GetHCState           (USB_OTG_CORE_HANDLE *pdev,  uint8_t ch_num) 
   * @}
   */ 
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif //__USB_HCD_H__
-
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

@@ -29,6 +29,10 @@
 #ifndef __USBH_HID_KEYBD_H
 #define __USBH_HID_KEYBD_H
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usb_conf.h"
 #include "usbh_hid_core.h"
@@ -106,23 +110,10 @@ void  USR_KEYBRD_ProcessData (uint8_t pbuf);
   * @}
   */ 
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* __USBH_HID_KEYBD_H */
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
-
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

@@ -29,6 +29,10 @@
 #ifndef __USB_OTG__
 #define __USB_OTG__
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 
 /** @addtogroup USB_OTG_DRIVER
   * @{
@@ -84,6 +88,9 @@ uint32_t  USB_OTG_GetCurrentState (USB_OTG_CORE_DEVICE *pdev);
   * @}
   */ 
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif //__USB_OTG__
 

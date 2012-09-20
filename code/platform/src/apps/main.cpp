@@ -54,6 +54,11 @@ __ALIGN_BEGIN USB_OTG_CORE_HANDLE  USB_OTG_dev __ALIGN_END;
 extern USB_OTG_CORE_HANDLE           USB_OTG_dev;
 static uint8_t *USBD_HID_GetPos (void);
 
+// TIM5
+extern uint16_t DutyCycle;
+extern uint32_t Frequency;
+
+
 /* Private function prototypes -----------------------------------------------*/
 void NVIC_Configuration(void);
 void SD_EraseTest(void);
@@ -62,6 +67,7 @@ void SD_MultiBlockTest(void);
 void Fill_Buffer(uint8_t *pBuffer, uint32_t BufferLength, uint32_t Offset);
 TestStatus Buffercmp(uint8_t* pBuffer1, uint8_t* pBuffer2, uint32_t BufferLength);
 TestStatus eBuffercmp(uint8_t* pBuffer, uint32_t BufferLength);
+void TIM_Config(void);
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -116,11 +122,11 @@ __IO uint32_t VBATVoltage = 0;
 #define ADC1_DR_ADDRESS    ((uint32_t)0x4001204C)
 
 // RTC
-RTC_InitTypeDef RTC_InitStruct;
-RTC_TimeTypeDef RTC_TimeStruct;
-RTC_DateTypeDef RTC_DateStruct;
-RTC_TimeTypeDef  RTC_TimeStampStruct;
-RTC_DateTypeDef  RTC_TimeStampDateStruct;
+RTC_InitTypeDef RTC_InitStructure;
+RTC_TimeTypeDef RTC_TimeStructure;
+RTC_DateTypeDef RTC_DateStructure;
+RTC_TimeTypeDef  RTC_TimeStampStructure;
+RTC_DateTypeDef  RTC_TimeStampDateStructure;
 __IO uint32_t AsynchPrediv = 0, SynchPrediv = 0;
 
 
@@ -407,7 +413,7 @@ void vDiagTask( void *pvParameters )
     //------------------------------------------------
     I2C_ByteWrite(PCA9533DP_ADDRESS, 0x05, 0xBB, FALSE); // LS0
 
-    delay = 500 / portTICK_RATE_MS;
+    delay = 5 / portTICK_RATE_MS;
 
     while(1)
     {
@@ -493,6 +499,9 @@ void vDiagTask( void *pvParameters )
         while(1)
         #endif
         {
+            printf("\n\r---------------------------------------------------------------------------------\n\r");
+            vTaskDelay(10);
+		
             tick_s=xTaskGetTickCount();
             printf("\n\rEnter Sleep, xTickCount = %d\n\r",tick_s);
             vTaskDelay(10);
@@ -507,6 +516,9 @@ void vDiagTask( void *pvParameters )
             vTaskDelay(10);
 					
             printf("\n\rTime Spent = %f ms\n\r",(float)(tick_e-tick_s)/portTICK_RATE_MS);
+            vTaskDelay(10);
+
+            printf("\n\rTIM5CH2 : DutyCycle = %d, Frequency = %d\n\r", DutyCycle, Frequency);
             vTaskDelay(10);
 					
             vTaskDelay(delay);
@@ -554,18 +566,18 @@ void vDiagTask( void *pvParameters )
         for(i=0;i<118;i++)
         {
             /* Get the current Time and Date */
-            RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
+            RTC_GetTime(RTC_Format_BIN, &RTC_TimeStructure);
             //reg=i2c_rx_data(CPAL_I2C2, MPU6050_ADDRESS, i);
-            //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MPU6050 REG[%03d] = 0x%02X\n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, i, reg);        
-            printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MPU6050 REG[%03d] = 0x%02X\n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, i, data_mpu[i]);
+            //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MPU6050 REG[%03d] = 0x%02X\n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds, i, reg);        
+            printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MPU6050 REG[%03d] = 0x%02X\n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds, i, data_mpu[i]);
 
             vTaskDelay(20);
         }
 
         while(data_mpu[117] != 0x68)
         {
-            RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
-            printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MPU6050 Read Fialed!!!!\n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds);
+            RTC_GetTime(RTC_Format_BIN, &RTC_TimeStructure);
+            printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MPU6050 Read Fialed!!!!\n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds);
             vTaskDelay(delay);
         }
         #endif
@@ -577,17 +589,17 @@ void vDiagTask( void *pvParameters )
         for(i=0;i<13;i++)
         {
             /* Get the current Time and Date */
-            RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
+            RTC_GetTime(RTC_Format_BIN, &RTC_TimeStructure);
             reg=i2c_rx_byte(CPAL_I2C2, HMC5883L_ADDRESS, i);
-            printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] HMC5883L REG[%02d] = 0x%02X\n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, i, reg);
+            printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] HMC5883L REG[%02d] = 0x%02X\n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds, i, reg);
 
             vTaskDelay(20);
         }
 
         while(reg != 0x33)
         {
-            RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
-            printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] HMC5883L Read Fialed!!!!\n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds);
+            RTC_GetTime(RTC_Format_BIN, &RTC_TimeStructure);
+            printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] HMC5883L Read Fialed!!!!\n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds);
             vTaskDelay(delay);
         }
         #endif
@@ -603,25 +615,25 @@ void vDiagTask( void *pvParameters )
         // PROM READ SEQUENCE
         for(i=0 ; i<8 ; i++)
         {
-            RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
+            RTC_GetTime(RTC_Format_BIN, &RTC_TimeStructure);
             
             // PROM READ SEQUENCE
             i2c_rx_mbytes_buf(CPAL_I2C2, MS5611_ADDRESS, (CMD_PROM_RD + (i<<1)), 2, (uint8_t*)&C[i]);
             C[i]= (C[i]>>8) | ((C[i]&0x00FF)<<8);
 
-            //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 C[%02d] = 0x%04X\n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, i, C[i]);
+            //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 C[%02d] = 0x%04X\n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds, i, C[i]);
             //vTaskDelay(20);
         }
 
-        printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 CRC of PROM = 0x%01X\n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, crc4(C));
+        printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 CRC of PROM = 0x%01X\n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds, crc4(C));
         vTaskDelay(20);
 
         #endif
 
         while(crc4(C) != 0x0F)
         {
-            RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
-            //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 Read Fialed!!!!\n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds);
+            RTC_GetTime(RTC_Format_BIN, &RTC_TimeStructure);
+            //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 Read Fialed!!!!\n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds);
             //vTaskDelay(delay);
         }
 
@@ -656,17 +668,17 @@ void vDiagTask( void *pvParameters )
         P = ( D1 * SENS / pow(2.0,21) - OFF ) / pow(2.0,15);
 
        
-        //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 D1 = %d , D2 = %d \n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, D1, D2);
+        //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 D1 = %d , D2 = %d \n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds, D1, D2);
         //vTaskDelay(300);
         
-        //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 dT = %d , TEMP = %d \n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, dT, TEMP);
+        //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 dT = %d , TEMP = %d \n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds, dT, TEMP);
         //vTaskDelay(300);
 
-        //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 OFF = %lld , SENS = %lld , P = %d \n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, OFF, SENS, P);
+        //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 OFF = %lld , SENS = %lld , P = %d \n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds, OFF, SENS, P);
         //vTaskDelay(200);
 
-        RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
-        printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 ALT = %f \n\r",RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds, (((pow((sea_press / ((float)P/100.0f)), 1/5.257f) - 1.0f) * (((float)TEMP/100.0f) + 273.15f)) / 0.0065f));
+        RTC_GetTime(RTC_Format_BIN, &RTC_TimeStructure);
+        printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 ALT = %f \n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds, (((pow((sea_press / ((float)P/100.0f)), 1/5.257f) - 1.0f) * (((float)TEMP/100.0f) + 273.15f)) / 0.0065f));
         vTaskDelay(200);
         
         vTaskDelay(delay);
@@ -923,25 +935,26 @@ uint8_t crc4(uint16_t n_prom[])
 
 void System_Init(void)
 {
-    GPIO_InitTypeDef  GPIO_InitStruct;
-    USART_InitTypeDef USART_InitStruct;
-    I2C_InitTypeDef   I2C_InitStruct;
-    ADC_InitTypeDef       ADC_InitStruct;
-    ADC_CommonInitTypeDef ADC_CommonInitStruct;
-    DMA_InitTypeDef       DMA_InitStruct;
+    GPIO_InitTypeDef      GPIO_InitStructure;
+    USART_InitTypeDef     USART_InitStructure;
+    I2C_InitTypeDef       I2C_InitStructure;
+    ADC_InitTypeDef       ADC_InitStructure;
+    ADC_CommonInitTypeDef ADC_CommonInitStructure;
+    DMA_InitTypeDef       DMA_InitStructure;
+	TIM_ICInitTypeDef     TIM_ICInitStructure;
 
     /*------------------------------------------------
           BEEP & GPIO Configuration
      ------------------------------------------------*/
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
 
-    GPIO_InitStruct.GPIO_Pin = GPIO_Pin_12;
-    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
-    GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
-    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
-    GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_DOWN;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
 
-    GPIO_Init(GPIOB, &GPIO_InitStruct);
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
     GPIO_ResetBits(GPIOB, GPIO_Pin_12);
     //------------------------------------------------
 
@@ -969,39 +982,39 @@ void System_Init(void)
     /* Connect PXx to I2C_SDA*/
     GPIO_PinAFConfig(GPIOB, GPIO_PinSource11, GPIO_AF_I2C2);
 
-    GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10|GPIO_Pin_11;
-    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
-    GPIO_InitStruct.GPIO_OType = GPIO_OType_OD;
-    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
-    GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10|GPIO_Pin_11;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 
-    GPIO_Init(GPIOB, &GPIO_InitStruct);
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
 
     /*!< I2C configuration */
     /* I2C configuration */
-    I2C_InitStruct.I2C_Mode = I2C_Mode_I2C;
-    I2C_InitStruct.I2C_DutyCycle = I2C_DutyCycle_2;
-    I2C_InitStruct.I2C_OwnAddress1 = 0;
-    I2C_InitStruct.I2C_Ack = I2C_Ack_Enable;
-    I2C_InitStruct.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
-    I2C_InitStruct.I2C_ClockSpeed = I2C_SPEED;
+    I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;
+    I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
+    I2C_InitStructure.I2C_OwnAddress1 = 0;
+    I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
+    I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
+    I2C_InitStructure.I2C_ClockSpeed = I2C_SPEED;
 
     /* I2C Peripheral Enable */
     I2C_Cmd(I2C2, ENABLE);
     /* Apply I2C configuration after enabling it */
-    I2C_Init(I2C2, &I2C_InitStruct);
+    I2C_Init(I2C2, &I2C_InitStructure);
     //------------------------------------------------
     #endif
 
     /*------------------------------------------------
          UART & GPIO Configuration
      ------------------------------------------------*/
-    USART_InitStruct.USART_BaudRate = 115200;
-    USART_InitStruct.USART_WordLength = USART_WordLength_8b;
-    USART_InitStruct.USART_StopBits = USART_StopBits_1;
-    USART_InitStruct.USART_Parity = USART_Parity_No;
-    USART_InitStruct.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-    USART_InitStruct.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+    USART_InitStructure.USART_BaudRate = 115200;
+    USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+    USART_InitStructure.USART_StopBits = USART_StopBits_1;
+    USART_InitStructure.USART_Parity = USART_Parity_No;
+    USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+    USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
 
     /* Enable GPIO clock */
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC | RCC_AHB1Periph_GPIOC, ENABLE);
@@ -1016,21 +1029,21 @@ void System_Init(void)
     GPIO_PinAFConfig(GPIOC, GPIO_PinSource7, GPIO_AF_USART6);
 
     /* Configure USART Tx as alternate function  */
-    GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
-    GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
-    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
 
-    GPIO_InitStruct.GPIO_Pin = GPIO_Pin_6;
-    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOC, &GPIO_InitStruct);
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOC, &GPIO_InitStructure);
 
     /* Configure USART Rx as alternate function  */
-    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
-    GPIO_InitStruct.GPIO_Pin = GPIO_Pin_7;
-    GPIO_Init(GPIOC, &GPIO_InitStruct);
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
+    GPIO_Init(GPIOC, &GPIO_InitStructure);
 
     /* USART configuration */
-    USART_Init(USART6, &USART_InitStruct);
+    USART_Init(USART6, &USART_InitStructure);
 
     /* Enable USART */
     USART_Cmd(USART6, ENABLE);
@@ -1044,40 +1057,40 @@ void System_Init(void)
 
     /* DMA2_Stream0 channel0 configuration **************************************/
     DMA_DeInit(DMA2_Stream0);
-    DMA_InitStruct.DMA_Channel = DMA_Channel_0;
-    DMA_InitStruct.DMA_PeripheralBaseAddr = (uint32_t)ADC1_DR_ADDRESS;
-    DMA_InitStruct.DMA_Memory0BaseAddr = (uint32_t)&ADCConvertedValue;
-    DMA_InitStruct.DMA_DIR = DMA_DIR_PeripheralToMemory;
-    DMA_InitStruct.DMA_BufferSize = 1;
-    DMA_InitStruct.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
-    DMA_InitStruct.DMA_MemoryInc = DMA_MemoryInc_Disable;
-    DMA_InitStruct.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
-    DMA_InitStruct.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
-    DMA_InitStruct.DMA_Mode = DMA_Mode_Circular;
-    DMA_InitStruct.DMA_Priority = DMA_Priority_High;
-    DMA_InitStruct.DMA_FIFOMode = DMA_FIFOMode_Disable;
-    DMA_InitStruct.DMA_FIFOThreshold = DMA_FIFOThreshold_HalfFull;
-    DMA_InitStruct.DMA_MemoryBurst = DMA_MemoryBurst_Single;
-    DMA_InitStruct.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
-    DMA_Init(DMA2_Stream0, &DMA_InitStruct);
+    DMA_InitStructure.DMA_Channel = DMA_Channel_0;
+    DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)ADC1_DR_ADDRESS;
+    DMA_InitStructure.DMA_Memory0BaseAddr = (uint32_t)&ADCConvertedValue;
+    DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory;
+    DMA_InitStructure.DMA_BufferSize = 1;
+    DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+    DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Disable;
+    DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
+    DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
+    DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
+    DMA_InitStructure.DMA_Priority = DMA_Priority_High;
+    DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;
+    DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_HalfFull;
+    DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;
+    DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
+    DMA_Init(DMA2_Stream0, &DMA_InitStructure);
     /* DMA2_Stream0 enable */
     DMA_Cmd(DMA2_Stream0, ENABLE);
 
     /* ADC Common Init **********************************************************/
-    ADC_CommonInitStruct.ADC_Mode = ADC_Mode_Independent;
-    ADC_CommonInitStruct.ADC_Prescaler = ADC_Prescaler_Div2;
-    ADC_CommonInitStruct.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
-    ADC_CommonInitStruct.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;
-    ADC_CommonInit(&ADC_CommonInitStruct);
+    ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;
+    ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div2;
+    ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
+    ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;
+    ADC_CommonInit(&ADC_CommonInitStructure);
 
     /* ADC1 Init ****************************************************************/
-    ADC_InitStruct.ADC_Resolution = ADC_Resolution_12b;
-    ADC_InitStruct.ADC_ScanConvMode = DISABLE;
-    ADC_InitStruct.ADC_ContinuousConvMode = ENABLE;
-    ADC_InitStruct.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;
-    ADC_InitStruct.ADC_DataAlign = ADC_DataAlign_Right;
-    ADC_InitStruct.ADC_NbrOfConversion = 1;
-    ADC_Init(ADC1, &ADC_InitStruct);
+    ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;
+    ADC_InitStructure.ADC_ScanConvMode = DISABLE;
+    ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;
+    ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;
+    ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
+    ADC_InitStructure.ADC_NbrOfConversion = 1;
+    ADC_Init(ADC1, &ADC_InitStructure);
 
     /* Enable ADC1 DMA */
     ADC_DMACmd(ADC1, ENABLE);
@@ -1113,12 +1126,12 @@ void System_Init(void)
         RTC_Config();
 
         /* Configure the RTC data register and RTC prescaler */
-        RTC_InitStruct.RTC_AsynchPrediv = AsynchPrediv;
-        RTC_InitStruct.RTC_SynchPrediv = SynchPrediv;
-        RTC_InitStruct.RTC_HourFormat = RTC_HourFormat_24;
+        RTC_InitStructure.RTC_AsynchPrediv = AsynchPrediv;
+        RTC_InitStructure.RTC_SynchPrediv = SynchPrediv;
+        RTC_InitStructure.RTC_HourFormat = RTC_HourFormat_24;
 
         /* Check on RTC init */
-        if (RTC_Init(&RTC_InitStruct) == ERROR)
+        if (RTC_Init(&RTC_InitStructure) == ERROR)
         {
             printf("\n\r        /!\\***** RTC Prescaler Config failed ********/!\\ \n\r");
             vTaskDelay(100);
@@ -1185,14 +1198,55 @@ void System_Init(void)
         vTaskDelay(100);
     }
 
-		/*------------------------------ USB OTG FS Init ---------------------------------- */
-		#if 1
+    /*------------------------------ USB OTG FS Init ---------------------------------- */
+    #if 1
     USBD_Init(&USB_OTG_dev,          
             USB_OTG_FS_CORE_ID,
             &USR_desc, 
             &USBD_HID_cb, 
             &USR_cb);
-		#endif
+    #endif
+
+    /*------------------------------ TIM5 Init ---------------------------------- */
+	/* TIM Configuration */
+    TIM_Config();
+
+  
+    /* --------------------------------------------------------------------------- 
+    TIM4 configuration: PWM Input mode
+
+    In this example TIM5 input clock (TIM5CLK) is set to 2 * APB1 clock (PCLK1), 
+    since APB1 prescaler is different from 1.   
+    TIM5CLK = 2 * PCLK1  
+    PCLK1 = HCLK / 4 
+    => TIM5CLK = HCLK / 2 = SystemCoreClock /2
+
+    External Signal Frequency = TIM5 counter clock / TIM5_CCR2 in Hz. 
+
+    External Signal DutyCycle = (TIM5_CCR1*100)/(TIM5_CCR2) in %.
+
+  --------------------------------------------------------------------------- */
+  
+    TIM_ICInitStructure.TIM_Channel = TIM_Channel_2;
+    TIM_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_Rising;
+    TIM_ICInitStructure.TIM_ICSelection = TIM_ICSelection_DirectTI;
+    TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;
+    TIM_ICInitStructure.TIM_ICFilter = 0x0;
+
+    TIM_PWMIConfig(TIM5, &TIM_ICInitStructure);
+
+    /* Select the TIM5 Input Trigger: TI2FP2 */
+    TIM_SelectInputTrigger(TIM5, TIM_TS_TI2FP2);
+
+    /* Select the slave Mode: Reset Mode */
+    TIM_SelectSlaveMode(TIM5, TIM_SlaveMode_Reset);
+    TIM_SelectMasterSlaveMode(TIM5,TIM_MasterSlaveMode_Enable);
+
+    /* TIM enable counter */
+    TIM_Cmd(TIM5, ENABLE);
+
+    /* Enable the CC2 Interrupt Request */
+    TIM_ITConfig(TIM5, TIM_IT_CC2, ENABLE);
 
 }
 
@@ -1274,10 +1328,10 @@ void assert_failed(uint8_t* file, uint32_t line)
 void RTC_TimeShow(void)
 {
     /* Get the current Time and Date */
-    RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
+    RTC_GetTime(RTC_Format_BIN, &RTC_TimeStructure);
     printf("\n\r============== Current Time Display ============================\n\r");
     vTaskDelay(100);
-    printf("\n\r  The current time (Hour-Minute-Second) is :  %0.2d:%0.2d:%0.2d \n\r", RTC_TimeStruct.RTC_Hours, RTC_TimeStruct.RTC_Minutes, RTC_TimeStruct.RTC_Seconds);
+    printf("\n\r  The current time (Hour-Minute-Second) is :  %0.2d:%0.2d:%0.2d \n\r", RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds);
     vTaskDelay(100);
     (void)RTC->DR;
 }
@@ -1290,10 +1344,10 @@ void RTC_TimeShow(void)
 void RTC_DateShow(void)
 {
   /* Get the current Date */
-    RTC_GetDate(RTC_Format_BIN, &RTC_DateStruct);
+    RTC_GetDate(RTC_Format_BIN, &RTC_DateStructure);
     printf("\n\r============== Current Date Display ============================\n\r");
     vTaskDelay(100);
-    printf("\n\r  The current date (WeekDay-Date-Month-Year) is :  %0.2d-%0.2d-%0.2d-%0.2d \n\r", RTC_DateStruct.RTC_WeekDay, RTC_DateStruct.RTC_Date, RTC_DateStruct.RTC_Month, RTC_DateStruct.RTC_Year);
+    printf("\n\r  The current date (WeekDay-Date-Month-Year) is :  %0.2d-%0.2d-%0.2d-%0.2d \n\r", RTC_DateStructure.RTC_WeekDay, RTC_DateStructure.RTC_Date, RTC_DateStructure.RTC_Month, RTC_DateStructure.RTC_Year);
     vTaskDelay(100);
 }
 
@@ -1306,12 +1360,12 @@ void RTC_DateShow(void)
 void RTC_TimeStampShow(void)
 {
     /* Get the current TimeStamp */
-    RTC_GetTimeStamp(RTC_Format_BIN, &RTC_TimeStampStruct, &RTC_TimeStampDateStruct);
+    RTC_GetTimeStamp(RTC_Format_BIN, &RTC_TimeStampStructure, &RTC_TimeStampDateStructure);
     printf("\n\r==============TimeStamp Display (Time and Date)=================\n\r");
     vTaskDelay(100);
-    printf("\n\r  The current timestamp time (Hour-Minute-Second) is :  %0.2d:%0.2d:%0.2d \n\r", RTC_TimeStampStruct.RTC_Hours, RTC_TimeStampStruct.RTC_Minutes, RTC_TimeStampStruct.RTC_Seconds);
+    printf("\n\r  The current timestamp time (Hour-Minute-Second) is :  %0.2d:%0.2d:%0.2d \n\r", RTC_TimeStampStructure.RTC_Hours, RTC_TimeStampStructure.RTC_Minutes, RTC_TimeStampStructure.RTC_Seconds);
     vTaskDelay(100);
-    printf("\n\r  The current timestamp date (WeekDay-Date-Month) is :  %0.2d-%0.2d-%0.2d \n\r", RTC_TimeStampDateStruct.RTC_WeekDay, RTC_TimeStampDateStruct.RTC_Date, RTC_TimeStampDateStruct.RTC_Month);
+    printf("\n\r  The current timestamp date (WeekDay-Date-Month) is :  %0.2d-%0.2d-%0.2d \n\r", RTC_TimeStampDateStructure.RTC_WeekDay, RTC_TimeStampDateStructure.RTC_Date, RTC_TimeStampDateStructure.RTC_Month);
     vTaskDelay(100);
 }
 
@@ -1385,14 +1439,14 @@ void RTC_TimeRegulate(void)
     printf("\n\r==============Time Settings=====================================\n\r");
     vTaskDelay(100);
     
-    RTC_TimeStruct.RTC_H12     = RTC_H12_AM;
+    RTC_TimeStructure.RTC_H12     = RTC_H12_AM;
     printf("  Please Set Hours\n\r");
     vTaskDelay(100);
     
     while (tmp_hh == 0xFF)
     {
         tmp_hh = USART_Scanf(0, 23);
-        RTC_TimeStruct.RTC_Hours = tmp_hh;
+        RTC_TimeStructure.RTC_Hours = tmp_hh;
     }
     printf(":  %0.2d\n\r", tmp_hh);
     vTaskDelay(100);
@@ -1403,7 +1457,7 @@ void RTC_TimeRegulate(void)
     while (tmp_mm == 0xFF)
     {
         tmp_mm = USART_Scanf(0, 59);
-        RTC_TimeStruct.RTC_Minutes = tmp_mm;
+        RTC_TimeStructure.RTC_Minutes = tmp_mm;
     }
     printf(":  %0.2d\n\r", tmp_mm);
     vTaskDelay(100);
@@ -1414,13 +1468,13 @@ void RTC_TimeRegulate(void)
     while (tmp_ss == 0xFF)
     {
         tmp_ss = USART_Scanf(0, 59);
-        RTC_TimeStruct.RTC_Seconds = tmp_ss;
+        RTC_TimeStructure.RTC_Seconds = tmp_ss;
     }
     printf(":  %0.2d\n\r", tmp_ss);
     vTaskDelay(100);
 
     /* Configure the RTC time register */
-    if(RTC_SetTime(RTC_Format_BIN, &RTC_TimeStruct) == ERROR)
+    if(RTC_SetTime(RTC_Format_BIN, &RTC_TimeStructure) == ERROR)
     {
         printf("\n\r>> !! RTC Set Time failed. !! <<\n\r");
         vTaskDelay(100);
@@ -1448,7 +1502,7 @@ void RTC_TimeRegulate(void)
     while (tmp_hh == 0xFF)
     {
         tmp_hh = USART_Scanf(1, 7);
-        RTC_DateStruct.RTC_WeekDay = tmp_hh;
+        RTC_DateStructure.RTC_WeekDay = tmp_hh;
     }
     
     printf(":  %0.2d\n\r", tmp_hh);
@@ -1462,7 +1516,7 @@ void RTC_TimeRegulate(void)
     while (tmp_hh == 0xFF)
     {
         tmp_hh = USART_Scanf(1, 31);
-        RTC_DateStruct.RTC_Date = tmp_hh;
+        RTC_DateStructure.RTC_Date = tmp_hh;
     }
     
     printf(":  %0.2d\n\r", tmp_hh);
@@ -1474,7 +1528,7 @@ void RTC_TimeRegulate(void)
     while (tmp_mm == 0xFF)
     {
         tmp_mm = USART_Scanf(1, 12);
-        RTC_DateStruct.RTC_Month = tmp_mm;
+        RTC_DateStructure.RTC_Month = tmp_mm;
     }
     printf(":  %0.2d\n\r", tmp_mm);
     vTaskDelay(100);
@@ -1485,13 +1539,13 @@ void RTC_TimeRegulate(void)
     while (tmp_ss == 0xFF)
     {
         tmp_ss = USART_Scanf(0, 99);
-        RTC_DateStruct.RTC_Year = tmp_ss;
+        RTC_DateStructure.RTC_Year = tmp_ss;
     }
     printf(":  %0.2d\n\r", tmp_ss);
     vTaskDelay(100);
 
     /* Configure the RTC date register */
-    if(RTC_SetDate(RTC_Format_BIN, &RTC_DateStruct) == ERROR)
+    if(RTC_SetDate(RTC_Format_BIN, &RTC_DateStructure) == ERROR)
     {
         printf("\n\r>> !! RTC Set Date failed. !! <<\n\r");
         vTaskDelay(100);
@@ -1760,7 +1814,7 @@ TestStatus eBuffercmp(uint8_t* pBuffer, uint32_t BufferLength)
 */
 static uint8_t *USBD_HID_GetPos (void)
 {
-  static int8_t  x = 0 , y = 0 ;
+  int8_t  x = 0 , y = 0 ;
   static uint8_t HID_Buffer [4];
 
   #if 0
@@ -1783,13 +1837,51 @@ static uint8_t *USBD_HID_GetPos (void)
     break;
   }
   #endif
-  
+
+  x += (DutyCycle - 200);
+
   HID_Buffer[0] = 0;
   HID_Buffer[1] = x;
   HID_Buffer[2] = y;
   HID_Buffer[3] = 0;
   
   return HID_Buffer;
+}
+
+/**
+  * @brief  Configure the TIM4 Pins.
+  * @param  None
+  * @retval None
+  */
+void TIM_Config(void)
+{
+  GPIO_InitTypeDef GPIO_InitStructure;
+  NVIC_InitTypeDef NVIC_InitStructure;
+
+  /* TIM5 clock enable */
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5, ENABLE); // T5C2
+
+  /* GPIOA clock enable */
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+  
+  /* TIM5 chennel2 configuration : PA.01 */
+  GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_1;
+  GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_AF;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP ;
+  GPIO_Init(GPIOA, &GPIO_InitStructure);
+  
+  /* Connect TIM pin to AF2 */
+  GPIO_PinAFConfig(GPIOA, GPIO_PinSource1, GPIO_AF_TIM5);
+
+  /* Enable the TIM5 global Interrupt */
+  NVIC_InitStructure.NVIC_IRQChannel = TIM5_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
+
 }
 
 #define MS561101BA_PROM_REG_COUNT 6 // number of registers in the PROM

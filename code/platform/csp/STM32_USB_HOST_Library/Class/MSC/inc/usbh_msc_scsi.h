@@ -29,6 +29,10 @@
 #ifndef __USBH_MSC_SCSI_H__
 #define __USBH_MSC_SCSI_H__
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usbh_stdreq.h"
 
@@ -146,24 +150,10 @@ void USBH_MSC_StateMachine(USB_OTG_CORE_HANDLE *pdev);
   * @}
   */ 
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif  //__USBH_MSC_SCSI_H__
-
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */
-
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

@@ -29,6 +29,10 @@
 #ifndef __USB_OTG_REGS_H__
 #define __USB_OTG_REGS_H__
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usb_conf.h"
 
@@ -1173,6 +1177,9 @@ uint32_t Reserved5_31 :
   * @}
   */ 
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif //__USB_OTG_REGS_H__
 

@@ -29,6 +29,10 @@
 #ifndef __USB_CORE_H__
 #define __USB_CORE_H__
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usb_conf.h"
 #include "usb_regs.h"
@@ -403,15 +407,10 @@ uint32_t     USB_OTG_GetEPStatus(USB_OTG_CORE_HANDLE *pdev ,USB_OTG_EP *ep);
   * @}
   */ 
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif  /* __USB_CORE_H__ */
-
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

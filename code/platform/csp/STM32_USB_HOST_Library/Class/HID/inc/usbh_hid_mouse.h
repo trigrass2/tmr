@@ -30,6 +30,10 @@
 #ifndef __USBH_HID_MOUSE_H
 #define __USBH_HID_MOUSE_H
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usbh_hid_core.h"
 
@@ -100,21 +104,10 @@ void  USR_MOUSE_ProcessData (HID_MOUSE_Data_TypeDef *data);
   * @}
   */ 
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* __USBH_HID_MOUSE_H */
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

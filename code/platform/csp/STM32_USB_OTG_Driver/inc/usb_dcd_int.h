@@ -29,6 +29,10 @@
 #ifndef USB_DCD_INT_H__
 #define USB_DCD_INT_H__
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usb_dcd.h"
 
@@ -113,15 +117,10 @@ uint32_t USBD_OTG_ISR_Handler (USB_OTG_CORE_HANDLE *pdev);
   * @}
   */ 
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif // USB_DCD_INT_H__
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

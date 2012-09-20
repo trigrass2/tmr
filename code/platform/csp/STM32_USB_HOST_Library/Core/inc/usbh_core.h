@@ -29,6 +29,10 @@
 #ifndef __USBH_CORE_H
 #define __USBH_CORE_H
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usb_hcd.h"
 #include "usbh_def.h"
@@ -276,20 +280,10 @@ void USBH_ErrorHandle(USBH_HOST *phost,
   * @}
   */ 
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* __USBH_CORE_H */
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
-
-/**
-* @}
-*/ 
-
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-
-
 

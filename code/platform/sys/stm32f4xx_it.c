@@ -39,11 +39,15 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-
 #define CURSOR_STEP     10
+
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 __IO uint32_t remote_wakeup =0;
+__IO uint16_t IC2Value = 0;
+__IO uint16_t DutyCycle = 0;
+__IO uint32_t Frequency = 0;
+
 /* Private function prototypes -----------------------------------------------*/
 extern USB_OTG_CORE_HANDLE           USB_OTG_dev;
 extern uint32_t USBD_OTG_ISR_Handler (USB_OTG_CORE_HANDLE *pdev);
@@ -227,6 +231,39 @@ void OTG_FS_WKUP_IRQHandler(void)
 void OTG_FS_IRQHandler(void)
 {
   USBD_OTG_ISR_Handler (&USB_OTG_dev);
+}
+
+/**
+  * @brief  This function handles TIM5 global interrupt request.
+  * @param  None
+  * @retval None
+  */
+void TIM5_IRQHandler(void)
+{
+  RCC_ClocksTypeDef RCC_Clocks;
+  RCC_GetClocksFreq(&RCC_Clocks);
+
+  /* Clear TIM5 Capture compare interrupt pending bit */
+  TIM_ClearITPendingBit(TIM5, TIM_IT_CC2);
+
+  /* Get the Input Capture value */
+  IC2Value = TIM_GetCapture2(TIM5);
+
+  if (IC2Value != 0)
+  {
+    /* Duty cycle computation */
+    DutyCycle = (TIM_GetCapture1(TIM5) * 100) / IC2Value;
+
+    /* Frequency computation 
+       TIM5 counter clock = (RCC_Clocks.HCLK_Frequency)/2 */
+
+    Frequency = (RCC_Clocks.HCLK_Frequency)/2 / IC2Value;
+  }
+  else
+  {
+    DutyCycle = 0;
+    Frequency = 0;
+  }
 }
 
 /******************************************************************************/

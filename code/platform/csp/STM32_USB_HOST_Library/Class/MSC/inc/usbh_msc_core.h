@@ -29,6 +29,10 @@
 #ifndef __USBH_MSC_CORE_H
 #define __USBH_MSC_CORE_H
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "usbh_core.h"
 #include "usbh_stdreq.h"
@@ -123,25 +127,10 @@ extern uint8_t MSCErrorCount;
   * @}
   */ 
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif  /* __USBH_MSC_CORE_H */
-
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-
-
 
