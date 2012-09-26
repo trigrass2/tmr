@@ -29,9 +29,13 @@
 typedef enum {FAILED = 0, PASSED = !FAILED} TestStatus;
 
 /* Private define ------------------------------------------------------------*/
-#define BLOCK_SIZE            512 /* Block Size in Bytes */
-
+#ifdef VECT_TAB_SRAM
+#define BLOCK_SIZE            4 /* Block Size in Bytes */
 #define NUMBER_OF_BLOCKS      100  /* For Multi Blocks operation (Read/Write) */
+#else
+#define BLOCK_SIZE            512 /* Block Size in Bytes */
+#define NUMBER_OF_BLOCKS      100  /* For Multi Blocks operation (Read/Write) */
+#endif
 #define MULTI_BUFFER_SIZE    (BLOCK_SIZE * NUMBER_OF_BLOCKS)
 
 #define SD_OPERATION_ERASE          0
@@ -57,6 +61,14 @@ static uint8_t *USBD_HID_GetPos (void);
 // TIM5
 extern uint16_t DutyCycle;
 extern uint32_t Frequency;
+
+void pushAvg(uint16_t val);
+uint16_t getAvg(uint16_t * buff, int size);
+
+#define MOVAVG_SIZE 32
+uint16_t movavg_buff[MOVAVG_SIZE];
+uint16_t movavg_i=0;
+
 
 
 /* Private function prototypes -----------------------------------------------*/
@@ -499,6 +511,7 @@ void vDiagTask( void *pvParameters )
         while(1)
         #endif
         {
+            #if 0
             printf("\n\r---------------------------------------------------------------------------------\n\r");
             vTaskDelay(10);
 		
@@ -522,12 +535,14 @@ void vDiagTask( void *pvParameters )
             vTaskDelay(10);
 					
             vTaskDelay(delay);
-  
+            #endif
+			
             buf = USBD_HID_GetPos();
             if((buf[1] != 0) ||(buf[2] != 0))
             {
                 USBD_HID_SendReport (&USB_OTG_dev, buf, 4);
             }
+			vTaskDelay(1);
         }
 
     }
@@ -1838,7 +1853,9 @@ static uint8_t *USBD_HID_GetPos (void)
   }
   #endif
 
-  x += (DutyCycle - 200);
+  pushAvg(DutyCycle);
+
+  x += (int8_t)(getAvg(movavg_buff, MOVAVG_SIZE)- 200.0);
 
   HID_Buffer[0] = 0;
   HID_Buffer[1] = x;
@@ -1906,3 +1923,23 @@ class MS561101BA {
     //unsigned long lastPresConv, lastTempConv;
     int32_t presCache, tempCache;
 };
+
+
+
+void pushAvg(uint16_t val) {
+	movavg_buff[movavg_i] = val;
+	movavg_i = (movavg_i + 1) % MOVAVG_SIZE;
+}
+
+uint16_t getAvg(uint16_t * buff, int size)
+{
+	float sum = 0.0;
+	for(int i=0; i<size; i++)
+	{
+	    sum += buff[i];
+    }
+
+	return (sum / size);
+}
+
+

@@ -44,6 +44,7 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 __IO uint32_t remote_wakeup =0;
+__IO uint16_t temp=0;
 __IO uint16_t IC2Value = 0;
 __IO uint16_t DutyCycle = 0;
 __IO uint32_t Frequency = 0;
@@ -252,17 +253,28 @@ void TIM5_IRQHandler(void)
   if (IC2Value != 0)
   {
     /* Duty cycle computation */
-    DutyCycle = (TIM_GetCapture1(TIM5) * 100) / IC2Value;
+    temp = (TIM_GetCapture1(TIM5) * 100) / IC2Value;
+    
+    if((temp < 210) & (temp > 190))
+            DutyCycle = 200;
+    else if((temp<=256) & (temp >= 145))
+    {
+        DutyCycle = temp;
 
-    /* Frequency computation 
-       TIM5 counter clock = (RCC_Clocks.HCLK_Frequency)/2 */
-
-    Frequency = (RCC_Clocks.HCLK_Frequency)/2 / IC2Value;
+        /* Frequency computation 
+            TIM5 counter clock = (RCC_Clocks.HCLK_Frequency)/2 */
+        Frequency = (RCC_Clocks.HCLK_Frequency)/2 / IC2Value;
+    }
+    else
+    {
+        DutyCycle = DutyCycle;
+        Frequency = Frequency;
+    }
   }
   else
   {
-    DutyCycle = 0;
-    Frequency = 0;
+    DutyCycle = DutyCycle;
+    Frequency = Frequency;
   }
 }
 
