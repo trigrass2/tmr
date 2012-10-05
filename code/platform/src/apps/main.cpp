@@ -62,12 +62,12 @@ static uint8_t *USBD_HID_GetPos (void);
 extern uint16_t DutyCycle;
 extern uint32_t Frequency;
 
-void pushAvg(uint16_t val);
-uint16_t getAvg(uint16_t * buff, int size);
+void pushAvg(int32_t val);
+int32_t getAvg(int32_t * buff, int size);
 
-#define MOVAVG_SIZE 32
-uint16_t movavg_buff[MOVAVG_SIZE];
-uint16_t movavg_i=0;
+#define MOVAVG_SIZE 64
+int32_t movavg_buff[MOVAVG_SIZE];
+int32_t movavg_i=0;
 
 
 
@@ -568,7 +568,7 @@ void vDiagTask( void *pvParameters )
     
     while(1)
     {
-        #if 1
+        #if 0
         printf("\n\r---------------------------------------------------------------------------------\n\r");
         vTaskDelay(100);
 
@@ -597,7 +597,7 @@ void vDiagTask( void *pvParameters )
         }
         #endif
         
-        #if 1
+        #if 0
         printf("\n\r---------------------------------------------------------------------------------\n\r");
         vTaskDelay(100);
 
@@ -652,13 +652,16 @@ void vDiagTask( void *pvParameters )
             vTaskDelay(delay);
         }
 
-        
+				delay = 10 / portTICK_RATE_MS; // delay 10 ms
+				
+        while(1)
+				{
         // CONVERSION SEQUENCE
         
         // D1
         i2c_tx_cmd(CPAL_I2C2, MS5611_ADDRESS, (CMD_ADC_CONV|CMD_ADC_D1|CMD_ADC_4096)); // ADC command for MS5611
         
-        delay = 30 / portTICK_RATE_MS; // delay 200 ms
+        
         vTaskDelay(delay);
         
         //I2C_MutiRead((u8*)&(D1), MS5611_ADDRESS, CMD_ADC_READ, 3);
@@ -668,7 +671,7 @@ void vDiagTask( void *pvParameters )
         // D2
         i2c_tx_cmd(CPAL_I2C2, MS5611_ADDRESS, (CMD_ADC_CONV|CMD_ADC_D2|CMD_ADC_4096)); // ADC command for MS5611
         
-        delay = 30 / portTICK_RATE_MS; // delay 200 ms
+        //delay = 10 / portTICK_RATE_MS; // delay 200 ms
         vTaskDelay(delay);
         
         i2c_rx_mbytes_buf(CPAL_I2C2, MS5611_ADDRESS, CMD_ADC_READ, 3, (uint8_t*)&(D2));
@@ -676,27 +679,32 @@ void vDiagTask( void *pvParameters )
 
         dT = D2 - ( (uint32_t)(C[5]) * pow(2.0,8) );
         
-        OFF = ( (uint64_t)(C[2]) * pow(2.0,17) ) + ( (uint64_t)(C[4]) * dT ) / pow(2.0,6);
-        SENS = ( (uint64_t)(C[1]) * pow(2.0,16) ) + ( (uint64_t)(C[3]) * dT ) / pow(2.0,7);
+        OFF = ( (uint64_t)(C[2]) * pow(2.0,16) ) + ( (uint64_t)(C[4]) * dT ) / pow(2.0,7);
+        SENS = ( (uint64_t)(C[1]) * pow(2.0,15) ) + ( (uint64_t)(C[3]) * dT ) / pow(2.0,8);
 
         TEMP = 2000 + ( dT * (uint32_t)(C[6]) ) / pow(2.0,23);
         P = ( D1 * SENS / pow(2.0,21) - OFF ) / pow(2.0,15);
+				
+				pushAvg(P);
 
        
         //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 D1 = %d , D2 = %d \n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds, D1, D2);
-        //vTaskDelay(300);
+        //vTaskDelay(50);
         
         //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 dT = %d , TEMP = %d \n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds, dT, TEMP);
-        //vTaskDelay(300);
+        //vTaskDelay(50);
 
-        //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 OFF = %lld , SENS = %lld , P = %d \n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds, OFF, SENS, P);
-        //vTaskDelay(200);
+        printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 OFF = %lld , SENS = %lld , P = %d , P(AVG) = %d \n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds, OFF, SENS, P, getAvg(movavg_buff, MOVAVG_SIZE));
+        vTaskDelay(50);
+				
+				P = getAvg(movavg_buff, MOVAVG_SIZE);
 
         RTC_GetTime(RTC_Format_BIN, &RTC_TimeStructure);
-        printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 ALT = %f \n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds, (((pow((sea_press / ((float)P/100.0f)), 1/5.257f) - 1.0f) * (((float)TEMP/100.0f) + 273.15f)) / 0.0065f));
-        vTaskDelay(200);
+        printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 ALT = %f \n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds, 15.30f + (((pow((sea_press / ((float)P/100.0f)), 1/5.257f) - 1.0f) * (((float)TEMP/100.0f) + 273.15f)) / 0.0065f));
+        //vTaskDelay(10);
         
         vTaskDelay(delay);
+			  }
     }
 }
 #endif
@@ -1853,9 +1861,9 @@ static uint8_t *USBD_HID_GetPos (void)
   }
   #endif
 
-  pushAvg(DutyCycle);
+  //pushAvg(DutyCycle);
 
-  x += (int8_t)(getAvg(movavg_buff, MOVAVG_SIZE)- 200.0);
+  //x += (int8_t)(getAvg(movavg_buff, MOVAVG_SIZE)- 200.0);
 
   HID_Buffer[0] = 0;
   HID_Buffer[1] = x;
@@ -1926,12 +1934,12 @@ class MS561101BA {
 
 
 
-void pushAvg(uint16_t val) {
+void pushAvg(int32_t val) {
 	movavg_buff[movavg_i] = val;
 	movavg_i = (movavg_i + 1) % MOVAVG_SIZE;
 }
 
-uint16_t getAvg(uint16_t * buff, int size)
+int32_t getAvg(int32_t * buff, int size)
 {
 	float sum = 0.0;
 	for(int i=0; i<size; i++)
