@@ -256,7 +256,7 @@ u8 pca9536dp[4]={0};
 #define TRUE   (1)                      /* Boolean true value.   */
 #define FALSE  (0)                      /* Boolean false value.  */
 
-#if 1
+#if 0
 void vDiagTask( void *pvParameters )
 {
     u16 delay=0, i=0;
@@ -568,7 +568,7 @@ void vDiagTask( void *pvParameters )
     
     while(1)
     {
-        #if 0
+        #if 1
         printf("\n\r---------------------------------------------------------------------------------\n\r");
         vTaskDelay(100);
 
@@ -597,7 +597,7 @@ void vDiagTask( void *pvParameters )
         }
         #endif
         
-        #if 0
+        #if 1
         printf("\n\r---------------------------------------------------------------------------------\n\r");
         vTaskDelay(100);
 
@@ -636,8 +636,8 @@ void vDiagTask( void *pvParameters )
             i2c_rx_mbytes_buf(CPAL_I2C2, MS5611_ADDRESS, (CMD_PROM_RD + (i<<1)), 2, (uint8_t*)&C[i]);
             C[i]= (C[i]>>8) | ((C[i]&0x00FF)<<8);
 
-            //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 C[%02d] = 0x%04X\n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds, i, C[i]);
-            //vTaskDelay(20);
+            printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 C[%02d] = 0x%04X\n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds, i, C[i]);
+            vTaskDelay(20);
         }
 
         printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 CRC of PROM = 0x%01X\n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds, crc4(C));
@@ -645,11 +645,11 @@ void vDiagTask( void *pvParameters )
 
         #endif
 
-        while(crc4(C) != 0x0F)
+        while(crc4(C) != (C[7]&0x000F))
         {
             RTC_GetTime(RTC_Format_BIN, &RTC_TimeStructure);
-            //printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 Read Fialed!!!!\n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds);
-            //vTaskDelay(delay);
+            printf("\n\r%0.2d:%0.2d:%0.2d [Sensor] MS5611 Read Fialed!!!!\n\r",RTC_TimeStructure.RTC_Hours, RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds);
+            vTaskDelay(delay);
         }
 
         
