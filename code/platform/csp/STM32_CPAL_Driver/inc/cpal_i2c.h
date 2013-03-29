@@ -1,32 +1,30 @@
 /**
   ******************************************************************************
-  * @file    Libraries/STM32_CPAL_Driver/inc/cpal_i2c.h
+  * @file    STM32_CPAL_Driver/inc/cpal_i2c.h
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    17-June-2011
+  * @version V1.2.0
+  * @date    21-December-2012
   * @brief   This file contains all the functions prototypes for the I2C firmware 
   *          layer.
   ******************************************************************************
   * @attention
   *
-  * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
-  * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
-  * TIME. AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY
-  * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
-  * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
-  * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
   *
-  * <h2><center>&copy; COPYRIGHT 2011 STMicroelectronics</center></h2>
+  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  * You may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at:
+  *
+  *        http://www.st.com/software_license_agreement_liberty_v2
+  *
+  * Unless required by applicable law or agreed to in writing, software 
+  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  *
   ******************************************************************************
   */
-
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __CPAL_I2C_H
-#define __CPAL_I2C_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /* Includes ------------------------------------------------------------------*/
 /* If STM32F10X family is used */
@@ -36,7 +34,7 @@ extern "C" {
 #endif
    
 /* If STM32L1XX family is used */
-#ifdef STM32L1XX_MD
+#if defined (STM32L1XX_MD) || defined (STM32L1XX_HD)
 #include "cpal_i2c_hal_stm32l1xx.h"
 #endif
 
@@ -50,7 +48,16 @@ extern "C" {
 #include "cpal_i2c_hal_stm32f4xx.h"
 #endif
 
-  
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __CPAL_I2C_H
+#define __CPAL_I2C_H
+
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
+/* Includes ------------------------------------------------------------------*/
+
 /* Exported types ------------------------------------------------------------*/
    
 /*========= CPAL_I2CError_TypeDef =========*/ 
@@ -157,6 +164,8 @@ uint32_t  CPAL_I2C_StructInit   (CPAL_InitTypeDef* pDevInitStruct); /*<!This fun
                                                                         application local variables and fill these fields with their
                                                                         pointers. */
 
+
+#if defined (CPAL_I2C_MASTER_MODE) || ! defined (CPAL_I2C_LISTEN_MODE) 
 uint32_t  CPAL_I2C_Write        (CPAL_InitTypeDef* pDevInitStruct); /*<!This function Writes data to the specified I2C device.
                                                                         All information relative to the write transfer parameters and
                                                                         current status are extracted from pCPAL_TransferTx field defined
@@ -166,7 +175,16 @@ uint32_t  CPAL_I2C_Read         (CPAL_InitTypeDef* pDevInitStruct); /*<!This fun
                                                                         All information relative to the read transfer parameters and
                                                                         current status are extracted from pCPAL_TransferTx field defined
                                                                         in @ref CPAL_Transfer_TypeDef */ 
- 
+
+#endif /* CPAL_I2C_MASTER_MODE || ! CPAL_I2C_LISTEN_MODE */ 
+
+
+#if defined (CPAL_I2C_LISTEN_MODE) && defined (CPAL_I2C_SLAVE_MODE)
+uint32_t  CPAL_I2C_Listen       (CPAL_InitTypeDef* pDevInitStruct); /*<!This function allows the specified I2C device to enter listen mode 
+                                                                        All information relative to the read or write transfer parameters and
+                                                                        current status are extracted from fields defined in @ref CPAL_Transfer_TypeDef */
+#endif /* CPAL_I2C_LISTEN_MODE && CPAL_I2C_SLAVE_MODE */
+
 uint32_t  CPAL_I2C_IsDeviceReady(CPAL_InitTypeDef* pDevInitStruct); /*<!This function can be used to wait until target device is ready 
                                                                         for communication (ie. for memories after write operations) */
 
@@ -181,6 +199,12 @@ uint32_t CPAL_I2C_DMA_TX_IRQHandler(CPAL_InitTypeDef* pDevInitStruct); /*<!This 
 uint32_t CPAL_I2C_DMA_RX_IRQHandler(CPAL_InitTypeDef* pDevInitStruct); /*<!This function Handles DMA RX Interrupts */
 #endif /* CPAL_I2C_DMA_PROGMODEL */
 
+
+/*========= Local DMA and IT Manager =========*/
+
+uint32_t CPAL_I2C_Enable_DMA_IT (CPAL_InitTypeDef* pDevInitStruct, CPAL_DirectionTypeDef Direction); /* This function Configure I2C DMA 
+                                                                                                    and Interrupts before starting 
+                                                                                                    transfer phase */
 
 /*========= CPAL_I2C_User_Callbacks =========*/
 /* These functions prototypes only are declared here. User can (optionally) 
@@ -255,6 +279,15 @@ void CPAL_I2C_DUALF_UserCallback(CPAL_InitTypeDef* pDevInitStruct); /*<!This fun
                                                                         is set (used in Dual Address Mode only ) */
 #endif
 
+#ifndef CPAL_I2C_SLAVE_READ_UserCallback
+void CPAL_I2C_SLAVE_READ_UserCallback(CPAL_InitTypeDef* pDevInitStruct); /*<!This function is called when a read operation is
+                                                                             requested in Listen mode only */
+#endif
+
+#ifndef CPAL_I2C_SLAVE_WRITE_UserCallback
+void CPAL_I2C_SLAVE_WRITE_UserCallback(CPAL_InitTypeDef* pDevInitStruct); /*<!This function is called when a write operation is
+                                                                              requested in Listen mode only */
+#endif
 
 /*========= CPAL_User_ErrorCallback_Prototypes =========*/
 /* User can use two types of Callback:
@@ -301,9 +334,7 @@ void CPAL_I2C_DUALF_UserCallback(CPAL_InitTypeDef* pDevInitStruct); /*<!This fun
                                                                      (If I2C Error interrupt is enabled) */
   #endif 
  
-#endif /* USE_MULTIPLE_ERROR_CALLBACK */
-
-   
+#endif /* USE_SINGLE_ERROR_CALLBACK */
    
 
 #ifdef __cplusplus
@@ -312,5 +343,4 @@ void CPAL_I2C_DUALF_UserCallback(CPAL_InitTypeDef* pDevInitStruct); /*<!This fun
 
 #endif /*__CPAL_I2C_H */
 
-/******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
-  
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -1,22 +1,28 @@
 /**
   ******************************************************************************
-  * @file    Libraries/STM32_CPAL_Driver/src/cpal_hal.c
+  * @file    STM32_CPAL_Driver/src/cpal_hal.c
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    17-June-2011
+  * @version V1.2.0
+  * @date    21-December-2012
   * @brief   This file contains all the functions for the CPAL_HAL common
   *          firmware layer.
   ******************************************************************************
   * @attention
   *
-  * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
-  * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
-  * TIME. AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY
-  * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
-  * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
-  * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
   *
-  * <h2><center>&copy; COPYRIGHT 2011 STMicroelectronics</center></h2>
+  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  * You may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at:
+  *
+  *        http://www.st.com/software_license_agreement_liberty_v2
+  *
+  * Unless required by applicable law or agreed to in writing, software 
+  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  *
   ******************************************************************************
   */
 
@@ -28,7 +34,7 @@
 #endif
 
 /* If STM32L1XX family is used */   
-#ifdef STM32L1XX_MD
+#if defined (STM32L1XX_MD) || defined (STM32L1XX_HD)
  #include "stm32l1xx.h"
 #endif
 
@@ -37,7 +43,7 @@
  #include "stm32f2xx.h"
 #endif
 
-/* If STM32F2XX family is used */   
+/* If STM32F4XX family is used */   
 #ifdef STM32F4XX
  #include "stm32f4xx.h"
 #endif
@@ -65,7 +71,4 @@ void CPAL_HAL_NVICInit(void)
   NVIC_PriorityGroupConfig (CPAL_NVIC_PRIOGROUP);
 }
 
-
-/******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
-
-
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

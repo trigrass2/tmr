@@ -1,22 +1,28 @@
 /**
   *********************************************************************************
-  * @file    Libraries/STM32_CPAL_Driver/devices/stm32f4xx/cpal_i2c_hal_stm32f4xx.c
+  * @file    STM32_CPAL_Driver/devices/stm32f4xx/cpal_i2c_hal_stm32f4xx.c
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    17-June-2011
+  * @version V1.2.0
+  * @date    21-December-2012
   * @brief   This file provides all the CPAL_I2C_HAL (hardware Abstraction Layer)
   *          firmware functions.
-  *********************************************************************************
+  ******************************************************************************
   * @attention
   *
-  * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
-  * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
-  * TIME. AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY
-  * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
-  * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
-  * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
   *
-  * <h2><center>&copy; COPYRIGHT 2011 STMicroelectronics</center></h2>
+  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  * You may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at:
+  *
+  *        http://www.st.com/software_license_agreement_liberty_v2
+  *
+  * Unless required by applicable law or agreed to in writing, software 
+  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  *
   ******************************************************************************
   */
 
@@ -442,7 +448,7 @@ void CPAL_I2C_HAL_DMADeInit(CPAL_DevTypeDef Device, CPAL_DirectionTypeDef Direct
   * @param  Options : I2C Transfer Options.
   * @retval None. 
   */
-void CPAL_I2C_HAL_ITInit(CPAL_DevTypeDef Device, uint32_t Options)
+void CPAL_I2C_HAL_ITInit(CPAL_DevTypeDef Device, uint32_t Options, CPAL_DirectionTypeDef Direction, CPAL_ProgModelTypeDef ProgModel)
 {
   NVIC_InitTypeDef NVIC_InitStructure; 
   
@@ -472,66 +478,86 @@ void CPAL_I2C_HAL_ITInit(CPAL_DevTypeDef Device, uint32_t Options)
   }
   
 #ifdef CPAL_I2C_DMA_PROGMODEL
-  /* If one or more DMA TX Interrupt option Bits selected */
-  if ((Options & CPAL_OPT_I2C_DMA_TX_IT_MASK) != 0)    
-  {      
-    /* Configure NVIC for DMA TX channel interrupt */
-    NVIC_InitStructure.NVIC_IRQChannel = CPAL_I2C_DMA_TX_IRQn [Device] ;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = I2C_IT_DMATX_PREPRIO[Device];
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = I2C_IT_DMATX_SUBPRIO[Device];
-    NVIC_Init(&NVIC_InitStructure);
-    
-    /* If DMA TX TC interrupt Option Bits Selected */
-    if ((Options & CPAL_OPT_DMATX_TCIT) != 0)
-    {
+  if (ProgModel == CPAL_PROGMODEL_DMA)
+  {
+    if ( (Direction & CPAL_DIRECTION_TX) != 0)
+    {   
+      /* Configure NVIC for DMA TX channel interrupt */
+      NVIC_InitStructure.NVIC_IRQChannel = CPAL_I2C_DMA_TX_IRQn [Device] ;
+      NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = I2C_IT_DMATX_PREPRIO[Device];
+      NVIC_InitStructure.NVIC_IRQChannelSubPriority = I2C_IT_DMATX_SUBPRIO[Device];
+      NVIC_Init(&NVIC_InitStructure);
+      
+
+
       /* Enable DMA TX Channel TCIT  */
       __I2C_HAL_ENABLE_DMATX_TCIT(Device);
-    }
-    
-    /* If DMA TX HT interrupt Option Bits Selected */
-    if ((Options & CPAL_OPT_DMATX_HTIT) != 0)
-    {
-      /* Enable DMA TX Channel HTIT  */    
-      __I2C_HAL_ENABLE_DMATX_HTIT(Device);
-    }
-    
-    /* If DMA TX TE interrupt Option Bits Selected */
-    if ((Options & CPAL_OPT_DMATX_TEIT) != 0)
-    {
+      
+
+
+
+
+
+
+
+
+
+
+
       /* Enable DMA TX Channel TEIT  */    
       __I2C_HAL_ENABLE_DMATX_TEIT(Device); 
+      
+      /* If DMA TX HT interrupt Option Bits Selected */
+      if ((Options & CPAL_OPT_DMATX_HTIT) != 0)
+      {
+        /* Enable DMA TX Channel HTIT  */    
+        __I2C_HAL_ENABLE_DMATX_HTIT(Device);
+      }
     }
-  }
-  
-  /* If one or more DMA RX interrupt option Bits selected */
-  if ((Options & CPAL_OPT_I2C_DMA_RX_IT_MASK) != 0)    
-  {
-    /* Configure NVIC for DMA RX channel interrupt */
-    NVIC_InitStructure.NVIC_IRQChannel = CPAL_I2C_DMA_RX_IRQn [Device] ;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = I2C_IT_DMARX_PREPRIO[Device];
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = I2C_IT_DMARX_SUBPRIO[Device];
-    NVIC_Init(&NVIC_InitStructure);
+
+
+
+
+
+
+
+
+
+
     
-    /* If DMA RX TC interrupt Option Bits Selected */
-    if ((Options & CPAL_OPT_DMARX_TCIT) != 0)
+    if ((Direction & CPAL_DIRECTION_RX) != 0)
+
     {
+      /* Configure NVIC for DMA RX channel interrupt */
+      NVIC_InitStructure.NVIC_IRQChannel = CPAL_I2C_DMA_RX_IRQn [Device] ;
+      NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = I2C_IT_DMARX_PREPRIO[Device];
+      NVIC_InitStructure.NVIC_IRQChannelSubPriority = I2C_IT_DMARX_SUBPRIO[Device];
+      NVIC_Init(&NVIC_InitStructure);
+      
       /* Enable DMA RX Channel TCIT  */
       __I2C_HAL_ENABLE_DMARX_TCIT(Device);  
-    }
-    
-    /* If DMA RX HT interrupt Option Bits Selected */
-    if ((Options & CPAL_OPT_DMARX_HTIT) != 0)
-    {
-      /* Enable DMA RX Channel HTIT  */    
-      __I2C_HAL_ENABLE_DMARX_HTIT(Device);  
-    }
-    
-    /* If DMA RX TE interrupt Option Bits Selected */
-    if ((Options & CPAL_OPT_DMARX_TEIT) != 0)
-    {
+      
+
+
+
+
+
+
+
+
+
+
+
       /* Enable DMA RX Channel TEIT  */
-      __I2C_HAL_ENABLE_DMARX_TEIT(Device);   
-    }  
+      __I2C_HAL_ENABLE_DMARX_TEIT(Device); 
+      
+      /* If DMA RX HT interrupt Option Bits Selected */
+      if ((Options & CPAL_OPT_DMARX_HTIT) != 0)
+      {
+        /* Enable DMA RX Channel HTIT  */    
+        __I2C_HAL_ENABLE_DMARX_HTIT(Device);  
+      }
+    }
   }
 #endif /* CPAL_I2C_DMA_PROGMODEL */ 
   
@@ -546,7 +572,7 @@ void CPAL_I2C_HAL_ITInit(CPAL_DevTypeDef Device, uint32_t Options)
   * @param  Options : I2C Transfer Options.
   * @retval None. 
   */
-void CPAL_I2C_HAL_ITDeInit(CPAL_DevTypeDef Device, uint32_t Options )
+void CPAL_I2C_HAL_ITDeInit(CPAL_DevTypeDef Device, uint32_t Options, CPAL_DirectionTypeDef Direction, CPAL_ProgModelTypeDef ProgModel)
 {
   NVIC_InitTypeDef NVIC_InitStructure; 
   
@@ -555,7 +581,7 @@ void CPAL_I2C_HAL_ITDeInit(CPAL_DevTypeDef Device, uint32_t Options )
   
   /* Disable the IRQ channel */
   NVIC_InitStructure.NVIC_IRQChannelCmd = DISABLE;
-  
+   
   /* Disable I2Cx EVT IRQn */
   NVIC_InitStructure.NVIC_IRQChannel = CPAL_I2C_IT_EVT_IRQn [Device] ;
   NVIC_Init(&NVIC_InitStructure);
@@ -569,21 +595,31 @@ void CPAL_I2C_HAL_ITDeInit(CPAL_DevTypeDef Device, uint32_t Options )
   }
   
 #ifdef CPAL_I2C_DMA_PROGMODEL
-  /* If one or more DMA TX It option Bits selected */
-  if ((Options & CPAL_OPT_I2C_DMA_TX_IT_MASK) != 0)
-  {      
-    /* Disable I2Cx DMA TX IRQn */
-    NVIC_InitStructure.NVIC_IRQChannel = CPAL_I2C_DMA_TX_IRQn [Device] ;
-    NVIC_Init(&NVIC_InitStructure);
-  }
-  
-  /* If one or more DMA RX It option Bits selected */
-  if ((Options & CPAL_OPT_I2C_DMA_RX_IT_MASK) != 0) 
+  if (ProgModel == CPAL_PROGMODEL_DMA)
+
+
+
+
+
+
+
+
+
   {
-    /* Disable I2Cx DMA RX IRQn */
-    NVIC_InitStructure.NVIC_IRQChannel = CPAL_I2C_DMA_RX_IRQn [Device] ;
-    NVIC_Init(&NVIC_InitStructure);
-  }  
+    if ( (Direction & CPAL_DIRECTION_TX) != 0)
+    {      
+      /* Disable I2Cx DMA TX IRQn */
+      NVIC_InitStructure.NVIC_IRQChannel = CPAL_I2C_DMA_TX_IRQn [Device] ;
+      NVIC_Init(&NVIC_InitStructure);
+    }
+    
+    if ( (Direction & CPAL_DIRECTION_RX) != 0)
+    { 
+      /* Disable I2Cx DMA RX IRQn */
+      NVIC_InitStructure.NVIC_IRQChannel = CPAL_I2C_DMA_RX_IRQn [Device] ;
+      NVIC_Init(&NVIC_InitStructure);
+    }  
+  }
 #endif /* CPAL_I2C_DMA_PROGMODEL */
 }
 
@@ -766,4 +802,5 @@ uint32_t CPAL_I2C3_DMA_RX_IRQHandler(void)
  #endif /* CPAL_I2C_DMA_PROGMODEL */
 #endif /* CPAL_USE_I2C3 */
 
-/******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

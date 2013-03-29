@@ -1,21 +1,27 @@
 /**
   ******************************************************************************
-  * @file    Libraries/STM32_CPAL_Driver/inc/cpal.h
+  * @file    STM32_CPAL_Driver/inc/cpal.h
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    17-June-2011
+  * @version V1.2.0
+  * @date    21-December-2012
   * @brief   This file contains CPAL Structures definition.
   ******************************************************************************
   * @attention
   *
-  * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
-  * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
-  * TIME. AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY
-  * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
-  * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
-  * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
   *
-  * <h2><center>&copy; COPYRIGHT 2011 STMicroelectronics</center></h2>
+  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  * You may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at:
+  *
+  *        http://www.st.com/software_license_agreement_liberty_v2
+  *
+  * Unless required by applicable law or agreed to in writing, software 
+  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  *
   ******************************************************************************
   */
 
@@ -37,20 +43,19 @@ extern "C" {
 #endif
    
 /* If STM32L1XX family is used */
-#ifdef STM32L1XX_MD
+#if defined (STM32L1XX_MD) || defined (STM32L1XX_HD)
 #include "stm32l1xx.h"
 #endif 
   
 /* If STM32F2XX family is used */   
 #ifdef STM32F2XX
 #include "stm32f2xx.h"
-#endif
-
-/* If STM32F4XX family is used */   
-#ifdef STM32F2XX
-#include "stm32f4xx.h"
 #endif 
-
+ 
+/* If STM32F4XX family is used */   
+#ifdef STM32F4XX
+#include "stm32f4xx.h"
+#endif
   
 /* Exported types ------------------------------------------------------------*/
 
@@ -263,17 +268,9 @@ extern CPAL_InitTypeDef I2C3_DevStructure;
                                                                     To use this option enable it by affecting this define 
                                                                     and own address2 to wCPAL_Options */
 
-#define CPAL_OPT_DMATX_TCIT             ((uint32_t)0x00000100)  /*!<Enable the Transmitter DMA Transfer Complete interrupt */
-
 #define CPAL_OPT_DMATX_HTIT             ((uint32_t)0x00000200)  /*!<Enable the Transmitter DMA Half Transfer Complete interrupt */
 
-#define CPAL_OPT_DMATX_TEIT             ((uint32_t)0x00000400)  /*!<Enable the Transmitter DMA Transfer Error interrupt */
-
-#define CPAL_OPT_DMARX_TCIT             ((uint32_t)0x00000800)  /*!<Enable the Receiver DMA Transfer Complete interrupt */
-
 #define CPAL_OPT_DMARX_HTIT             ((uint32_t)0x00001000)  /*!<Enable the Receiver DMA Half Transfer Complete interrupt */
-
-#define CPAL_OPT_DMARX_TEIT             ((uint32_t)0x00002000)  /*!<Enable the Receiver DMA Half Transfer Error interrupt */
 
 #define CPAL_OPT_DMATX_CIRCULAR         ((uint32_t)0x00004000)  /*!<Enable the Circular Mode for DMA Transmitter */
   
@@ -301,6 +298,9 @@ extern CPAL_InitTypeDef I2C3_DevStructure;
                                                                     of data transfer (for multi-read/write operations) */
 
 #define CPAL_OPT_I2C_NOSTOP_MODE        ((uint32_t)0x01000000)  /*!<Start communication in No STOP generation mode */
+
+#define CPAL_OPT_I2C_NACK_ADD           ((uint32_t)0x40000000)  /*!<Initialize the I2C Slave device without enabling the acknowledgement of its 
+                                                                    own address. This option must not be used with No Stop generation mode */
 
 
 /*========= CPAL_Interne_Defines =========*/
@@ -335,5 +335,4 @@ void CPAL_HAL_NVICInit(void);
 #endif /*__CPAL_H */
 
 
-/******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
-  
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

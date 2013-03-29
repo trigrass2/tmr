@@ -1,28 +1,34 @@
 /**
   *********************************************************************************
-  * @file    Libraries/STM32_CPAL_Driver/devices/stm32f4xx/cpal_i2c_hal_stm32f4xx.h
+  * @file    STM32_CPAL_Driver/devices/stm32f4xx/cpal_i2c_hal_stm32f4xx.h
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    17-June-2011
+  * @version V1.2.0
+  * @date    21-December-2012
   * @brief   This file contains all the functions prototypes for the CPAL_I2C_HAL 
   *          firmware layer.
-  *********************************************************************************
+  ******************************************************************************
   * @attention
   *
-  * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
-  * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
-  * TIME. AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY
-  * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
-  * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
-  * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
   *
-  * <h2><center>&copy; COPYRIGHT 2011 STMicroelectronics</center></h2>
+  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  * You may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at:
+  *
+  *        http://www.st.com/software_license_agreement_liberty_v2
+  *
+  * Unless required by applicable law or agreed to in writing, software 
+  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  *
   ******************************************************************************
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef ___CPAL_I2C_HAL_STM32F2XX_H
-#define ___CPAL_I2C_HAL_STM32F2XX_H
+#ifndef ___CPAL_I2C_HAL_STM32F4XX_H
+#define ___CPAL_I2C_HAL_STM32F4XX_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -134,23 +140,23 @@ extern "C" {
 #define CPAL_I2C2_SCL_GPIO_CLK          RCC_AHB1Periph_GPIOB 
 #define CPAL_I2C2_SCL_GPIO_PIN          GPIO_Pin_10
 #define CPAL_I2C2_SCL_GPIO_PINSOURCE    GPIO_PinSource10 
-  
+
 #define CPAL_I2C2_SDA_GPIO_PORT         GPIOB       
 #define CPAL_I2C2_SDA_GPIO_CLK          RCC_AHB1Periph_GPIOB 
 #define CPAL_I2C2_SDA_GPIO_PIN          GPIO_Pin_11 
 #define CPAL_I2C2_SDA_GPIO_PINSOURCE    GPIO_PinSource11  
-  
+
 /*-----------I2C3 Device -----------*/
   
-#define CPAL_I2C3_SCL_GPIO_PORT         GPIOH       
-#define CPAL_I2C3_SCL_GPIO_CLK          RCC_AHB1Periph_GPIOH 
+#define CPAL_I2C3_SCL_GPIO_PORT         GPIOH
+#define CPAL_I2C3_SCL_GPIO_CLK          RCC_AHB1Periph_GPIOH
 #define CPAL_I2C3_SCL_GPIO_PIN          GPIO_Pin_7
-#define CPAL_I2C3_SCL_GPIO_PINSOURCE    GPIO_PinSource7 
+#define CPAL_I2C3_SCL_GPIO_PINSOURCE    GPIO_PinSource7
   
-#define CPAL_I2C3_SDA_GPIO_PORT         GPIOH       
-#define CPAL_I2C3_SDA_GPIO_CLK          RCC_AHB1Periph_GPIOH 
-#define CPAL_I2C3_SDA_GPIO_PIN          GPIO_Pin_8 
-#define CPAL_I2C3_SDA_GPIO_PINSOURCE    GPIO_PinSource8  
+#define CPAL_I2C3_SDA_GPIO_PORT         GPIOH
+#define CPAL_I2C3_SDA_GPIO_CLK          RCC_AHB1Periph_GPIOH
+#define CPAL_I2C3_SDA_GPIO_PIN          GPIO_Pin_8
+#define CPAL_I2C3_SDA_GPIO_PINSOURCE    GPIO_PinSource8
   
 /*-----------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------*/
@@ -625,6 +631,8 @@ extern "C" {
 #define __CPAL_I2C_HAL_GET_GENCALL(device)       (uint16_t)(CPAL_I2C_DEVICE[(device)]->SR2 & I2C_SR2_GENCALL) 
   
 #define __CPAL_I2C_HAL_GET_DUALF(device)         (uint16_t)(CPAL_I2C_DEVICE[(device)]->SR2 & I2C_SR2_DUALF) 
+
+#define __CPAL_I2C_HAL_GET_TRA(device)           (uint16_t)(CPAL_I2C_DEVICE[(device)]->SR2 & I2C_SR2_TRA)
   
 #define __CPAL_I2C_HAL_GET_OVR(device)           (uint16_t)(CPAL_I2C_DEVICE[(device)]->SR1 & I2C_SR1_OVR) 
   
@@ -717,20 +725,20 @@ extern "C" {
                                                                                             values). DMA clock is not disabled */
 #endif /* CPAL_I2C_DMA_PROGMODEL */
   
-  void CPAL_I2C_HAL_ITInit(CPAL_DevTypeDef Device, uint32_t Options); /*<!This function configures NVIC and interrupts used 
-                                                                          by I2C Device according to enabled options */ 
+  void CPAL_I2C_HAL_ITInit(CPAL_DevTypeDef Device, uint32_t Options, CPAL_DirectionTypeDef Direction, CPAL_ProgModelTypeDef CPAL_ProgModel); /*<!This function configures NVIC and interrupts used 
+                                                                                                                                                 by I2C Device according to enabled options */  
   
-  void CPAL_I2C_HAL_ITDeInit(CPAL_DevTypeDef Device, uint32_t Options); /*<!This function deinitialize NVIC and interrupts used 
-                                                                          by I2C Device  */ 
-   
+  void CPAL_I2C_HAL_ITDeInit(CPAL_DevTypeDef Device, uint32_t Options, CPAL_DirectionTypeDef Direction, CPAL_ProgModelTypeDef ProgModel); /*<!This function deinitialize NVIC and interrupts used 
+                                                                                                                                              by I2C Device  */     
 
   
 #ifdef __cplusplus
 }
 #endif
 
-#endif /*___CPAL_I2C_HAL_STM32F2XX_H */
+#endif /*___CPAL_I2C_HAL_STM32F4XX_H */
 
-/******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
 
 
