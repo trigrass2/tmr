@@ -1,10 +1,33 @@
 #include "tmr_board.h"
 
+#ifdef __GNUC__
+  /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
+     set to 'Yes') calls __io_putchar() */
+  #define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+  #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif /* __GNUC__ */
+
 void System_Init(void);
 void vLoopTask_ON( void *pvParameters );
 void vLoopTask_OFF( void *pvParameters );
 void vI2C_Task( void *pvParameters );
-//void Beep(void);
+void vUSART_Task( void *pvParameters );
+void USART6_Config(void);
+void Beep(void);
+
+#define digitalHi(p, i)     { p->BSRRL = i; }
+#define digitalLo(p, i)     { p->BSRRH = i; }
+#define digitalToggle(p, i) { p->ODR ^= i; }
+
+// Hardware definitions and GPIO
+
+#define BEEP_GPIO   GPIOB
+#define BEEP_PIN    GPIO_Pin_12
+
+#define BEEP_TOGGLE digitalToggle(BEEP_GPIO, BEEP_PIN);
+#define BEEP_ON    digitalHi(BEEP_GPIO, BEEP_PIN);
+#define BEEP_OFF     digitalLo(BEEP_GPIO, BEEP_PIN);
 
 xSemaphoreHandle xSemaphore;
 
@@ -13,10 +36,13 @@ int main(void)
     unsigned int exit = 0;
     
     System_Init();
+
+    xSemaphore = xSemaphoreCreateMutex();
     
-    xTaskCreate( vLoopTask_ON, ( signed portCHAR * ) "beep_on", configMINIMAL_STACK_SIZE*2, NULL, 1, NULL );
-    xTaskCreate( vLoopTask_OFF, ( signed portCHAR * ) "beep_off", configMINIMAL_STACK_SIZE*2, NULL, 2, NULL );
-    xTaskCreate( vI2C_Task, ( signed portCHAR * ) "vI2C_Task", configMINIMAL_STACK_SIZE*2, NULL, 3, NULL );
+    //xTaskCreate( vLoopTask_ON, ( signed portCHAR * ) "beep_on", configMINIMAL_STACK_SIZE*2, NULL, 1, NULL );
+    //xTaskCreate( vLoopTask_OFF, ( signed portCHAR * ) "beep_off", configMINIMAL_STACK_SIZE*2, NULL, 2, NULL );
+    xTaskCreate( vUSART_Task, ( signed portCHAR * ) "USART1", configMINIMAL_STACK_SIZE*2, NULL, 1, NULL );
+    //xTaskCreate( vI2C_Task, ( signed portCHAR * ) "I2C2", configMINIMAL_STACK_SIZE*2, NULL, 2, NULL );
 
     /* Start the scheduler. */
     vTaskStartScheduler();
@@ -27,14 +53,10 @@ int main(void)
 }
 
 void vLoopTask_ON( void *pvParameters )
-{
-    //unsigned int delay = 5 / portTICK_RATE_MS;
-    
-    xSemaphore = xSemaphoreCreateMutex();
-
+{   
     if( xSemaphore == NULL )
     {
-        //BEEP_ON
+
     }
     
     while(1)
@@ -53,8 +75,6 @@ void vLoopTask_ON( void *pvParameters )
                 // We have finished accessing the shared resource.  Release the 
                 // semaphore.
                 //xSemaphoreGive( xSemaphore );
-                BEEP_ON
-                //vTaskDelay(delay);
             }
         }
     }
@@ -70,20 +90,6 @@ void vLoopTask_OFF( void *pvParameters )
         xSemaphoreGive( xSemaphore );
     }
 }
-
-#define digitalHi(p, i)     { p->BSRRL = i; }
-#define digitalLo(p, i)     { p->BSRRH = i; }
-#define digitalToggle(p, i) { p->ODR ^= i; }
-
-// Hardware definitions and GPIO
-
-#define BEEP_GPIO   GPIOB
-#define BEEP_PIN    GPIO_Pin_12
-
-#define BEEP_TOGGLE digitalToggle(BEEP_GPIO, BEEP_PIN);
-#define BEEP_ON    digitalHi(BEEP_GPIO, BEEP_PIN);
-#define BEEP_OFF     digitalLo(BEEP_GPIO, BEEP_PIN);
-
 void System_Init(void)
 {
     GPIO_InitTypeDef  GPIO_PB;
@@ -250,7 +256,6 @@ void vI2C_Task( void *pvParameters )
     
     I2C_WriteReg(MPU6050_ADDRESS_AD0_HIGH, MPU6050_RA_PWR_MGMT_1, 1 << MPU6050_PWR1_DEVICE_RESET_BIT); // Reset
 
-    
     vTaskDelay(100 / portTICK_RATE_MS);
 
     I2C_WriteReg(MPU6050_ADDRESS_AD0_HIGH, MPU6050_RA_PWR_MGMT_1, 0x0); // Leave sleep mpde
@@ -270,19 +275,111 @@ void vI2C_Task( void *pvParameters )
 
         vTaskDelay(10000 / portTICK_RATE_MS);
 
-        #if 1
-        BEEP_ON
-        vTaskDelay(100 / portTICK_RATE_MS);
-        BEEP_OFF
-        vTaskDelay(100 / portTICK_RATE_MS);
-        BEEP_ON
-        vTaskDelay(100 / portTICK_RATE_MS);
-        BEEP_OFF
-        vTaskDelay(100 / portTICK_RATE_MS);
-        #endif
     }
 }
 
+void vUSART_Task( void *pvParameters )
+{
+    unsigned int count = 0;
+    USART6_Config();
+
+    while(1)
+    {
+        printf("Hello world!! %d \n\r", count++);
+        vTaskDelay(100 / portTICK_RATE_MS);
+    }
+}
+
+void USART6_Config(void)
+{
+    USART_InitTypeDef USART_InitStructure;
+    GPIO_InitTypeDef GPIO_InitStructure;
+  
+    /* USARTx configured as follow:
+        - BaudRate = 115200 baud  
+        - Word Length = 8 Bits
+        - One Stop Bit
+        - No parity
+        - Hardware flow control disabled (RTS and CTS signals)
+        - Receive and transmit enabled
+    */
+    USART_InitStructure.USART_BaudRate = 115200;
+    USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+    USART_InitStructure.USART_StopBits = USART_StopBits_1;
+    USART_InitStructure.USART_Parity = USART_Parity_No;
+    USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+    USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+
+    /* Enable GPIO clock */
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
+
+    /* Connect PXx to USARTx_Tx*/
+    GPIO_PinAFConfig(GPIOB, GPIO_PinSource6, GPIO_AF_USART1);
+
+    /* Connect PXx to USARTx_Rx*/
+    GPIO_PinAFConfig(GPIOB, GPIO_PinSource7, GPIO_AF_USART1);
+
+    /* Configure USART Tx as alternate function  */
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+    /* Configure USART Rx as alternate function  */
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+    /* USART configuration */
+    USART_Init(USART1, &USART_InitStructure);
+    
+    /* Enable USART */
+    USART_Cmd(USART1, ENABLE);
+}
+
+/**
+  * @brief  Retargets the C library printf function to the USART.
+  * @param  None
+  * @retval None
+  */
+PUTCHAR_PROTOTYPE
+{
+  /* Place your implementation of fputc here */
+  /* e.g. write a character to the USART */
+  USART_SendData(USART1, (uint8_t) ch);
+
+  /* Loop until the end of transmission */
+  while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET)
+  {}
+
+  return ch;
+}
+
+#ifdef  USE_FULL_ASSERT
+
+/**
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
+void assert_failed(uint8_t* file, uint32_t line)
+{ 
+  /* User can add his own implementation to report the file name and line number,
+     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+
+  /* Infinite loop */
+  while (1)
+  {
+  }
+}
+#endif
 void vApplicationTickHook( void )
 {
     CPAL_I2C_TIMEOUT_Manager();
