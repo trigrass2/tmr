@@ -1,0 +1,278 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>xioDotNetV1</name>
+    </assembly>
+    <members>
+        <member name="T:xioInterface.xioBoard">
+            <summary>
+            The class which talks to the x-io board
+            </summary>
+        </member>
+        <member name="M:xioInterface.xioBoard.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="ComPort">Name of the port the board is connected to, ie COM1</param>
+        </member>
+        <member name="M:xioInterface.xioBoard.Open">
+            <summary>
+            Open the port the board is connected to
+            </summary>
+        </member>
+        <member name="M:xioInterface.xioBoard.Close">
+            <summary>
+            Close the port the board is connected to
+            </summary>
+        </member>
+        <member name="M:xioInterface.xioBoard.OnDataPacketReceived(xioInterface.IncomingBoardMessage)">
+            <summary>
+            Event triggered when a data packet is received from the board
+            </summary>
+        </member>
+        <member name="M:xioInterface.xioBoard.SendMessage(xioInterface.OutgoingBoardMessage)">
+            <summary>
+            Sends a data message to the board
+            </summary>
+            <param name="_message"></param>
+        </member>
+        <member name="P:xioInterface.xioBoard.IsOpen">
+            <summary>
+            Returns the state of the port the board is connected to
+            </summary>
+        </member>
+        <member name="E:xioInterface.xioBoard.DataPacketReceived">
+            <summary>
+            Event triggered when a data packet is received from the board
+            </summary>
+        </member>
+        <member name="T:xioInterface.xioBoard.onDataPacketReceived">
+            <summary>
+            Event triggered when a data packet is received from the board
+            Threading issues might arise
+            </summary>
+            <param name="sender">Object which triggered the event</param>
+            <param name="e">The packet</param>
+        </member>
+        <member name="T:xioInterface.IncomingBoardMessage">
+            <summary>
+            Message sent from Board to PC
+            </summary>
+        </member>
+        <member name="F:xioInterface.IncomingBoardMessage.ADC">
+            <summary>
+            Analogue input
+            </summary>
+        </member>
+        <member name="F:xioInterface.IncomingBoardMessage.DigitalInput">
+            <summary>
+            Digital input
+            </summary>
+        </member>
+        <member name="F:xioInterface.IncomingBoardMessage.QEI">
+            <summary>
+            Quadrature Encoder Interface
+            </summary>
+        </member>
+        <member name="F:xioInterface.IncomingBoardMessage.Comms">
+            <summary>
+            Comms
+            </summary>
+        </member>
+        <member name="M:xioInterface.IncomingBoardMessage.#ctor">
+            <summary>
+            Constructor for BoardMessage
+            </summary>
+        </member>
+        <member name="M:xioInterface.IncomingBoardMessage.#ctor(System.UInt16[],System.UInt16[],xioInterface.QEIdata,xioInterface.QEIdata,xioInterface.CommsData)">
+            <summary>
+            Constructor for BoardMessage
+            </summary>
+        </member>
+        <member name="M:xioInterface.IncomingBoardMessage.#ctor(System.UInt16[],System.UInt16[],System.UInt32,System.Int16,System.UInt32,System.Int16,xioInterface.CommsData)">
+            <summary>
+            Constructor for BoardMessage
+            </summary>
+        </member>
+        <member name="M:xioInterface.IncomingBoardMessage.#ctor(System.UInt16[],System.UInt16[],System.UInt32,System.Int16,System.UInt32,System.Int16,System.Int32,System.Byte[])">
+            <summary>
+            Constructor for BoardMessage
+            </summary>
+        </member>
+        <member name="M:xioInterface.IncomingBoardMessage.#ctor(System.UInt16[],System.UInt16[],xioInterface.QEIdata[],xioInterface.CommsData)">
+            <summary>
+            Constructor for BoardMessage
+            </summary>
+        </member>
+        <member name="M:xioInterface.IncomingBoardMessage.ConvertToBytes(xioInterface.IncomingBoardMessage)">
+            <summary>
+            Converts the formatted message into x-io datapacket
+            </summary>
+            <param name="aMessage">Message to be converted</param>
+            <returns>Resultant byte[]</returns>
+        </member>
+        <member name="M:xioInterface.IncomingBoardMessage.ConvertToBytes">
+            <summary>
+            Converts the formatted message into x-io datapacket
+            </summary>
+            <returns>Resultant byte[]</returns>
+        </member>
+        <member name="T:xioInterface.OutgoingBoardMessage">
+            <summary>
+            Message sent from PC to Board
+            </summary>
+        </member>
+        <member name="F:xioInterface.OutgoingBoardMessage.DigitalOutput">
+            <summary>
+            Digital output
+            </summary>
+        </member>
+        <member name="F:xioInterface.OutgoingBoardMessage.Motors">
+            <summary>
+            Motors
+            </summary>
+        </member>
+        <member name="F:xioInterface.OutgoingBoardMessage.Comms">
+            <summary>
+            Comms
+            </summary>
+        </member>
+        <member name="M:xioInterface.OutgoingBoardMessage.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:xioInterface.OutgoingBoardMessage.#ctor(System.UInt16[],xioInterface.MotorData,xioInterface.MotorData,System.Int32,System.Byte[])">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:xioInterface.OutgoingBoardMessage.#ctor(System.UInt16,System.UInt16,System.UInt16,System.UInt16,System.Boolean,System.Boolean,System.UInt16,System.Boolean,System.Boolean,System.UInt16,System.Int32,System.Byte[])">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:xioInterface.OutgoingBoardMessage.#ctor(xioInterface.OutgoingBoardMessage)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:xioInterface.OutgoingBoardMessage.#ctor(System.UInt16[],xioInterface.MotorData[],xioInterface.CommsData)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:xioInterface.OutgoingBoardMessage.ConvertToBytes(xioInterface.OutgoingBoardMessage)">
+            <summary>
+            Converts the formatted message into x-io datapacket
+            </summary>
+            <param name="aMessage">Message to be converted</param>
+            <returns>Resultant byte[] to be sent to the board</returns>
+        </member>
+        <member name="M:xioInterface.OutgoingBoardMessage.ConvertToBytes">
+            <summary>
+            Converts the formatted message into x-io datapacket
+            </summary>
+            <returns>Resultant byte[] to be sent to the board</returns>
+        </member>
+        <member name="T:xioInterface.MotorData">
+            <summary>
+            A single motor
+            </summary>
+        </member>
+        <member name="F:xioInterface.MotorData.LogicA">
+            <summary>
+            Output status of pin LOGICA (true = high, false = low)
+            </summary>
+        </member>
+        <member name="F:xioInterface.MotorData.LogicB">
+            <summary>
+            Output status of pin LOGICB (true = high, false = low)
+            </summary>
+        </member>
+        <member name="F:xioInterface.MotorData.PWM">
+            <summary>
+            Duty cycle value, 0 = 0% (off)  65535 = 100%, linear spacing
+            </summary>
+        </member>
+        <member name="M:xioInterface.MotorData.#ctor">
+            <summary>
+            Default constructor, both LOGICA and LOGICB are low, duty cycle 0
+            </summary>
+        </member>
+        <member name="M:xioInterface.MotorData.#ctor(System.Boolean,System.Boolean,System.UInt16)">
+            <summary>
+            Constructor for motor data
+            </summary>
+            <param name="_LogicA">Status of LOGICA pin, true = high</param>
+            <param name="_LogicB">Status of LOGICB pin, true = high</param>
+            <param name="_PWM">Duty cycle value, 0 = off  65535 = 100%, linear spacing</param>
+        </member>
+        <member name="T:xioInterface.QEIdata">
+            <summary>
+            A single QEI
+            </summary>
+        </member>
+        <member name="F:xioInterface.QEIdata.Counter">
+            <summary>
+            Counter value
+            </summary>
+        </member>
+        <member name="F:xioInterface.QEIdata.CountsPerT">
+            <summary>
+            Number of counts per t milliseconds, where t is specified during configuration
+            </summary>
+        </member>
+        <member name="M:xioInterface.QEIdata.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:xioInterface.QEIdata.#ctor(xioInterface.QEIdata)">
+            <summary>
+            Constructor, copies original values
+            </summary>
+            <param name="_Data">QEIData to be copied</param>
+        </member>
+        <member name="M:xioInterface.QEIdata.#ctor(System.UInt32,System.Int16)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="_Counter">Value for Counter</param>
+            <param name="_CountsPerT">Value for CountsPerT</param>
+        </member>
+        <member name="T:xioInterface.CommsData">
+            <summary>
+            A single payload of data
+            </summary>
+        </member>
+        <member name="F:xioInterface.CommsData.NumBytes">
+            <summary>
+            Number of bytes available in the Data array
+            </summary>
+        </member>
+        <member name="F:xioInterface.CommsData.Data">
+            <summary>
+            Byte array containing most recent data
+            </summary>
+        </member>
+        <member name="M:xioInterface.CommsData.#ctor">
+            <summary>
+            Default constructor, with 16 zeros in Data
+            </summary>
+        </member>
+        <member name="M:xioInterface.CommsData.#ctor(xioInterface.CommsData)">
+            <summary>
+            Constructor, copies existing CommsData into this new instance
+            </summary>
+            <param name="_Comms">CommsData to be copied</param>
+        </member>
+        <member name="M:xioInterface.CommsData.#ctor(System.Int32,System.Byte[])">
+            <summary>
+            Constructor
+            </summary>
+            <param name="_numBytes">Number of meaningful bytes in Data array</param>
+            <param name="_data">The Data array</param>
+        </member>
+    </members>
+</doc>
